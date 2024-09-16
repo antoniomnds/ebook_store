@@ -7,16 +7,19 @@
 <table id="ebooks">
   <thead>
     <tr>
-      <td>Title</td>
-      <td>Status</td>
-      <td>Price</td>
-      <td>Pages</td>
-      <td>Publication date</td>
-      <td>ISBN</td>
-      <td>Sales</td>
-      <td>Views</td>
-      <td>Preview downloads</td>
-      <td>Actions</td>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Price</th>
+      <th>Authors</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>Publication date</th>
+      <th>Pages</th>
+      <th>ISBN</th>
+      <th>Sales</th>
+      <th>Views</th>
+      <th>Preview downloads</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -26,6 +29,7 @@
       <td><%= ebook.status %></td>
       <td><%= ebook.price %></td>
       <td><%= ebook.authors %></td>
+      <td><%= ebook.genre %></td>
       <td><%= ebook.publisher %></td>
       <td><%= ebook.publication_date %></td>
       <td><%= ebook.pages %></td>

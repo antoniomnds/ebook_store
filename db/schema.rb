@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_16_095142) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_16_162436) do
   create_table "buyers", force: :cascade do |t|
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_095142) do
     t.integer "preview_downloads", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "genre"
   end
 
   create_table "sellers", force: :cascade do |t|
