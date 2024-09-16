@@ -7,3 +7,8 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+$LOAD_PATH << File.dirname(__FILE__)
+
+require 'seeds/users.rb'
+require 'seeds/ebooks.rb'

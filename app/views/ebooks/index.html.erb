@@ -1,0 +1,46 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Ebooks" %>
+
+<h1>Ebooks</h1>
+
+<table id="ebooks">
+  <thead>
+    <tr>
+      <td>Title</td>
+      <td>Status</td>
+      <td>Price</td>
+      <td>Pages</td>
+      <td>Publication date</td>
+      <td>ISBN</td>
+      <td>Sales</td>
+      <td>Views</td>
+      <td>Preview downloads</td>
+      <td>Actions</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @ebooks.each do |ebook| %>
+    <tr id="<%= dom_id ebook %>">
+      <td><%= ebook.title %></td>
+      <td><%= ebook.status %></td>
+      <td><%= ebook.price %></td>
+      <td><%= ebook.authors %></td>
+      <td><%= ebook.publisher %></td>
+      <td><%= ebook.publication_date %></td>
+      <td><%= ebook.pages %></td>
+      <td><%= ebook.isbn %></td>
+      <td><%= ebook.sales %></td>
+      <td><%= ebook.views %></td>
+      <td><%= ebook.preview_downloads %></td>
+      <td>
+        <%= link_to "Show", ebook %> |
+        <%= link_to "Edit", edit_ebook_path(ebook) %> |
+        <%= link_to "Delete", ebook, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+      </td>
+    <tr>
+  <% end %>
+  </tbody>
+</table>
+
+<p><%= link_to "New ebook", new_ebook_path %></p>

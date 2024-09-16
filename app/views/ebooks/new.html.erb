@@ -1,0 +1,11 @@
+<% content_for :title, "New ebook" %>
+
+<h1>New ebook</h1>
+
+<%= render "form", ebook: @ebook %>
+
+<br>
+
+<div>
+  <%= link_to "Back to ebooks", ebooks_path %>
+</div>

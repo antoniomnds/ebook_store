@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @ebook %>
+
+<div>
+  <%= link_to "Edit this ebook", edit_ebook_path(@ebook) %> |
+  <%= link_to "Back to ebooks", ebooks_path %>
+
+  <p>
+    <%= button_to "Delete this ebook",
+                  @ebook,
+                  method: :delete,
+                  form: {
+                    data: {
+                      turbo_confirm: 'Are you sure?'
+                    }
+                  }
+    %>
+  </p>
+</div>

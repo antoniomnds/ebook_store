@@ -10,12 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_13_215634) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_13_220220) do
   create_table "buyers", force: :cascade do |t|
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_buyers_on_user_id"
+  end
+
+  create_table "ebooks", force: :cascade do |t|
+    t.string "title"
+    t.integer "status"
+    t.decimal "price", precision: 5, scale: 2
+    t.string "authors"
+    t.string "publisher"
+    t.datetime "publication_date"
+    t.integer "pages"
+    t.string "isbn"
+    t.integer "sales", default: 0
+    t.integer "views", default: 0
+    t.integer "preview_downloads", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sellers", force: :cascade do |t|
