@@ -1,7 +1,8 @@
 10.times do |i|
   User.create! do |user|
-    user.username = "Test#{i}"
-    user.email = "test#{i}@example.com"
+    user.username = Faker::Internet.username
+    user.email = Faker::Internet.email
     user.enabled = true
   end
 end
+  

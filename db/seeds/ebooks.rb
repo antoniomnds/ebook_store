@@ -1,32 +1,14 @@
-Ebook.create! do |ebook|
-  ebook.title = '1984'
-  ebook.status = 'live'
-  ebook.price = 0.99
-  ebook.authors = 'George Orwell'
-  ebook.publisher = 'Global Publishers'
-  ebook.pages = 219
-  ebook.publication_date = DateTime.parse('2024-03-02')
-  ebook.isbn = '978-0451524935'
-end
+20.times do |_|
+  Ebook.create! do |ebook|
+    ebook.title = Faker::Book.title
+    ebook.status = %w[draft pending live].sample
+    ebook.price = Faker::Number.decimal(l_digits: 2)
+    ebook.authors = Faker::Book.author
+    ebook.publisher = Faker::Book.publisher
+    ebook.genre = Faker::Book.genre
+    ebook.pages = Faker::Number.number(digits: 3)
+    ebook.publication_date = Faker::Date.between(from: 20.years.ago, to: Date.today)
+    ebook.isbn = "978-#{Faker::Number.number(digits: 9)}"
+  end
 
-Ebook.create! do |ebook|
-  ebook.title = 'Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones'
-  ebook.status = 'live'
-  ebook.price = 12.99
-  ebook.authors = 'James Clear'
-  ebook.publisher = 'Avery'
-  ebook.pages = 320
-  ebook.publication_date = DateTime.parse('2018-10-16')
-  ebook.isbn = '978-0735211292'
-end
-
-Ebook.create! do |ebook|
-  ebook.title = 'Nexus: A Brief History of Information Networks from the Stone Age to AI'
-  ebook.status = 'live'
-  ebook.price = 12.99
-  ebook.authors = 'Yuval Noah Harari'
-  ebook.publisher = 'Random House'
-  ebook.pages = 528
-  ebook.publication_date = DateTime.parse('2024-09-10')
-  ebook.isbn = '978-0593734223'
 end
