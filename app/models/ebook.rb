@@ -1,4 +1,14 @@
 class Ebook < ApplicationRecord
+  has_many :ebook_buyers
+
+  has_many :buyers,
+    through: :buyer_ebooks
+
+  has_many :ebook_sellers
+
+  has_many :sellers,
+    through: :seller_ebooks
+
   enum :status, %i[draft pending live], prefix: true
 
   validates :title,
