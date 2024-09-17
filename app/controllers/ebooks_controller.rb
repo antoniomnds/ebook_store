@@ -42,6 +42,7 @@ class EbooksController < ApplicationController
   # DELETE /ebooks/1
   def destroy
     begin
+      @ebook.preview_file.purge # Remove the preview file from the storage
       @ebook.destroy!
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
     rescue ActiveRecord::RecordNotDestroyed
@@ -58,6 +59,7 @@ class EbooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def ebook_params
       params.require(:ebook).permit(:title, :status, :price, :authors, :genre, :publisher,
-                                    :publication_date, :pages, :isbn, :sales, :views, :preview_downloads)
+                                    :publication_date, :pages, :isbn, :sales, :views,
+                                    :preview_downloads, :preview_file)
     end
 end

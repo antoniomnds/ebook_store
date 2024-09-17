@@ -59,4 +59,16 @@
     <%= ebook.preview_downloads %>
   </p>
 
+  <% if ebook.preview_file.attached? %>
+    <p><strong>Preview file:</strong></p>
+    <%= image_tag ebook.preview_file.preview(:thumb) %>
+    <%= link_to 'Download',
+                rails_blob_path(ebook.preview_file, disposition: "attachment"),
+                class: 'btn btn-outline-primary'
+    %>
+    <br>
+    <br>
+    <br>
+  <% end %>
+
 </div>
