@@ -5,4 +5,3 @@
     user.enabled = true
   end
 end
-  
