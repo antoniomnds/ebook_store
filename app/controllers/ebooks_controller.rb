@@ -41,8 +41,12 @@ class EbooksController < ApplicationController
 
   # DELETE /ebooks/1
   def destroy
-    @ebook.destroy!
-    redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
+    begin
+      @ebook.destroy!
+      redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
+    rescue ActiveRecord::RecordNotDestroyed
+      redirect_to ebooks_url, notice: "Ebook could not be destroyed.", status: :unprocessable_entity
+    end
   end
 
   private
