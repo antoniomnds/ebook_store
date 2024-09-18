@@ -11,9 +11,12 @@ class Ebook < ApplicationRecord
 
   enum :status, %i[draft pending live], prefix: true
 
-  has_one_attached :preview_file do |attachable|
-    attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true
-  end
+  has_one_attached :preview_file # ActiveStorage attachment using Cloudinary
+
+  # ActiveStorage attachment using local storage
+  # has_one_attached :preview_file do |attachable|
+  # attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true
+  # end
 
   validates :title,
     presence: true,

@@ -42,11 +42,15 @@ class EbooksController < ApplicationController
   # DELETE /ebooks/1
   def destroy
     begin
-      @ebook.preview_file.purge # Remove the preview file from the storage
-      @ebook.destroy!
+      ActiveRecord::Base.transaction do
+        @ebook.destroy!
+        @ebook.preview_file.purge # Synchronously remove the preview file from storage
+      end
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
-    rescue ActiveRecord::RecordNotDestroyed
-      redirect_to ebooks_url, notice: "Ebook could not be destroyed.", status: :unprocessable_entity
+    rescue StandardError => e
+      redirect_to ebooks_url,
+                  notice: "Ebook could not be destroyed: #{ e.message }",
+                  status: :unprocessable_entity
     end
   end
 
