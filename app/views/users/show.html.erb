@@ -2,19 +2,19 @@
 
 <%= render @user %>
 
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
+<br>
 
-  <p>
-    <%= button_to "Destroy this user",
-                  @user,
-                  method: :delete,
-                  form: {
-                    data: {
-                      turbo_confirm: 'Are you sure?'
-                    }
+<div class="btn-group" role="group" aria-label="User management buttons">
+  <%= link_to "Back to users", users_path, class: 'btn btn-outline-dark' %>
+  <%= link_to "Edit this user", edit_user_path(@user), class: 'btn btn-outline-primary' %>
+  <%= button_to "Destroy this user",
+                @user,
+                method: :delete,
+                form: {
+                  data: {
+                    turbo_confirm: 'Are you sure?'
                   }
-    %>
-  </p>
+                },
+                class: 'btn btn-outline-danger'
+  %>
 </div>

@@ -1,6 +1,6 @@
 <%= form_with(model: ebook) do |form| %>
   <% if ebook.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(ebook.errors.count, "error") %> prohibited this ebook from being saved:</h2>
 
       <ul>
@@ -11,67 +11,91 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="row mb-3">
+    <%= form.label :title, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :title, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.select :status, Ebook.statuses.keys, include_blank: true %>
+  <div class="row mb-3">
+    <%= form.label :status, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.select :status, Ebook.statuses.keys, { include_blank: true }, { class: 'form-select' } %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :price, style: "display: block" %>
-    <%= form.text_field :price %>
+  <div class="row mb-3">
+    <%= form.label :price, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :price, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :authors, style: "display: block" %>
-    <%= form.text_field :authors %>
+  <div class="row mb-3">
+    <%= form.label :authors, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :authors, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :genre, style: "display: block" %>
-    <%= form.text_field :genre %>
+  <div class="row mb-3">
+    <%= form.label :genre, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :genre, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :publisher, style: "display: block" %>
-    <%= form.text_field :publisher %>
+  <div class="row mb-3">
+    <%= form.label :publisher, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :publisher, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :publication_date, style: "display: block" %>
-    <%= form.date_field :publication_date %>
+  <div class="row mb-3">
+    <%= form.label :publication_date, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.date_field :publication_date, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :pages, style: "display: block" %>
-    <%= form.number_field :pages %>
+  <div class="row mb-3">
+    <%= form.label :pages, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.number_field :pages, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :isbn, style: "display: block" %>
-    <%= form.text_field :isbn %>
+  <div class="row mb-3">
+    <%= form.label :isbn, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :isbn, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :sales, style: "display: block" %>
-    <%= form.number_field :sales %>
+  <div class="row mb-3">
+    <%= form.label :sales, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.number_field :sales, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :views, style: "display: block" %>
-    <%= form.number_field :views %>
+  <div class="row mb-3">
+    <%= form.label :views, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.number_field :views, class: 'form-control' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :preview_downloads, style: "display: block" %>
-    <%= form.number_field :preview_downloads %>
+  <div class="row mb-3">
+    <%= form.label :preview_downloads, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.number_field :preview_downloads, class: 'form-control' %>
+    </div>
   </div>
 
   <p>
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary' %>
   </p>
 <% end %>

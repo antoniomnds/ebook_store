@@ -4,9 +4,9 @@
 
 <h1>Users</h1>
 
-<table id="users">
+<table id="users" class="table">
   <thead>
-    <tr>
+    <tr class="text-center">
       <th>Username</th>
       <th>Email</th>
       <th>Enabled?</th>
@@ -15,18 +15,27 @@
   </thead>
   <tbody>
     <% @users.each do |user| %>
-      <tr id="<%= dom_id user %>">
+      <tr id="<%= dom_id user %>" class="text-center">
         <td><%= user.username %></td>
         <td><%= user.email %></td>
         <td><%= user.enabled ? 'Yes' : 'No' %></td>
         <td>
-          <%= link_to "Show", user %> |
-          <%= link_to "Edit", edit_user_path(user) %> |
-          <%= link_to "Delete", user, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+          <div class="btn-group" role="group" aria-label="User management buttons">
+            <%= link_to "Show", user, class: 'btn btn-outline-dark' %>
+            <%= link_to "Edit", edit_user_path(user), class: 'btn btn-outline-dark' %>
+            <%= link_to "Delete",
+                        user,
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: 'Are you sure?'
+                        },
+                        class: 'btn btn-outline-dark'
+            %>
+          </div>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<p><%= link_to "New user", new_user_path %></p>
+<%= link_to "New user", new_user_path, class: 'btn btn-outline-dark' %>

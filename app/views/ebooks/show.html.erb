@@ -2,19 +2,17 @@
 
 <%= render @ebook %>
 
-<div>
-  <%= link_to "Edit this ebook", edit_ebook_path(@ebook) %> |
-  <%= link_to "Back to ebooks", ebooks_path %>
-
-  <p>
-    <%= button_to "Delete this ebook",
-                  @ebook,
-                  method: :delete,
-                  form: {
-                    data: {
-                      turbo_confirm: 'Are you sure?'
-                    }
+<div class="btn-group" role="group" aria-label="Ebook management buttons">
+  <%= link_to "Back to ebooks", ebooks_path, class: 'btn btn-outline-dark' %>
+  <%= link_to "Edit this ebook", edit_ebook_path(@ebook), class: 'btn btn-outline-primary' %>
+  <%= button_to "Delete this ebook",
+                @ebook,
+                method: :delete,
+                form: {
+                  data: {
+                    turbo_confirm: 'Are you sure?'
                   }
-    %>
-  </p>
+                },
+                class: 'btn btn-outline-danger'
+  %>
 </div>

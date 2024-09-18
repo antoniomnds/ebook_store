@@ -4,9 +4,9 @@
 
 <h1>Ebooks</h1>
 
-<table id="ebooks">
+<table id="ebooks" class="table">
   <thead>
-    <tr>
+    <tr class="text-center">
       <th>Title</th>
       <th>Status</th>
       <th>Price</th>
@@ -24,7 +24,7 @@
   </thead>
   <tbody>
   <% @ebooks.each do |ebook| %>
-    <tr id="<%= dom_id ebook %>">
+    <tr id="<%= dom_id ebook %>" class="text-center">
       <td><%= ebook.title %></td>
       <td><%= ebook.status %></td>
       <td><%= ebook.price %></td>
@@ -38,13 +38,22 @@
       <td><%= ebook.views %></td>
       <td><%= ebook.preview_downloads %></td>
       <td>
-        <%= link_to "Show", ebook %> |
-        <%= link_to "Edit", edit_ebook_path(ebook) %> |
-        <%= link_to "Delete", ebook, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        <div class="btn-group" role="group" aria-label="Ebook management buttons">
+          <%= link_to "Show", ebook, class: 'btn btn-outline-dark' %>
+          <%= link_to "Edit", edit_ebook_path(ebook), class: 'btn btn-outline-dark' %>
+          <%= link_to "Delete",
+                      ebook,
+                      data: {
+                        turbo_method: :delete,
+                        turbo_confirm: 'Are you sure?'
+                      },
+                      class: 'btn btn-outline-dark'
+          %>
+        </div>
       </td>
     <tr>
   <% end %>
   </tbody>
 </table>
 
-<p><%= link_to "New ebook", new_ebook_path %></p>
+<%= link_to "New ebook", new_ebook_path, class: 'btn btn-outline-dark' %>

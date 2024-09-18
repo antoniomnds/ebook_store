@@ -10,5 +10,4 @@
     ebook.publication_date = Faker::Date.between(from: 20.years.ago, to: Date.today)
     ebook.isbn = "978-#{Faker::Number.number(digits: 9)}"
   end
-
 end
