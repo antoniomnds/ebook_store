@@ -13,5 +13,9 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resources :users
-  resources :ebooks
+  resources :ebooks do
+    member do
+      post "purchase"
+    end
+  end
 end

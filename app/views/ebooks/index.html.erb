@@ -1,10 +1,8 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Ebooks" %>
 
 <h1>Ebooks</h1>
 
-<table id="ebooks" class="table">
+<table id="ebooks" class="table table-hover">
   <thead>
     <tr class="text-center">
       <th>Title</th>
@@ -19,7 +17,7 @@
       <th>Sales</th>
       <th>Views</th>
       <th>Preview downloads</th>
-      <th>Actions</th>
+      <th colspan="2">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -50,6 +48,9 @@
                       class: 'btn btn-outline-dark'
           %>
         </div>
+      </td>
+      <td>
+        <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-outline-primary' %>
       </td>
     <tr>
   <% end %>

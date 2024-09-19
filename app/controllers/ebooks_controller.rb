@@ -8,6 +8,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
+    @ebook.update_attribute(:views, @ebook.views + 1)
   end
 
   # GET /ebooks/new
@@ -51,6 +52,18 @@ class EbooksController < ApplicationController
       redirect_to ebooks_url,
                   notice: "Ebook could not be destroyed: #{ e.message }",
                   status: :unprocessable_entity
+    end
+  end
+
+  def purchase
+    begin
+      ebook = Ebook.find(params[:id])
+      user = User.first
+      Ebook::PurchaseService.purchase(user, ebook)
+
+      redirect_to ebooks_url, notice: "Ebook was successfully purchased."
+    rescue StandardError => e
+      redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
     end
   end
 
