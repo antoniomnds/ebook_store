@@ -45,4 +45,8 @@ class Ebook < ApplicationRecord
 
   validates :isbn,
     presence: true
+
+  def discount_value(discount)
+    (price * (discount / 100.0)).round(2)
+  end
 end

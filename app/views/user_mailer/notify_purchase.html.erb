@@ -3,6 +3,6 @@
 <h4>Thank you for purchasing <%= @ebook.title %>!</h4>
 
 <p>You have gotten 10% off the original price of <%= @ebook.price %>€, which corresponds to a
-  <strong>discount</strong> of <strong><%= @purchase_fee %>€</strong>!</p>
+  <strong>discount</strong> of <strong><%= @ebook.discount_value(10) %>€</strong>!</p>
 
 <p>Happy reading!</p>

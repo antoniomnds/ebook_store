@@ -5,7 +5,6 @@ class UserMailer < ApplicationMailer
   def notify_purchase(user, ebook)
     @user = user
     @ebook = ebook
-    @purchase_fee = (0.1 * @ebook.price).round(2)
 
     mail(subject: "Thank you for buying '#{@ebook.title}'")
   end
