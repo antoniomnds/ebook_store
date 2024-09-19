@@ -61,8 +61,11 @@
 
   <% if ebook.preview_file.attached? %>
     <p><strong>Preview file:</strong></p>
-    <%#= image_tag ebook.preview_file.preview(:thumb) %> <%# uncomment when using local storage %>
-    <%= cl_image_tag ebook.preview_file.key, width: 300, height: 200, crop: "scale", format: "jpg" %>
+    <% if Rails.configuration.active_storage.service == :local %>
+      <%= image_tag ebook.preview_file.preview(:thumb) %>
+    <% else %>
+      <%= cl_image_tag ebook.preview_file.key, width: 300, height: 200, crop: "scale", format: "jpg" %>
+    <% end %>
     <%= link_to 'Download Preview',
                 rails_blob_path(ebook.preview_file, disposition: "attachment"),
                 class: 'btn btn-outline-primary'

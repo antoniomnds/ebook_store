@@ -38,5 +38,12 @@ module EbookStore
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Use Sidekiq for Active Job queueing
+    config.active_job.queue_adapter = :sidekiq
+
+    # Configure Active Storage to use background jobs
+    config.active_storage.queues.analysis = :default
+    config.active_storage.queues.purge = :default
   end
 end
