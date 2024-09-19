@@ -44,7 +44,7 @@ class EbooksController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         @ebook.destroy!
-        @ebook.preview_file.purge # Synchronously remove the preview file from storage
+        @ebook.preview_file.purge_later
       end
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
     rescue StandardError => e
