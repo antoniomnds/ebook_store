@@ -8,7 +8,6 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
-    @ebook.update_attribute(:views, @ebook.views + 1)
   end
 
   # GET /ebooks/new
@@ -61,8 +60,20 @@ class EbooksController < ApplicationController
       Ebook::PurchaseService.purchase(user, ebook)
 
       redirect_to ebooks_url, notice: "Ebook was successfully purchased."
+    rescue RecordNotFound
+      redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
       redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
+    end
+  end
+
+  def increment_views
+    begin
+      ebook = Ebook.find(params[:id])
+      ebook.increment!(:views)
+      render json: { views: ebook.views }, status: :ok
+    rescue RecordNotFound
+      render json: { error: "Ebook could not be found." }, status: :not_found
     end
   end
 

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :ebooks do
     member do
       post "purchase"
+      patch "increment_views"
     end
   end
 end
