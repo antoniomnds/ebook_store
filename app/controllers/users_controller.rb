@@ -43,7 +43,13 @@ class UsersController < ApplicationController
   def destroy
     begin
       @user.destroy!
+      @user.avatar.purge_later
+
       redirect_to users_url, notice: "User was successfully destroyed.", status: :see_other
+    rescue ActiveRecord::InvalidForeignKey # FIXME redirect not working
+      redirect_to users_url,
+                  alert: "User already bought ebooks. Cannot not be destroyed.",
+                  status: :unprocessable_entity
     rescue ActiveRecord::RecordNotDestroyed
       redirect_to users_url, notice: "User could not be destroyed.", status: :unprocessable_entity
     end
@@ -57,6 +63,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :email, :enabled)
+      params.require(:user).permit(:username, :email, :enabled, :avatar)
     end
 end
