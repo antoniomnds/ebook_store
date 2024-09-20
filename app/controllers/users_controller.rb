@@ -46,12 +46,14 @@ class UsersController < ApplicationController
       @user.avatar.purge_later
 
       redirect_to users_url, notice: "User was successfully destroyed.", status: :see_other
-    rescue ActiveRecord::InvalidForeignKey # FIXME redirect not working
-      redirect_to users_url,
+    rescue ActiveRecord::InvalidForeignKey
+      redirect_to request.referer,
                   alert: "User already bought ebooks. Cannot be destroyed.",
-                  status: :unprocessable_entity
-    rescue ActiveRecord::RecordNotDestroyed
-      redirect_to users_url, notice: "User could not be destroyed.", status: :unprocessable_entity
+                  status: :see_other
+    rescue ActiveRecord::RecordNotDestroyed => e
+      redirect_to request.referer,
+                  alert: "User could not be destroyed. #{ e.message }",
+                  status: :see_other
     end
   end
 

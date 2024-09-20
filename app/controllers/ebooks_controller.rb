@@ -47,14 +47,14 @@ class EbooksController < ApplicationController
       @ebook.cover_image.purge_later
 
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
-    rescue ActiveRecord::InvalidForeignKey # FIXME redirect not working
-      redirect_to ebooks_url,
+    rescue ActiveRecord::InvalidForeignKey
+      redirect_to request.referer,
                   alert: "Ebook already bought and cannot not be destroyed.",
-                  status: :unprocessable_entity
-    rescue ActiveRecord::RecordNotDestroyed => e # FIXME redirect not working
-      redirect_to ebooks_url,
-                  alert: "Ebook could not be destroyed: #{ e.message }",
-                  status: :unprocessable_entity
+                  status: :see_other
+    rescue ActiveRecord::RecordNotDestroyed => e
+      redirect_to request.referer,
+                  alert: "Ebook could not be destroyed. #{ e.message }",
+                  status: :see_other
     end
   end
 
