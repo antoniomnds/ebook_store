@@ -19,4 +19,6 @@ Rails.application.routes.draw do
       patch "increment_views"
     end
   end
+
+  resources :logins, only: %i[ new create destroy ]
 end

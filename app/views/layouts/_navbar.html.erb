@@ -14,8 +14,28 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><%= link_to 'Home', root_path, class: 'nav-link' %></li>
         <li class="nav-item"><%= link_to 'Users', users_path, class: 'nav-link' %></li>
-        <li class="nav-item"><%= link_to 'Ebook', ebooks_path, class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to 'Ebooks', ebooks_path, class: 'nav-link' %></li>
       </ul>
+      <% if logged_in? %>
+        <div class="d-flex">
+          <span class="navbar-text me-3">Welcome, <%= current_user.username %>!</span>
+          <ul class="navbar-nav">
+            <li><%= button_to 'Log out',
+                              login_path(current_user),
+                              method: :delete,
+                              form: {
+                                data: { turbo_confirm: 'Are you sure you want to logout?' }
+                              },
+                              class: 'nav-link'
+            %></li>
+          </ul>
+        </div>
+      <% else %>
+        <ul class="navbar-nav">
+          <li><%= link_to 'Log in', new_login_path, class: 'nav-link' %></li>
+          <li><%= link_to 'Sign up', new_user_path, class: 'nav-link' %></li>
+        </ul>
+      <% end %>
     </div>
   </div>
 </nav>

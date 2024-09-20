@@ -24,6 +24,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      session[:current_user_id] = @user.id
       redirect_to @user, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -65,6 +66,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :email, :enabled, :avatar)
+      params.require(:user).permit(:username, :email, :enabled, :avatar, :password, :password_confirmation)
     end
 end

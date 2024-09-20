@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_17_151721) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_20_114933) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -88,19 +88,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_151721) do
     t.index ["user_id"], name: "index_sellers_on_user_id"
   end
 
-  create_table "user_profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_profiles_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "email"
     t.boolean "enabled"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -111,5 +106,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_151721) do
   add_foreign_key "ebook_sellers", "ebooks"
   add_foreign_key "ebook_sellers", "sellers"
   add_foreign_key "sellers", "users"
-  add_foreign_key "user_profiles", "users"
 end

@@ -4,12 +4,15 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
+  has_secure_password
+
   validates :username,
             presence: true
 
   validates :email,
             presence: true,
-            email: true
+            email: true,
+            uniqueness: true
 
   validates :enabled,
     presence: true

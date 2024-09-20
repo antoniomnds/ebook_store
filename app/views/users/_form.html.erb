@@ -11,30 +11,46 @@
     </div>
   <% end %>
 
-  <div class="row mb-3">
-    <%= form.label :avatar, style: 'display: block', class: 'col-sm-2 col-form-label' %>
-    <div class="col-sm-10">
-      <%# retain reference to the uploaded file to not upload it again in case of form re-rendering %>
-      <%= form.hidden_field :avatar, value: @user.avatar.signed_id if @user.avatar.attached? %>
-      <%= form.file_field :avatar, class: 'form-control', accept: 'image/png,image/gif,image/jpeg', direct_upload: true %>
+  <% if action_name == 'edit' %>
+    <div class="row mb-3">
+      <%= form.label :avatar, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+      <div class="col-sm-10">
+        <%# retain reference to the uploaded file to not upload it again in case of form re-rendering %>
+        <%= form.hidden_field :avatar, value: @user.avatar.signed_id if @user.avatar.attached? %>
+        <%= form.file_field :avatar, class: 'form-control', accept: 'image/png,image/gif,image/jpeg', direct_upload: true %>
+      </div>
     </div>
-  </div>
+  <% end %>
 
-  <div class="row mb-3">
+  <div class="row m-3">
     <%= form.label :username, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%= form.text_field :username, class: 'form-control' %>
     </div>
   </div>
 
-  <div class="row mb-3">
+  <div class="row m-3">
     <%= form.label :email, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%= form.email_field :email, class: 'form-control' %>
     </div>
   </div>
 
-  <div class="row mb-3">
+  <div class="row m-3">
+    <%= form.label :password, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.password_field :password, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <%= form.label :password_confirmation, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.password_field :password_confirmation, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row m-3">
     <div class="col-sm-10 offset-sm-2">
       <div class="form-check">
         <%= form.check_box :enabled, class: 'form-check-input' %>
