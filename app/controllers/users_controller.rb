@@ -48,7 +48,7 @@ class UsersController < ApplicationController
       redirect_to users_url, notice: "User was successfully destroyed.", status: :see_other
     rescue ActiveRecord::InvalidForeignKey # FIXME redirect not working
       redirect_to users_url,
-                  alert: "User already bought ebooks. Cannot not be destroyed.",
+                  alert: "User already bought ebooks. Cannot be destroyed.",
                   status: :unprocessable_entity
     rescue ActiveRecord::RecordNotDestroyed
       redirect_to users_url, notice: "User could not be destroyed.", status: :unprocessable_entity
