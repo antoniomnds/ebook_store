@@ -13,4 +13,11 @@ class User < ApplicationRecord
 
   validates :enabled,
     presence: true
+
+  after_save_commit :resize_avatar,
+                    if: -> { avatar.attached? }
+
+  def resize_avatar
+    ResizeImageJob.perform_later(self.class.name, self.id, :avatar, 250, 250)
+  end
 end
