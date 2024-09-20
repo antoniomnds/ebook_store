@@ -7,7 +7,7 @@
             <% if Rails.configuration.active_storage.service == :local %>
               <%= image_tag ebook.cover_image.preview(:thumb) %>
             <% else %>
-              <%= cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale", format: "jpg" %>
+              <%= cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale" %>
             <% end %>
           </div>
         <% end %>
