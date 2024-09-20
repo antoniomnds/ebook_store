@@ -7,6 +7,6 @@ class ResizeImageJob < ApplicationJob
     attachment = record.__send__(attachment_name)
     return unless attachment.attached?
 
-    attachment.variant(resize_to_limit: [ 300, 300 ]).processed # process and cache the variant
+    attachment.variant(resize_to_limit: [ width, height ]).processed # process and cache the variant
   end
 end
