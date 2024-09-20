@@ -60,7 +60,7 @@ class EbooksController < ApplicationController
       Ebook::PurchaseService.purchase(user, ebook)
 
       redirect_to ebooks_url, notice: "Ebook was successfully purchased."
-    rescue RecordNotFound
+    rescue ActiveRecord::RecordNotFound
       redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
       redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
