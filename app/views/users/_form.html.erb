@@ -37,14 +37,33 @@
   </div>
 
   <div class="row m-3">
-    <%= form.label :password, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <%= form.label :password_challenge,
+                   "Current password",
+                   style: 'display: block',
+                   class: 'col-sm-2 col-form-label'
+    %>
+    <div class="col-sm-10">
+      <%= form.password_field :password_challenge, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <%= form.label :password,
+                   "New password",
+                   style: 'display: block',
+                   class: 'col-sm-2 col-form-label'
+    %>
     <div class="col-sm-10">
       <%= form.password_field :password, class: 'form-control' %>
     </div>
   </div>
 
   <div class="row m-3">
-    <%= form.label :password_confirmation, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <%= form.label :password_confirmation,
+                   "New password confirmation",
+                   style: 'display: block',
+                   class: 'col-sm-2 col-form-label'
+    %>
     <div class="col-sm-10">
       <%= form.password_field :password_confirmation, class: 'form-control' %>
     </div>
