@@ -1,4 +1,6 @@
 class LoginsController < ApplicationController
+  skip_before_action :require_login, only: %i[new create]
+
   def new
   end
 
@@ -16,7 +18,6 @@ class LoginsController < ApplicationController
   def destroy
     session.delete(:current_user_id)
     @_current_user = nil
-    flash[:notice] = "You have successfully logged out."
-    redirect_to root_path, status: :see_other
+    redirect_to root_path, notice: "You have successfully logged out.", status: :see_other
   end
 end
