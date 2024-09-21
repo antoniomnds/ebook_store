@@ -20,15 +20,17 @@
         <td>
           <div class="btn-group" role="group" aria-label="User management buttons">
             <%= link_to "Show", user, class: 'btn btn-outline-dark' %>
-            <%= link_to "Edit", edit_user_path(user), class: 'btn btn-outline-dark' %>
-            <%= link_to "Delete",
-                        user,
-                        data: {
-                          turbo_method: :delete,
-                          turbo_confirm: 'Are you sure?'
-                        },
-                        class: 'btn btn-outline-dark'
-            %>
+            <% if current_user && current_user == user %>
+              <%= link_to "Edit", edit_user_path(user), class: 'btn btn-outline-dark' %>
+              <%= link_to "Delete",
+                          user,
+                          data: {
+                            turbo_method: :delete,
+                            turbo_confirm: 'Are you sure?'
+                          },
+                          class: 'btn btn-outline-dark'
+              %>
+            <% end %>
           </div>
         </td>
       </tr>

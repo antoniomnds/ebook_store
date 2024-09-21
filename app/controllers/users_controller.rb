@@ -17,6 +17,9 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    redirect_to root_path,
+                alert: "You can only edit your own profile.",
+                status: :see_other unless @user == current_user
   end
 
   # POST /users
@@ -42,6 +45,10 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
+    redirect_to root_path,
+                alert: "You can only delete your own profile.",
+                status: :see_other unless @user == current_user
+
     begin
       @user.destroy!
       @user.avatar.purge_later
