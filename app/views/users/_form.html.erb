@@ -36,16 +36,18 @@
     </div>
   </div>
 
-  <div class="row m-3">
-    <%= form.label :password_challenge,
-                   "Current password",
-                   style: 'display: block',
-                   class: 'col-sm-2 col-form-label'
-    %>
-    <div class="col-sm-10">
-      <%= form.password_field :password_challenge, class: 'form-control' %>
+  <% if action_name == 'edit' %>
+    <div class="row m-3">
+      <%= form.label :password_challenge,
+                     "Current password",
+                     style: 'display: block',
+                     class: 'col-sm-2 col-form-label'
+      %>
+      <div class="col-sm-10">
+        <%= form.password_field :password_challenge, class: 'form-control' %>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="row m-3">
     <%= form.label :password,
