@@ -4,6 +4,8 @@
 
 <%= form_with url: logins_path do |form| %>
 
+  <%= hidden_field_tag :back_url, request.referer %>
+
   <div class="row m-3">
     <%= form.label :email, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
