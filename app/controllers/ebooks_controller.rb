@@ -1,5 +1,6 @@
 class EbooksController < ApplicationController
   before_action :set_ebook, only: %i[ show edit update destroy ]
+  skip_before_action :require_login, only: %i[ index show increment_views ]
 
   # GET /ebooks
   def index
