@@ -1,4 +1,4 @@
-<% content_for :title, "Users" %>
+<% content_for :title, "Ebook Store - Users" %>
 
 <h1>Users</h1>
 
@@ -8,7 +8,7 @@
       <th>Username</th>
       <th>Email</th>
       <th>Enabled?</th>
-      <th>Actions</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -17,22 +17,7 @@
         <td><%= user.username %></td>
         <td><%= user.email %></td>
         <td><%= user.enabled ? 'Yes' : 'No' %></td>
-        <td>
-          <div class="btn-group" role="group" aria-label="User management buttons">
-            <%= link_to "Show", user, class: 'btn btn-outline-dark' %>
-            <% if current_user && current_user == user %>
-              <%= link_to "Edit", edit_user_path(user), class: 'btn btn-outline-dark' %>
-              <%= link_to "Delete",
-                          user,
-                          data: {
-                            turbo_method: :delete,
-                            turbo_confirm: 'Are you sure?'
-                          },
-                          class: 'btn btn-outline-dark'
-              %>
-            <% end %>
-          </div>
-        </td>
+        <td><%= link_to "View profile", user, class: 'btn btn-outline-dark' %></td>
       </tr>
     <% end %>
   </tbody>
