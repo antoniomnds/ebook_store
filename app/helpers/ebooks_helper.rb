@@ -23,4 +23,14 @@ module EbooksHelper
       content_tag(:span, ebook.status&.titleize, class: "badge bg-info")
     end
   end
+
+  def purchase_button(ebook, klass: "btn btn-lg btn-outline-primary mt-5")
+    if current_user != ebook.user && ebook.status_live?
+        button_to "Purchase",
+                  purchase_ebook_path(ebook),
+                  method: :post,
+                  class: klass,
+                  data: { confirm: "Are you sure you want to purchase this ebook?" }
+    end
+  end
 end

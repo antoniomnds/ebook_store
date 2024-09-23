@@ -33,7 +33,7 @@
         </div>
       </td>
       <td>
-        <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-outline-primary' %>
+        <%= purchase_button(ebook, klass: "btn btn-outline-primary") %>
       </td>
     <tr>
   <% end %>
