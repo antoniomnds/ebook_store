@@ -10,5 +10,5 @@
 
 $LOAD_PATH << File.dirname(__FILE__)
 
-require 'seeds/users.rb'
+require 'seeds/users.rb' # should be loaded first, before the ebooks seed
 require 'seeds/ebooks.rb'

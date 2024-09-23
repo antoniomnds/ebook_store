@@ -2,6 +2,10 @@
 
 <h1>Ebooks</h1>
 
+<div class="d-flex justify-content-end mb-5">
+  <%= link_to "New ebook", new_ebook_path, class: 'btn btn-primary' %>
+</div>
+
 <table id="ebooks" class="table table-hover">
   <thead>
     <tr class="text-center">
@@ -11,12 +15,6 @@
       <th>Authors</th>
       <th>Genre</th>
       <th>Publisher</th>
-      <th>Publication date</th>
-      <th>Pages</th>
-      <th>ISBN</th>
-      <th>Sales</th>
-      <th>Views</th>
-      <th>Preview downloads</th>
       <th colspan="2">Actions</th>
     </tr>
   </thead>
@@ -29,24 +27,9 @@
       <td><%= ebook.authors %></td>
       <td><%= ebook.genre %></td>
       <td><%= ebook.publisher %></td>
-      <td><%= ebook.publication_date %></td>
-      <td><%= ebook.pages %></td>
-      <td><%= ebook.isbn %></td>
-      <td><%= ebook.sales %></td>
-      <td><%= ebook.views %></td>
-      <td><%= ebook.preview_downloads %></td>
       <td>
         <div class="btn-group" role="group" aria-label="Ebook management buttons">
           <%= link_to "Show", ebook, class: 'btn btn-outline-dark' %>
-          <%= link_to "Edit", edit_ebook_path(ebook), class: 'btn btn-outline-dark' %>
-          <%= link_to "Delete",
-                      ebook,
-                      data: {
-                        turbo_method: :delete,
-                        turbo_confirm: 'Are you sure?'
-                      },
-                      class: 'btn btn-outline-dark'
-          %>
         </div>
       </td>
       <td>
@@ -56,5 +39,3 @@
   <% end %>
   </tbody>
 </table>
-
-<%= link_to "New ebook", new_ebook_path, class: 'btn btn-outline-dark' %>

@@ -1,4 +1,5 @@
 20.times do |_|
+  num_users = User.count
   Ebook.create! do |ebook|
     ebook.title = Faker::Book.title
     ebook.status = %w[draft pending live].sample
@@ -12,5 +13,6 @@
     ebook.sales = Faker::Number.number(digits: 3)
     ebook.views = Faker::Number.number(digits: 5)
     ebook.preview_downloads = Faker::Number.number(digits: 4)
+    ebook.user = User.find(rand(1..num_users))
   end
 end

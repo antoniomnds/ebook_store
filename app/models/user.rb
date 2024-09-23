@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_one :buyer
   has_one :seller
+  has_many :ebooks
 
   has_one_attached :avatar
 
