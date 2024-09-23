@@ -2,19 +2,8 @@
 
 <div class="btn-group" role="group" aria-label="Ebook management buttons">
   <%= link_to "Back to ebooks", ebooks_path, class: 'btn btn-outline-dark' %>
-  <% if current_user == @ebook.user %>
-    <%= link_to "Edit this ebook", edit_ebook_path(@ebook), class: 'btn btn-outline-primary' %>
-    <%= button_to "Delete this ebook",
-                  @ebook,
-                  method: :delete,
-                  form: {
-                    data: {
-                      turbo_confirm: 'Are you sure?'
-                    }
-                  },
-                  class: 'btn btn-outline-danger'
-    %>
-  <% end %>
+  <%= edit_ebook_button(@ebook) %>
+  <%= delete_ebook_button(@ebook) %>
 </div>
 
 <div data-controller="ebook"
