@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_23_103653) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_23_112046) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -65,6 +65,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_103653) do
     t.index ["user_id"], name: "index_ebooks_on_user_id"
   end
 
+  create_table "purchases", force: :cascade do |t|
+    t.datetime "purchased_at"
+    t.decimal "price", precision: 5, scale: 2
+    t.integer "buyer_id", null: false
+    t.integer "seller_id", null: false
+    t.integer "ebook_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buyer_id"], name: "index_purchases_on_buyer_id"
+    t.index ["ebook_id"], name: "index_purchases_on_ebook_id"
+    t.index ["seller_id"], name: "index_purchases_on_seller_id"
+  end
+
   create_table "sellers", force: :cascade do |t|
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -87,5 +100,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_103653) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "buyers", "users"
   add_foreign_key "ebooks", "users"
+  add_foreign_key "purchases", "buyers"
+  add_foreign_key "purchases", "ebooks"
+  add_foreign_key "purchases", "sellers"
   add_foreign_key "sellers", "users"
 end

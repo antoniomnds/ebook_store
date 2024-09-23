@@ -15,7 +15,10 @@ class Ebook
 
       ActiveRecord::Base.transaction do
         buyer = @user.buyer || @user.create_buyer
-        buyer.ebooks << @ebook
+        seller = @ebook.user.seller || @ebook.user.create_seller
+
+        Purchase.create!(buyer: buyer, seller: seller, ebook: @ebook, price: @ebook.price)
+        @user.ebooks << @ebook # change ebook ownership
         @ebook.update_attribute(:sales, @ebook.sales + 1)
 
         UserMailer.notify_purchase(@user, @ebook).deliver_later

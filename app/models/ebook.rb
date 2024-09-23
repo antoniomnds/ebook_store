@@ -1,5 +1,6 @@
 class Ebook < ApplicationRecord
   belongs_to :user
+  has_many :purchases
 
   enum :status, %i[archived draft pending live], prefix: true
 

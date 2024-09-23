@@ -62,10 +62,10 @@ class EbooksController < ApplicationController
   def purchase
     begin
       ebook = Ebook.find(params[:id])
-      user = User.first
+      user = current_user
       Ebook::PurchaseService.purchase(user, ebook)
 
-      redirect_to ebooks_url, notice: "Ebook was successfully purchased."
+      redirect_to ebook, notice: "Ebook was successfully purchased."
     rescue ActiveRecord::RecordNotFound
       redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
