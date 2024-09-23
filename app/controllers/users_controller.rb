@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:current_user_id] = @user.id
+      UserMailer.welcome(@user).deliver_later
       redirect_to root_path, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity

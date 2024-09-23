@@ -2,6 +2,12 @@ class UserMailer < ApplicationMailer
   default from: "antoniomndsantos@gmail.com"
   default to: "antonio.santos@runtime-revolution.com"
 
+  def welcome(user)
+    @user = user
+
+    mail(subject: "Welcome to the Ebook Store!")
+  end
+
   def notify_purchase(user, ebook)
     @user = user
     @ebook = ebook
