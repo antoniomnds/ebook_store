@@ -17,6 +17,12 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
 
   def require_login
-    redirect_to new_login_path, status: :see_other unless logged_in?
+    redirect_to edit_user_path(current_user),
+                alert: "Your password has expired. Please update your password.",
+                status: :see_other if current_user&.password_expired?
+
+    redirect_to new_login_path,
+                alert: "You must be logged in to access this page.",
+                status: :see_other unless logged_in?
   end
 end

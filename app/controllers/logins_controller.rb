@@ -10,7 +10,7 @@ class LoginsController < ApplicationController
       session[:current_user_id] = user.id
       redirect_to params[:back_url] || root_path,
                   notice: "You have successfully logged in.",
-                  status: :see_other # FIXME its redirecting to the login page
+                  status: :see_other
     else
       flash[:alert] = "The email or password you entered is incorrect."
       render :new, status: :unprocessable_entity

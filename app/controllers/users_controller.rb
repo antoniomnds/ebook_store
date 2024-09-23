@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  skip_before_action :require_login, only: %i[ new create ]
+  skip_before_action :require_login, only: %i[ new create edit update ] # to sign up and change password
 
   # GET /users
   def index
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:current_user_id] = @user.id
-      redirect_to @user, notice: "User was successfully created."
+      redirect_to root_path, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
