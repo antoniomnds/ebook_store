@@ -11,6 +11,8 @@ class Ebook
     end
 
     def purchase
+      raise "Ebook is archived." if @ebook.status_archived?
+
       ActiveRecord::Base.transaction do
         buyer = @user.buyer || @user.create_buyer
         buyer.ebooks << @ebook

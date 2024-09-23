@@ -1,7 +1,7 @@
 class Ebook < ApplicationRecord
   belongs_to :user
 
-  enum :status, %i[draft pending live], prefix: true
+  enum :status, %i[archived draft pending live], prefix: true
 
   %i[preview_file cover_image].each do |attr|
     if Rails.configuration.active_storage.service == :cloudinary
@@ -39,6 +39,8 @@ class Ebook < ApplicationRecord
 
   validates :isbn,
     presence: true
+
+  scope :live, -> { where(status: :live) }
 
   def discount_value(discount)
     (price * (discount / 100.0)).round(2)

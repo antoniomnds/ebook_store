@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_103653) do
   end
 
   create_table "buyers", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_buyers_on_user_id"
@@ -61,12 +61,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_103653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "genre"
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.index ["user_id"], name: "index_ebooks_on_user_id"
   end
 
   create_table "sellers", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sellers_on_user_id"

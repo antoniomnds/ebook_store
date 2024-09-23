@@ -77,13 +77,22 @@
         <%= ebook.preview_downloads %>
       </p>
 
-      <p>
-        <strong>Owner:</strong>
-        <%= link_to ebook.user.username, user_path(ebook.user) %>
-      </p>
+      <% if ebook.user %>
+        <p>
+          <strong>Owner:</strong>
+          <%= link_to ebook.user.username, user_path(ebook.user) %>
+        </p>
+      <% end %>
     </div>
-    <div class="col-md-8">
-      <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-lg btn-outline-primary mt-3' %>
+
+    <div class="col-md-8 mt-4">
+      <h3><%= ebook_status_tag(ebook) %></h3>
+      <% if current_user != ebook.user && ebook.status_live? %>
+        <%= button_to 'Purchase',
+                      purchase_ebook_path(ebook),
+                      method: :post,
+                      class: 'btn btn-lg btn-outline-primary mt-5' %>
+      <% end %>
     </div>
   </div>
 </div>

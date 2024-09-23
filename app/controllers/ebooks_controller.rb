@@ -4,7 +4,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks
   def index
-    @ebooks = Ebook.all
+    @ebooks = Ebook.live
   end
 
   # GET /ebooks/1

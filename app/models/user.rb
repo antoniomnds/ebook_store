@@ -1,7 +1,10 @@
 class User < ApplicationRecord
-  has_one :buyer
-  has_one :seller
-  has_many :ebooks
+  has_one :buyer,
+          dependent: :nullify
+  has_one :seller,
+          dependent: :nullify
+  has_many :ebooks,
+           dependent: :nullify
 
   has_one_attached :avatar
 
@@ -21,6 +24,10 @@ class User < ApplicationRecord
   after_save_commit :resize_avatar,
                     if: -> { avatar.attached? }
 
+  before_destroy :process_orphaned_ebooks,
+                 prepend: true,
+                 if: -> { ebooks.any? }
+
   def password_expired?
     DateTime.now > password_expires_at
   end
@@ -34,5 +41,13 @@ class User < ApplicationRecord
 
   def set_password_expiration
     self.password_expires_at = Time.now + 6.months
+  end
+
+  def process_orphaned_ebooks
+    ActiveRecord::Base.transaction do
+      ebooks.each do |ebook|
+        ebook.update!(status: :archived)
+      end
+    end
   end
 end

@@ -56,10 +56,6 @@ class UsersController < ApplicationController
       @user.avatar.purge_later
 
       redirect_to users_url, notice: "User was successfully destroyed.", status: :see_other
-    rescue ActiveRecord::InvalidForeignKey
-      redirect_to request.referer,
-                  alert: "User already bought ebooks. Cannot be destroyed.",
-                  status: :see_other
     rescue ActiveRecord::RecordNotDestroyed => e
       redirect_to request.referer,
                   alert: "User could not be destroyed. #{ e.message }",
