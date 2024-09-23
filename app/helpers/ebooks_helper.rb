@@ -30,7 +30,7 @@ module EbooksHelper
                   purchase_ebook_path(ebook),
                   method: :post,
                   class: klass,
-                  data: { confirm: "Are you sure you want to purchase this ebook?" }
+                  data: { turbo_confirm: "Are you sure you want to purchase this ebook?" }
     end
   end
 end
