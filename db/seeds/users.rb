@@ -6,3 +6,12 @@
     user.enabled = true
   end
 end
+
+# a known admin user
+User.create! do |user|
+  user.username = "admin"
+  user.password = "password"
+  user.email = "admin@example.com"
+  user.enabled = true
+  user.is_admin = true
+end

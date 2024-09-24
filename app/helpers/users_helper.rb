@@ -8,4 +8,10 @@ module UsersHelper
       image_tag user.avatar.variant(resize_to_limit: [ 250, 250 ])
     end
   end
+
+  def admin_tag(user)
+    return nil unless user.is_admin?
+
+    content_tag :span, "Admin", class: "badge bg-danger"
+  end
 end
