@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :users
+  resources :users do
+    member do
+      get "ebooks"
+    end
+  end
+
   resources :ebooks do
     member do
       post "purchase"
