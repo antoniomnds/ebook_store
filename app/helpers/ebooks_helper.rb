@@ -25,7 +25,7 @@ module EbooksHelper
   end
 
   def purchase_button(ebook, klass: "btn btn-lg btn-outline-primary mt-5")
-    if current_user != ebook.user && ebook.status_live?
+    if current_user.id != ebook.user_id && ebook.status_live?
         button_to "Purchase",
                   purchase_ebook_path(ebook),
                   method: :post,
