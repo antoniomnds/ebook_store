@@ -100,6 +100,7 @@ class EbooksController < ApplicationController
     def ebook_params
       params.require(:ebook).permit(:title, :status, :price, :authors, :genre, :publisher,
                                     :publication_date, :pages, :isbn, :sales, :views,
-                                    :preview_downloads, :preview_file, :cover_image, :user_id)
+                                    :preview_downloads, :preview_file, :cover_image,
+                                    :user_id, tag_ids: [])
     end
 end

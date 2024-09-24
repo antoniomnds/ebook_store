@@ -1,6 +1,8 @@
 class Ebook < ApplicationRecord
   belongs_to :user
   has_many :purchases
+  has_many :ebook_tags, dependent: :destroy
+  has_many :tags, through: :ebook_tags
 
   enum :status, %i[archived draft pending live], prefix: true
 

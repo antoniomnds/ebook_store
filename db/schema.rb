@@ -46,6 +46,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_112046) do
     t.index ["user_id"], name: "index_buyers_on_user_id"
   end
 
+  create_table "ebook_tags", force: :cascade do |t|
+    t.integer "ebook_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ebook_id"], name: "index_ebook_tags_on_ebook_id"
+    t.index ["tag_id"], name: "index_ebook_tags_on_tag_id"
+  end
+
   create_table "ebooks", force: :cascade do |t|
     t.string "title"
     t.integer "status"
@@ -85,6 +94,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_112046) do
     t.index ["user_id"], name: "index_sellers_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -99,6 +116,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_112046) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "buyers", "users"
+  add_foreign_key "ebook_tags", "ebooks"
+  add_foreign_key "ebook_tags", "tags"
   add_foreign_key "ebooks", "users"
   add_foreign_key "purchases", "buyers"
   add_foreign_key "purchases", "ebooks"
