@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   def edit
     redirect_to root_path,
                 alert: "You can only edit your own profile.",
-                status: :see_other unless @user == current_user
+                status: :see_other unless @user == current_user || current_user.is_admin?
   end
 
   # POST /users
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   def destroy
     redirect_to root_path,
                 alert: "You can only delete your own profile.",
-                status: :see_other unless @user == current_user
+                status: :see_other unless @user == current_user || current_user.is_admin?
 
     begin
       @user.destroy!
