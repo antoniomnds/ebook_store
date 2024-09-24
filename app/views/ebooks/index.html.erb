@@ -6,6 +6,8 @@
   <%= link_to "New ebook", new_ebook_path, class: 'btn btn-primary' %>
 </div>
 
+<%= render 'filters' if action_name == 'index' %>
+
 <table id="ebooks" class="table table-hover">
   <thead>
     <tr class="text-center">
@@ -15,6 +17,7 @@
       <th>Authors</th>
       <th>Genre</th>
       <th>Publisher</th>
+      <th>Tags</th>
       <th colspan="2">Actions</th>
     </tr>
   </thead>
@@ -28,13 +31,12 @@
       <td><%= ebook.genre %></td>
       <td><%= ebook.publisher %></td>
       <td>
-        <div class="btn-group" role="group" aria-label="Ebook management buttons">
-          <%= link_to "Show", ebook, class: 'btn btn-outline-dark' %>
-        </div>
+        <% ebook.tags.each do |tag| %>
+          <span class="badge bg-info">#<%= tag.name %></span>
+        <% end %>
       </td>
-      <td>
-        <%= purchase_button(ebook, klass: "btn btn-outline-primary") %>
-      </td>
+      <td><%= link_to "Show", ebook, class: 'btn btn-outline-dark' %></td>
+      <td><%= purchase_button(ebook, klass: "btn btn-outline-primary") %></td>
     <tr>
   <% end %>
   </tbody>

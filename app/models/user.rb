@@ -28,6 +28,8 @@ class User < ApplicationRecord
                  prepend: true,
                  if: -> { ebooks.any? }
 
+  scope :with_ebooks, -> { joins(:ebooks).distinct.order(:id) }
+
   def password_expired?
     DateTime.now > password_expires_at
   end
