@@ -44,10 +44,7 @@ class User < ApplicationRecord
   end
 
   def process_orphaned_ebooks
-    ActiveRecord::Base.transaction do
-      ebooks.each do |ebook|
-        ebook.update!(status: :archived)
-      end
-    end
+    # noinspection RailsParamDefResolve
+    ebooks.update_all(status: :archived)
   end
 end
