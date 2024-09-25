@@ -25,4 +25,13 @@ class ApplicationController < ActionController::Base
                 alert: "You must be logged in to access this page.",
                 status: :see_other unless logged_in?
   end
+
+  def login(user)
+    session[:current_user_id] = user.id
+  end
+
+  def logout
+    session.delete(:current_user_id)
+    @_current_user = nil
+  end
 end

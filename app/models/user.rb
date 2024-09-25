@@ -1,10 +1,7 @@
 class User < ApplicationRecord
-  has_one :buyer,
-          dependent: :nullify
-  has_one :seller,
-          dependent: :nullify
-  has_many :ebooks,
-           dependent: :nullify
+  has_one :buyer
+  has_one :seller
+  has_many :ebooks
 
   has_one_attached :avatar
 
@@ -24,14 +21,25 @@ class User < ApplicationRecord
   after_save_commit :resize_avatar,
                     if: -> { avatar.attached? }
 
-  before_destroy :process_orphaned_ebooks,
-                 prepend: true,
-                 if: -> { ebooks.any? }
+  scope :active, -> { where(active: true) }
 
   def password_expired?
     DateTime.now > password_expires_at
   end
 
+  # Performs a soft delete on the user.
+  def inactivate!
+    ActiveRecord::Base.transaction do
+      update!(
+        active: false,
+        username: "deleted-user-#{ DateTime.now.to_i }",
+        email: "#{ DateTime.now.to_i }@deleted-user",
+        inactivated_at: DateTime.now
+      )
+      # noinspection RailsParamDefResolve
+      ebooks.update_all(status: :archived, updated_at: DateTime.now)
+    end
+  end
 
   private
 
@@ -41,10 +49,5 @@ class User < ApplicationRecord
 
   def set_password_expiration
     self.password_expires_at = Time.now + 6.months
-  end
-
-  def process_orphaned_ebooks
-    # noinspection RailsParamDefResolve
-    ebooks.update_all(status: :archived)
   end
 end
