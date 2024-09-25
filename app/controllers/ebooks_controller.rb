@@ -42,15 +42,38 @@ class EbooksController < ApplicationController
   # DELETE /ebooks/1
   def destroy
     begin
-      ActiveRecord::Base.transaction do
-        @ebook.destroy!
-        @ebook.preview_file.purge_later
-      end
+      @ebook.destroy!
+      @ebook.preview_file.purge_later
+
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
-    rescue StandardError => e
+    rescue RecordNotDestroyed => e
       redirect_to ebooks_url,
                   notice: "Ebook could not be destroyed: #{ e.message }",
                   status: :unprocessable_entity
+    end
+  end
+
+  def purchase
+    begin
+      ebook = Ebook.find(params[:id])
+      user = User.first
+      Ebook::PurchaseService.purchase(user, ebook)
+
+      redirect_to ebooks_url, notice: "Ebook was successfully purchased."
+    rescue ActiveRecord::RecordNotFound
+      redirect_to ebooks_url, alert: "Ebook could not be found."
+    rescue StandardError => e
+      redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
+    end
+  end
+
+  def increment_views
+    begin
+      ebook = Ebook.find(params[:id])
+      ebook.increment!(:views)
+      render json: { views: ebook.views }, status: :ok
+    rescue RecordNotFound
+      render json: { error: "Ebook could not be found." }, status: :not_found
     end
   end
 

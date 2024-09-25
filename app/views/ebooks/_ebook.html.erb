@@ -1,78 +1,84 @@
 <div id="<%= dom_id ebook %>">
-  <p>
-    <strong>Title:</strong>
-    <%= ebook.title %>
-  </p>
+  <div class="row">
+    <div class="col-md-4">
+      <% if ebook.preview_file.attached? %>
+        <% if Rails.configuration.active_storage.service == :local %>
+          <%= image_tag ebook.preview_file.preview(:thumb) %>
+        <% else %>
+          <%= cl_image_tag ebook.preview_file.key, width: 300, height: 200, crop: "scale", format: "jpg" %>
+        <% end %>
 
-  <p>
-    <strong>Status:</strong>
-    <%= ebook.status %>
-  </p>
+        <p>
+          <%= link_to 'Download Preview',
+                      rails_blob_path(ebook.preview_file, disposition: "attachment"),
+                      class: 'btn btn-outline-primary offset-md-1'
+          %>
+        </p>
+      <% end %>
 
-  <p>
-    <strong>Price:</strong>
-    <%= ebook.price %>
-  </p>
+      <p>
+        <strong>Title:</strong>
+        <%= ebook.title %>
+      </p>
 
-  <p>
-    <strong>Authors:</strong>
-    <%= ebook.authors %>
-  </p>
+      <p>
+        <strong>Status:</strong>
+        <%= ebook.status %>
+      </p>
 
-  <p>
-    <strong>Genre:</strong>
-    <%= ebook.genre %>
-  </p>
+      <p>
+        <strong>Price:</strong>
+        <%= ebook.price %>
+      </p>
 
-  <p>
-    <strong>Publisher:</strong>
-    <%= ebook.publisher %>
-  </p>
+      <p>
+        <strong>Authors:</strong>
+        <%= ebook.authors %>
+      </p>
 
-  <p>
-    <strong>Publication Date:</strong>
-    <%= ebook.publication_date %>
-  </p>
+      <p>
+        <strong>Genre:</strong>
+        <%= ebook.genre %>
+      </p>
 
-  <p>
-    <strong>Pages:</strong>
-    <%= ebook.pages %>
-  </p>
+      <p>
+        <strong>Publisher:</strong>
+        <%= ebook.publisher %>
+      </p>
 
-  <p>
-    <strong>ISBN:</strong>
-    <%= ebook.isbn %>
-  </p>
+      <p>
+        <strong>Publication Date:</strong>
+        <%= ebook.publication_date %>
+      </p>
 
-  <p>
-    <strong>Sales:</strong>
-    <%= ebook.sales %>
-  </p>
+      <p>
+        <strong>Pages:</strong>
+        <%= ebook.pages %>
+      </p>
 
-  <p>
-    <strong>Views:</strong>
-    <%= ebook.views %>
-  </p>
+      <p>
+        <strong>ISBN:</strong>
+        <%= ebook.isbn %>
+      </p>
 
-  <p>
-    <strong>Preview downloads:</strong>
-    <%= ebook.preview_downloads %>
-  </p>
+      <p>
+        <strong>Sales:</strong>
+        <%= ebook.sales %>
+      </p>
 
-  <% if ebook.preview_file.attached? %>
-    <p><strong>Preview file:</strong></p>
-    <% if Rails.configuration.active_storage.service == :local %>
-      <%= image_tag ebook.preview_file.preview(:thumb) %>
-    <% else %>
-      <%= cl_image_tag ebook.preview_file.key, width: 300, height: 200, crop: "scale", format: "jpg" %>
-    <% end %>
-    <%= link_to 'Download Preview',
-                rails_blob_path(ebook.preview_file, disposition: "attachment"),
-                class: 'btn btn-outline-primary'
-    %>
-    <br>
-    <br>
-    <br>
-  <% end %>
+      <p>
+        <strong>Views:</strong>
+        <%= ebook.views %>
+      </p>
 
+      <p>
+        <strong>Preview downloads:</strong>
+        <%= ebook.preview_downloads %>
+      </p>
+    </div>
+    <div class="col-md-8">
+      <br>
+      <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-lg btn-outline-primary' %>
+    </div>
+  </div>
 </div>

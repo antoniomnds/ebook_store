@@ -37,6 +37,9 @@ gem "cloudinary"
 # For background processing
 gem "sidekiq"
 
+# For sending by default some headers that are required by rails, like X-CSRF-Token
+gem "requestjs-rails"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

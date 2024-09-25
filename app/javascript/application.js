@@ -4,3 +4,4 @@ import "controllers"
 import "popper"
 import "bootstrap"
 //= require activestorage
+import "@rails/request.js"

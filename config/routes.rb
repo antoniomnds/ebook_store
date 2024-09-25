@@ -13,5 +13,10 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resources :users
-  resources :ebooks
+  resources :ebooks do
+    member do
+      post "purchase"
+      patch "increment_views"
+    end
+  end
 end

@@ -9,5 +9,8 @@
     ebook.pages = Faker::Number.number(digits: 3)
     ebook.publication_date = Faker::Date.between(from: 20.years.ago, to: Date.today)
     ebook.isbn = "978-#{Faker::Number.number(digits: 9)}"
+    ebook.sales = Faker::Number.number(digits: 3)
+    ebook.views = Faker::Number.number(digits: 5)
+    ebook.preview_downloads = Faker::Number.number(digits: 4)
   end
 end

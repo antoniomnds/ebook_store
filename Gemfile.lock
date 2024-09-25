@@ -260,6 +260,8 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
+    requestjs-rails (0.0.12)
+      railties (>= 6.1.0)
     rubocop (1.66.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -392,6 +394,7 @@ DEPENDENCIES
   importmap-rails
   puma (>= 5.0)
   rails (~> 7.2.1)
+  requestjs-rails
   rubocop-rails-omakase
   sidekiq
   sprockets-rails

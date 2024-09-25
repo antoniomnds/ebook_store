@@ -1,5 +1,3 @@
-<p style="color: green"><%= notice %></p>
-
 <%= render @ebook %>
 
 <div class="btn-group" role="group" aria-label="Ebook management buttons">
@@ -15,4 +13,8 @@
                 },
                 class: 'btn btn-outline-danger'
   %>
+</div>
+
+<div data-controller="ebook"
+     data-increment-views-url="<%= increment_views_ebook_path(@ebook) %>">
 </div>
