@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
 
   rescue_from ActiveRecord::RecordNotFound do |_|
-    redirect_to root_path, alert: "The record you tried to access does not exist.", status: :see_other
+    render file: "#{Rails.root}/public/404.html",  layout: false, status: :not_found
   end
 
   # Finds the User with the ID stored in the session with the key :current_user_id.
