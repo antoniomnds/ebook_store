@@ -4,7 +4,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks
   def index
-    @ebooks = Ebook.filter(params.slice(:tags, :users)).includes(:tags)
+    @ebooks = Ebook.filter(params.slice(:tags, :users)).includes(:tags).live
   end
 
   # GET /ebooks/1
