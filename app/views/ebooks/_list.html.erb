@@ -1,0 +1,17 @@
+<% ebooks.each do |ebook| %>
+  <tr id="<%= dom_id ebook %>" class="text-center">
+    <td><%= ebook.title %></td>
+    <td><%= ebook.status %></td>
+    <td><%= ebook.price %></td>
+    <td><%= ebook.authors %></td>
+    <td><%= ebook.genre %></td>
+    <td><%= ebook.publisher %></td>
+    <td>
+      <% ebook.tags.each do |tag| %>
+        <span class="badge bg-info">#<%= tag.name %></span>
+      <% end %>
+    </td>
+    <td><%= link_to "Show", ebook, class: 'btn btn-outline-dark' %></td>
+    <td><%= purchase_button(ebook, klass: "btn btn-outline-primary") %></td>
+  <tr>
+<% end %>

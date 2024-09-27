@@ -15,20 +15,22 @@
                        class: "form-select"
         %>
       </div>
-      <div class="p-2">
-        <%= label_tag :users, "Users" %>
-        <%= select_tag :users,
-                       options_from_collection_for_select(
-                         User.with_ebooks,
-                         "id",
-                         "username",
-                         params[:users]
-                       ),
-                       multiple: true,
-                       include_blank: true,
-                       class: "form-select"
-        %>
-      </div>
+      <% unless controller_name == "users" %>
+        <div class="p-2">
+          <%= label_tag :users, "Users" %>
+          <%= select_tag :users,
+                         options_from_collection_for_select(
+                           User.with_ebooks,
+                           "id",
+                           "username",
+                           params[:users]
+                         ),
+                         multiple: true,
+                         include_blank: true,
+                         class: "form-select"
+          %>
+        </div>
+      <% end %>
       <div class="p-2">
         <%= submit_tag "Filter", class: "btn btn-outline-success my-2 my-sm-0" %>
       </div>

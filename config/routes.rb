@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get "ebooks"
+      get "my_ebooks"
     end
   end
 

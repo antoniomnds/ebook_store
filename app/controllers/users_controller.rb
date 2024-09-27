@@ -63,10 +63,8 @@ class UsersController < ApplicationController
     end
   end
 
-  def ebooks
+  def my_ebooks
     @ebooks = current_user.ebooks
-
-    render "ebooks/index"
   end
 
   private
