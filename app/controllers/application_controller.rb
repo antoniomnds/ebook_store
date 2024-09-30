@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
                 alert: "Your password has expired. Please update your password.",
                 status: :see_other if current_user&.password_expired?
 
-    redirect_to new_login_path,
+    redirect_to new_session_path,
                 alert: "You must be logged in to access this page.",
                 status: :see_other unless logged_in?
   end

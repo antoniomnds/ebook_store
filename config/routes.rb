@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :users
+  resources :users, except: %i[ new create]
   resources :ebooks do
     member do
       post "purchase"
@@ -20,5 +20,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :logins, only: %i[ new create destroy ]
+  resources :sessions, only: %i[ new create destroy ]
+  resources :registrations, only: %i[ new create ]
 end
