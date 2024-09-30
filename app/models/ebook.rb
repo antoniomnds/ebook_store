@@ -30,6 +30,9 @@ class Ebook < ApplicationRecord
     presence: true,
     numericality: { greater_than_or_equal_to: 0.0 }
 
+  validates :genre,
+    presence: true
+
   validates :authors,
     presence: true
 
@@ -45,11 +48,23 @@ class Ebook < ApplicationRecord
   validates :isbn,
     presence: true
 
+  validate :publication_date_cannot_be_in_the_future
+
   scope :live, -> { where(status: :live) }
   scope :filter_by_tags, ->(tag_ids) { joins(:ebook_tags).where(ebook_tags: { tag_id: tag_ids }) }
   scope :filter_by_users, ->(user_ids) { where(user_id: user_ids) }
 
   def discount_value(discount)
-    (price * (discount / 100.0)).round(2)
+    if discount >= 0 && discount <= 100
+      (price * (discount / 100.0)).round(2)
+    else
+      nil
+    end
+  end
+
+  def publication_date_cannot_be_in_the_future
+    if publication_date.present? && publication_date > Date.today
+      errors.add(:publication_date, "can't be in the future")
+    end
   end
 end
