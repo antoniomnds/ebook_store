@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     unless current_user.enabled?
       session.delete(:current_user_id)
       @_current_user = nil
-      redirect_to new_login_path,
+      redirect_to new_session_path,
                   alert: "Your account has been disabled.",
                   status: :see_other
     end

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
-      return redirect_to new_login_path,
+      return redirect_to new_session_path,
                          alert: "Your account has been disabled.",
                          status: :see_other unless user.enabled?
 

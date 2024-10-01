@@ -34,7 +34,7 @@
         <div class="d-flex">
           <ul class="navbar-nav">
             <li><%= button_to 'Log out',
-                              login_path(current_user),
+                              session_path(current_user),
                               method: :delete,
                               form: {
                                 data: { turbo_confirm: 'Are you sure you want to logout?' }
