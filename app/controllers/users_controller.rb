@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     end
 
     begin
-      @user.inactivate!
+      @user.deactivate!
       @user.avatar.purge_later
       logout
 

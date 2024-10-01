@@ -30,7 +30,7 @@ class User < ApplicationRecord
   end
 
   # Performs a soft delete on the user.
-  def inactivate!
+  def deactivate!
     ActiveRecord::Base.transaction do
       update!(
         active: false,
