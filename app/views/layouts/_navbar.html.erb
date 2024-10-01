@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <a class="navbar-brand" href="#">Ebook Store</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><%= link_to 'Home', root_path, class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to 'Users', users_path, class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to 'Ebooks', ebooks_path, class: 'nav-link' %></li>
+      </ul>
+      <% if logged_in? %>
+        <div class="dropdown">
+          <a class="navbar-text me-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Welcome, <%= current_user.username %>!
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <%= link_to 'Edit profile', edit_user_path(current_user), class: 'dropdown-item' %>
+            <li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <%= link_to 'My ebooks', my_ebooks_user_path(current_user), class: 'dropdown-item' %>
+            </li>
+          </ul>
+        </div>
+        <div class="d-flex">
+          <ul class="navbar-nav">
+            <li><%= button_to 'Log out',
+                              session_path(current_user),
+                              method: :delete,
+                              form: {
+                                data: { turbo_confirm: 'Are you sure you want to logout?' }
+                              },
+                              class: 'nav-link'
+            %></li>
+          </ul>
+        </div>
+      <% else %>
+        <ul class="navbar-nav">
+          <li><%= link_to 'Log in', new_session_path, class: 'nav-link' %></li>
+          <li><%= link_to 'Sign up', new_registration_path, class: 'nav-link' %></li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</nav>

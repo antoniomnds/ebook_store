@@ -1,0 +1,21 @@
+<% content_for :title, "Ebook Store - Edit profile" %>
+
+<h1>Edit your profile</h1>
+
+<%= render "form", user: @user %>
+
+<br>
+
+<div class="d-flex justify-content-between" role="group" aria-label="User management buttons">
+  <%= link_to "Back to users", users_path, class: 'btn btn-outline-dark' %>
+  <%= button_to "Delete account",
+                @user,
+                method: :delete,
+                form: {
+                  data: {
+                    turbo_confirm: 'Are you sure? This action cannot be undone.'
+                  }
+                },
+                class: 'btn btn-outline-danger'
+  %>
+</div>

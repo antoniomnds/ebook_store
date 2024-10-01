@@ -1,0 +1,66 @@
+<%= form_with(model: user) do |form| %>
+  <% if user.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row m-3">
+    <%= form.label :avatar, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%# retain reference to the uploaded file to not upload it again in case of form re-rendering %>
+      <%= form.hidden_field :avatar, value: @user.avatar.signed_id if @user.avatar.attached? %>
+      <%= form.file_field :avatar, class: 'form-control', accept: 'image/png,image/gif,image/jpeg', direct_upload: true %>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <%= form.label :username, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.text_field :username, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <%= form.label :email, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.email_field :email, class: 'form-control' %>
+    </div>
+  </div>
+
+  <%= password_challenge_tag(form) %>
+
+  <div class="row m-3">
+    <%= form.label :password,
+                   "New password",
+                   style: 'display: block',
+                   class: 'col-sm-2 col-form-label'
+    %>
+    <div class="col-sm-10">
+      <%= form.password_field :password, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <%= form.label :password_confirmation,
+                   "New password confirmation",
+                   style: 'display: block',
+                   class: 'col-sm-2 col-form-label'
+    %>
+    <div class="col-sm-10">
+      <%= form.password_field :password_confirmation, class: 'form-control' %>
+    </div>
+  </div>
+
+  <%= user_enabled_tag(form) %>
+
+  <div>
+    <%= form.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

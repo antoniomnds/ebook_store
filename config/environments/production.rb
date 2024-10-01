@@ -91,4 +91,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Use Cloudinary for Active Storage
+  config.active_storage.service = :cloudinary
 end

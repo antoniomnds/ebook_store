@@ -1,0 +1,42 @@
+<div class="navbar navbar-light bg-light mb-2">
+  <%= form_with url: ebooks_url, method: :get, class: 'form-inline' do %>
+    <div class="d-flex align-items-center">
+      <div class="p-2">
+        <%= label_tag :tags, "Tags" %>
+        <%= select_tag :tags,
+                       options_from_collection_for_select(
+                         Tag.all,
+                         "id",
+                         "name",
+                         params[:tags]
+                       ),
+                       multiple: true,
+                       include_blank: true,
+                       class: "form-select"
+        %>
+      </div>
+      <% unless controller_name == "users" %>
+        <div class="p-2">
+          <%= label_tag :users, "Users" %>
+          <%= select_tag :users,
+                         options_from_collection_for_select(
+                           User.with_ebooks,
+                           "id",
+                           "username",
+                           params[:users]
+                         ),
+                         multiple: true,
+                         include_blank: true,
+                         class: "form-select"
+          %>
+        </div>
+      <% end %>
+      <div class="p-2">
+        <%= submit_tag "Filter", class: "btn btn-outline-success my-2 my-sm-0" %>
+      </div>
+      <div class="p-2">
+        <%= link_to "Reset", ebooks_url, class: "btn btn-outline-secondary my-2 my-sm-0" %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -5,7 +5,7 @@ require "rails"
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
-# require "active_storage/engine"
+require "active_storage/engine"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 # require "action_mailbox/engine"
@@ -38,5 +38,12 @@ module EbookStore
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Use Sidekiq for Active Job queueing
+    config.active_job.queue_adapter = :sidekiq
+
+    # Configure Active Storage to use background jobs
+    config.active_storage.queues.analysis = :default
+    config.active_storage.queues.purge = :default
   end
 end

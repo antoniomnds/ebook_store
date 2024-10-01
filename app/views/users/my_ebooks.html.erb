@@ -1,0 +1,17 @@
+<% content_for :title, "My Ebooks" %>
+
+<h1>My Ebooks</h1>
+
+<div class="d-flex justify-content-end mb-5">
+  <%= link_to "New ebook", new_ebook_path, class: 'btn btn-primary' %>
+</div>
+
+<% if @ebooks.any? %>
+  <%= render 'ebooks/filters' %>
+
+  <%= render 'ebooks/list', ebooks: @ebooks %>
+<% else %>
+  <div class="alert alert-info" role="alert">
+    You don't have any ebooks yet. <%= link_to "Create one", new_ebook_path %>.
+  </div>
+<% end %>
