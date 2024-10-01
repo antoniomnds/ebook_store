@@ -16,7 +16,7 @@ module UsersHelper
   end
 
   def password_challenge_tag(form)
-    return nil unless %w[edit update].include?(action_name) && !current_user.is_admin?
+    return nil if current_user.is_admin?
 
     content_tag :div, class: "row m-3" do
       form.label(:password_challenge,
