@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_22_164513) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_104519) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -40,28 +40,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_164513) do
   end
 
   create_table "buyers", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_buyers_on_user_id"
-  end
-
-  create_table "ebook_buyers", force: :cascade do |t|
-    t.integer "buyer_id", null: false
-    t.integer "ebook_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["buyer_id"], name: "index_ebook_buyers_on_buyer_id"
-    t.index ["ebook_id"], name: "index_ebook_buyers_on_ebook_id"
-  end
-
-  create_table "ebook_sellers", force: :cascade do |t|
-    t.integer "seller_id", null: false
-    t.integer "ebook_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ebook_id"], name: "index_ebook_sellers_on_ebook_id"
-    t.index ["seller_id"], name: "index_ebook_sellers_on_seller_id"
   end
 
   create_table "ebooks", force: :cascade do |t|
@@ -79,10 +61,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_164513) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "genre"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_ebooks_on_user_id"
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.datetime "purchased_at"
+    t.decimal "price", precision: 5, scale: 2
+    t.integer "buyer_id", null: false
+    t.integer "seller_id", null: false
+    t.integer "ebook_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buyer_id"], name: "index_purchases_on_buyer_id"
+    t.index ["ebook_id"], name: "index_purchases_on_ebook_id"
+    t.index ["seller_id"], name: "index_purchases_on_seller_id"
   end
 
   create_table "sellers", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sellers_on_user_id"
@@ -96,15 +93,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_164513) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.datetime "password_expires_at"
+    t.boolean "active", default: true
+    t.datetime "inactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "buyers", "users"
-  add_foreign_key "ebook_buyers", "buyers"
-  add_foreign_key "ebook_buyers", "ebooks"
-  add_foreign_key "ebook_sellers", "ebooks"
-  add_foreign_key "ebook_sellers", "sellers"
+  add_foreign_key "ebooks", "users"
+  add_foreign_key "purchases", "buyers"
+  add_foreign_key "purchases", "ebooks"
+  add_foreign_key "purchases", "sellers"
   add_foreign_key "sellers", "users"
 end

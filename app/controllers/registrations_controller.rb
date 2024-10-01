@@ -11,7 +11,7 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      session[:current_user_id] = @user.id
+      login(@user)
       UserMailer.welcome(@user).deliver_later
       redirect_to root_path, notice: "User was successfully created."
     else

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_one :buyer
   has_one :seller
+  has_many :ebooks
 
   has_one_attached :avatar
 
@@ -20,10 +21,25 @@ class User < ApplicationRecord
   after_save_commit :resize_avatar,
                     if: -> { avatar.attached? }
 
+  scope :active, -> { where(active: true) }
+
   def password_expired?
     DateTime.now > password_expires_at
   end
 
+  # Performs a soft delete on the user.
+  def inactivate!
+    ActiveRecord::Base.transaction do
+      update!(
+        active: false,
+        username: "deleted-user-#{ DateTime.now.to_i }",
+        email: "#{ DateTime.now.to_i }@deleted-user",
+        inactivated_at: DateTime.now
+      )
+      # noinspection RailsParamDefResolve
+      ebooks.update_all(status: :archived, updated_at: DateTime.now)
+    end
+  end
 
   private
 

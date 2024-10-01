@@ -19,4 +19,15 @@
     <%= user.enabled %>
   </p>
 
+  <% if user.ebooks.any? %>
+    <p>
+      <strong>Ebooks owned:</strong>
+      <% user.ebooks.each do |ebook| %>
+        <ul>
+          <li><%= link_to ebook.title, ebook_path(ebook) %></li>
+        </ul>
+      <% end %>
+    </p>
+  <% end %>
+
 </div>

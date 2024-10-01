@@ -4,7 +4,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks
   def index
-    @ebooks = Ebook.all
+    @ebooks = Ebook.live
   end
 
   # GET /ebooks/1
@@ -18,6 +18,9 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1/edit
   def edit
+    redirect_to ebooks_url,
+                alert: "You can only edit your ebooks.",
+                status: :see_other unless @ebook.user == current_user
   end
 
   # POST /ebooks
@@ -42,6 +45,10 @@ class EbooksController < ApplicationController
 
   # DELETE /ebooks/1
   def destroy
+    redirect_to ebooks_url,
+                alert: "You can only delete your ebooks.",
+                status: :see_other unless @ebook.user == current_user
+
     begin
       @ebook.destroy!
       @ebook.preview_file.purge_later
@@ -62,10 +69,10 @@ class EbooksController < ApplicationController
   def purchase
     begin
       ebook = Ebook.find(params[:id])
-      user = User.first
+      user = current_user
       Ebook::PurchaseService.purchase(user, ebook)
 
-      redirect_to ebooks_url, notice: "Ebook was successfully purchased."
+      redirect_to ebook, notice: "Ebook was successfully purchased."
     rescue ActiveRecord::RecordNotFound
       redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
@@ -93,6 +100,6 @@ class EbooksController < ApplicationController
     def ebook_params
       params.require(:ebook).permit(:title, :status, :price, :authors, :genre, :publisher,
                                     :publication_date, :pages, :isbn, :sales, :views,
-                                    :preview_downloads, :preview_file, :cover_image)
+                                    :preview_downloads, :preview_file, :cover_image, :user_id)
     end
 end
