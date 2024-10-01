@@ -14,12 +14,12 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    redirect_to root_path,
-                alert: "You can only edit your own profile.",
-                status: :see_other unless @user == current_user || current_user.is_admin?
+    unless @user == current_user || current_user.is_admin?
+      redirect_to root_path,
+                  alert: "You can only edit your own profile.",
+                  status: :see_other
+    end
   end
-
-
 
   # PATCH/PUT /users/1
   def update
@@ -32,9 +32,11 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    redirect_to root_path,
-                alert: "You can only delete your own profile.",
-                status: :see_other unless @user == current_user || current_user.is_admin?
+    unless @user == current_user || current_user.is_admin?
+      redirect_to root_path,
+                  alert: "You can only delete your own profile.",
+                  status: :see_other
+    end
 
     begin
       @user.inactivate!

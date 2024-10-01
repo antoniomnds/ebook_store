@@ -19,9 +19,11 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1/edit
   def edit
-    redirect_to ebooks_url,
-                alert: "You can only edit your ebooks.",
-                status: :see_other unless @ebook.user == current_user
+    unless @ebook.user == current_user
+      redirect_to ebooks_url,
+                  alert: "You can only edit your ebooks.",
+                  status: :see_other
+    end
   end
 
   # POST /ebooks
@@ -46,9 +48,11 @@ class EbooksController < ApplicationController
 
   # DELETE /ebooks/1
   def destroy
-    redirect_to ebooks_url,
-                alert: "You can only delete your ebooks.",
-                status: :see_other unless @ebook.user == current_user
+    unless @ebook.user == current_user
+      redirect_to ebooks_url,
+                  alert: "You can only delete your ebooks.",
+                  status: :see_other
+    end
 
     begin
       @ebook.destroy!
