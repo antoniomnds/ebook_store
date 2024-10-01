@@ -17,7 +17,7 @@ class Ebook < ApplicationRecord
     else
       # ActiveStorage attachment using local storage
       has_one_attached attr do |attachable|
-        attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true
+        attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true # process and cache the variant
       end
     end
   end
