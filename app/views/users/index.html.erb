@@ -14,7 +14,7 @@
   <tbody>
     <% @users.each do |user| %>
       <tr id="<%= dom_id user %>" class="text-center">
-        <td><%= user.username %></td>
+        <td><%= user.username %> <%= admin_tag(user) %></td>
         <td><%= user.email %></td>
         <td><%= user.enabled ? 'Yes' : 'No' %></td>
         <td><%= link_to "View profile", user, class: 'btn btn-outline-dark' %></td>

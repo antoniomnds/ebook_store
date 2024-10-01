@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   skip_before_action :require_login, only: %i[ edit update ] # to change password
+  skip_before_action :verify_current_user, only: %i[ new create edit update ]
 
   # GET /users
   def index
@@ -15,7 +16,7 @@ class UsersController < ApplicationController
   def edit
     redirect_to root_path,
                 alert: "You can only edit your own profile.",
-                status: :see_other unless @user == current_user
+                status: :see_other unless @user == current_user || current_user.is_admin?
   end
 
 
@@ -31,9 +32,9 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    redirect_to request.referer,
+    redirect_to root_path,
                 alert: "You can only delete your own profile.",
-                status: :see_other unless @user == current_user
+                status: :see_other unless @user == current_user || current_user.is_admin?
 
     begin
       @user.inactivate!
