@@ -76,6 +76,14 @@
         <%= ebook.preview_downloads %>
       </p>
 
+      <% if ebook.tags.any? %>
+        <p>
+          <% ebook.tags.each do |tag| %>
+            <span class="badge bg-info">#<%= tag.name %></span>
+        <% end %>
+        </p>
+      <% end %>
+
       <% if ebook.user %>
         <p>
           <strong>Owner:</strong>

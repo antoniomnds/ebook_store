@@ -21,7 +21,15 @@
   <div class="row mb-3">
     <%= form.label :status, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
-      <%= form.select :status, Ebook.statuses.keys, { include_blank: true }, { class: 'form-select' } %>
+      <%= form.select :status,
+                      Ebook.statuses.keys,
+                      {
+                        include_blank: true
+                      },
+                      {
+                        class: 'form-select'
+                      }
+      %>
     </div>
   </div>
 
@@ -85,6 +93,22 @@
     <%= form.label :views, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%= form.number_field :views, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <%= form.label :tag_ids, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%= form.select :tag_ids,
+                      Tag.all.map { |tag| [ tag.name, tag.id ] },
+                      {
+                        include_blank: true
+                      },
+                      {
+                        class: 'form-control',
+                        multiple: true
+                      }
+      %>
     </div>
   </div>
 

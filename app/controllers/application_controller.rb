@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
 
   before_action :require_login
 
+  rescue_from ActiveRecord::RecordNotFound do |_|
+    render file: "#{Rails.root}/public/404.html",  layout: false, status: :not_found
+  end
+
   # Finds the User with the ID stored in the session with the key :current_user_id.
   def current_user
     @_current_user ||= session[:current_user_id] &&
