@@ -12,11 +12,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :users
+  resources :users, except: %i[ new create]
   resources :ebooks do
     member do
       post "purchase"
       patch "increment_views"
     end
   end
+
+  resources :sessions, only: %i[ new create destroy ]
+  resources :registrations, only: %i[ new create ]
 end

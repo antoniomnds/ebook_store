@@ -4,15 +4,5 @@
 
 <div class="btn-group" role="group" aria-label="User management buttons">
   <%= link_to "Back to users", users_path, class: 'btn btn-outline-dark' %>
-  <%= link_to "Edit this user", edit_user_path(@user), class: 'btn btn-outline-primary' %>
-  <%= button_to "Destroy this user",
-                @user,
-                method: :delete,
-                form: {
-                  data: {
-                    turbo_confirm: 'Are you sure?'
-                  }
-                },
-                class: 'btn btn-outline-danger'
-  %>
+  <%= link_to "Edit profile", edit_user_path(@user), class: 'btn btn-outline-primary' %>
 </div>
