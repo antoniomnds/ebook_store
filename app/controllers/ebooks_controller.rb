@@ -44,11 +44,16 @@ class EbooksController < ApplicationController
     begin
       @ebook.destroy!
       @ebook.preview_file.purge_later
+      @ebook.cover_image.purge_later
 
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
-    rescue RecordNotDestroyed => e
+    rescue ActiveRecord::InvalidForeignKey # FIXME redirect not working
       redirect_to ebooks_url,
-                  notice: "Ebook could not be destroyed: #{ e.message }",
+                  alert: "Ebook already bought and cannot not be destroyed.",
+                  status: :unprocessable_entity
+    rescue ActiveRecord::RecordNotDestroyed => e # FIXME redirect not working
+      redirect_to ebooks_url,
+                  alert: "Ebook could not be destroyed: #{ e.message }",
                   status: :unprocessable_entity
     end
   end
@@ -87,6 +92,6 @@ class EbooksController < ApplicationController
     def ebook_params
       params.require(:ebook).permit(:title, :status, :price, :authors, :genre, :publisher,
                                     :publication_date, :pages, :isbn, :sales, :views,
-                                    :preview_downloads, :preview_file)
+                                    :preview_downloads, :preview_file, :cover_image)
     end
 end

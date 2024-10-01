@@ -99,8 +99,17 @@
     <%= form.label :preview_file, style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%# retain reference to the uploaded file to not upload it again in case of form re-rendering %>
-      <%= form.hidden_field :preview_file, value: @ebook.preview_file.signed_id if @ebook.preview_file.attached? %>
+      <%= form.hidden_field :preview_file, value: @ebook.preview_file.signed_id if @ebook.persisted? and @ebook.preview_file.attached? %>
       <%= form.file_field :preview_file, class: 'form-control', accept: 'application/pdf', direct_upload: true %>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <%= form.label :cover_image, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <div class="col-sm-10">
+      <%# retain reference to the uploaded file to not upload it again in case of form re-rendering %>
+      <%= form.hidden_field :cover_image, value: @ebook.cover_image.signed_id if @ebook.persisted? and @ebook.cover_image.attached? %>
+      <%= form.file_field :cover_image, class: 'form-control', accept: 'image/png,image/gif,image/jpeg', direct_upload: true %>
     </div>
   </div>
 

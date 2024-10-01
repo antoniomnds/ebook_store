@@ -1,20 +1,26 @@
 <div id="<%= dom_id ebook %>">
   <div class="row">
     <div class="col-md-4">
-      <% if ebook.preview_file.attached? %>
-        <% if Rails.configuration.active_storage.service == :local %>
-          <%= image_tag ebook.preview_file.preview(:thumb) %>
-        <% else %>
-          <%= cl_image_tag ebook.preview_file.key, width: 300, height: 200, crop: "scale", format: "jpg" %>
+      <div class="text-center">
+        <% if ebook.cover_image.attached? %>
+          <div class="mb-4">
+            <% if Rails.configuration.active_storage.service == :local %>
+              <%= image_tag ebook.cover_image.preview(:thumb) %>
+            <% else %>
+              <%= cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale", format: "jpg" %>
+            <% end %>
+          </div>
         <% end %>
 
-        <p>
-          <%= link_to 'Download Preview',
-                      rails_blob_path(ebook.preview_file, disposition: "attachment"),
-                      class: 'btn btn-outline-primary offset-md-1'
-          %>
-        </p>
-      <% end %>
+        <% if ebook.preview_file.attached? %>
+          <p class="mt-3">
+            <%= link_to 'Download Preview',
+                        rails_blob_path(ebook.preview_file, disposition: "attachment"),
+                        class: 'btn btn-outline-primary' if ebook.preview_file.attached?
+            %>
+          </p>
+        <% end %>
+      </div>
 
       <p>
         <strong>Title:</strong>
@@ -77,8 +83,7 @@
       </p>
     </div>
     <div class="col-md-8">
-      <br>
-      <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-lg btn-outline-primary' %>
+      <%= button_to 'Purchase', purchase_ebook_path(ebook), method: :post, class: 'btn btn-lg btn-outline-primary mt-3' %>
     </div>
   </div>
 </div>

@@ -11,12 +11,14 @@ class Ebook < ApplicationRecord
 
   enum :status, %i[draft pending live], prefix: true
 
-  if Rails.configuration.active_storage.service == :cloudinary
-    has_one_attached :preview_file
-  else
-    # ActiveStorage attachment using local storage
-    has_one_attached :preview_file do |attachable|
-      attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true
+  %i[preview_file cover_image].each do |attr|
+    if Rails.configuration.active_storage.service == :cloudinary
+      has_one_attached attr
+    else
+      # ActiveStorage attachment using local storage
+      has_one_attached attr do |attachable|
+        attachable.variant :thumb, resize_to_limit: [ 300, 300 ], preprocessed: true
+      end
     end
   end
 
