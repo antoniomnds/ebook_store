@@ -18,4 +18,12 @@ class RegistrationsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+
+  private
+
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+  end
 end
