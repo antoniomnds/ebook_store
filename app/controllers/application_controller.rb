@@ -22,9 +22,11 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
 
   def require_login
-    redirect_to new_session_path,
-                alert: "You must be logged in to access this page.",
-                status: :see_other unless logged_in?
+    unless logged_in?
+      redirect_to new_session_path,
+                  alert: "You must be logged in to access this page.",
+                  status: :see_other
+    end
   end
 
   # Performs some checks before allowing access to the application, namely:
