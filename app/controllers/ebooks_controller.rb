@@ -90,7 +90,22 @@ class EbooksController < ApplicationController
       ebook = Ebook.find(params[:id])
       ebook.increment!(:views)
       render json: { views: ebook.views }, status: :ok
-    rescue RecordNotFound
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: "Ebook could not be found." }, status: :not_found
+    end
+  end
+
+  def fetch_summary
+    begin
+      ebook = Ebook.find(params[:id])
+      result = Ebook::MetadataService.get_summary(ebook)
+
+      if result
+        render json: { result: result }, status: :ok
+      else
+        render json: { error: "Summary could not be fetched." }, status: :bad_request
+      end
+    rescue ActiveRecord::RecordNotFound
       render json: { error: "Ebook could not be found." }, status: :not_found
     end
   end
