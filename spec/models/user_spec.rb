@@ -111,4 +111,17 @@ RSpec.describe User, type: :model do
       expect { user.deactivate! }.not_to raise_error
     end
   end
+
+  context "scope tests" do
+    let(:users) { create_list(:random_user, 5) }
+    before do
+      users.first(2).each do |user|
+        user.update!(active: false)
+      end
+    end
+
+    it "should return active users" do
+      expect(described_class.active.size).to eq(3)
+    end
+  end
 end
