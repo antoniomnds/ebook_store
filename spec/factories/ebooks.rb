@@ -9,6 +9,6 @@ FactoryBot.define do
     publication_date { "2024-09-23" }
     pages { 100 }
     isbn { "978-3589352332" }
-    association :user
+    user
   end
 end
