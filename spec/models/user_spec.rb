@@ -11,11 +11,11 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to be_enabled }
 
-  it { is_expected.not_to be_is_admin }
+  it { is_expected.not_to be_admin }
 
   it { is_expected.to be_active }
 
-  it { is_expected.to have_attributes(username: "John Doe", email: "john.doe@example.com", password: "password", enabled: true, is_admin: false) }
+  it { is_expected.to have_attributes(username: "John Doe", email: "john.doe@example.com", password: "password", enabled: true, admin: false) }
 
   context "validation tests" do
     describe "#username" do

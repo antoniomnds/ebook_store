@@ -5,7 +5,7 @@ FactoryBot.define do
     password { "password" }
     enabled { true }
     active { true }
-    is_admin { false }
+    admin { false }
   end
 
   factory :random_user, class: User do
@@ -14,6 +14,6 @@ FactoryBot.define do
     password { Faker::Internet.password }
     enabled { true }
     active { true }
-    is_admin { false }
+    admin { false }
   end
 end

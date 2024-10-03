@@ -12,5 +12,5 @@ User.find_or_create_by!(email: "admin@example.com") do |user|
   user.username = "admin"
   user.password = "password"
   user.enabled = true
-  user.is_admin = true
+  user.admin = true
 end
