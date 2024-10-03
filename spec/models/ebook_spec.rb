@@ -56,14 +56,15 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.title = nil
       ebook.valid?
-      expect(ebook.errors[:title].size).to eq(2) # blank and too short
+      expect(ebook.errors[:title].first).to match(/blank/)
+      expect(ebook.errors[:title].last).to match(/too short \(minimum is 4 characters\)/)
     end
 
     context "with a title less than four characters" do
       it "should be invalid" do
         ebook.title = "A" * 3
         ebook.valid?
-        expect(ebook.errors[:title].size).to eq(1)
+        expect(ebook.errors[:title].first).to match(/too short \(minimum is 4 characters\)/)
       end
     end
   end
@@ -72,7 +73,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.status = nil
       ebook.valid?
-      expect(ebook.errors[:status].size).to eq(1)
+      expect(ebook.errors[:status].first).to match(/blank/)
     end
 
     it "belongs to a predefined set of values" do
@@ -86,13 +87,14 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.price = nil
       ebook.valid?
-      expect(ebook.errors[:price].size).to eq(2) # blank and not a number
+      expect(ebook.errors[:price].first).to match(/blank/)
+      expect(ebook.errors[:price].last).to match(/not a number/)
     end
 
     it "should not be negative" do
       ebook.price = -1
       ebook.valid?
-      expect(ebook.errors[:price].size).to eq(1)
+      expect(ebook.errors[:price].first).to match(/greater than or equal to 0.0/)
     end
   end
 
@@ -100,7 +102,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.authors = nil
       ebook.valid?
-      expect(ebook.errors[:authors].size).to eq(1)
+      expect(ebook.errors[:authors].first).to match(/blank/)
     end
   end
 
@@ -108,7 +110,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.genre = nil
       ebook.valid?
-      expect(ebook.errors[:genre].size).to eq(1)
+      expect(ebook.errors[:genre].first).to match(/blank/)
     end
   end
 
@@ -116,7 +118,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.publisher = nil
       ebook.valid?
-      expect(ebook.errors[:publisher].size).to eq(1)
+      expect(ebook.errors[:publisher].first).to match(/blank/)
     end
   end
 
@@ -124,13 +126,13 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.publication_date = nil
       ebook.valid?
-      expect(ebook.errors[:publication_date].size).to eq(1)
+      expect(ebook.errors[:publication_date].first).to match(/blank/)
     end
 
     it "should not be in the future" do
       ebook.publication_date = Date.tomorrow
       ebook.valid?
-      expect(ebook.errors[:publication_date].size).to eq(1)
+      expect(ebook.errors[:publication_date]).to contain_exactly "can't be in the future"
     end
   end
 
@@ -138,7 +140,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.pages = nil
       ebook.valid?
-      expect(ebook.errors[:pages].size).to eq(1)
+      expect(ebook.errors[:pages].first).to match(/blank/)
     end
   end
 
@@ -146,13 +148,12 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.isbn = nil
       ebook.valid?
-      expect(ebook.errors[:isbn].size).to eq(1)
+      expect(ebook.errors[:isbn].first).to match(/blank/)
+      expect(ebook.errors[:isbn].last).to match(/not a valid format/)
     end
 
     it "has a defined format" do
-      expect(ebook.isbn).to satisfy do |isbn|
-        isbn.match(/^978-\d{10}$/)
-      end
+      expect(ebook.isbn).to match(/\A978-\d{10}\z/)
     end
   end
 
@@ -160,7 +161,7 @@ RSpec.describe Ebook, type: :model do
     it "is required" do
       ebook.user = nil
       ebook.valid?
-      expect(ebook.errors[:user].size).to eq(1)
+      expect(ebook.errors[:user].first).to match(/must exist/)
     end
   end
 

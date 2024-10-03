@@ -19,41 +19,44 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to have_attributes(username: "test", email: "test@example.com", password: "password", enabled: true, is_admin: false) }
 
-  describe "#username" do
-    it "is required" do
-      user.username = nil
-      user.valid?
-      expect(user.errors[:username].size).to eq(1)
-    end
-  end
-
-  describe "#email" do
-    it "is required" do
-      user.email = nil
-      user.valid?
-      expect(user.errors[:email].size).to eq(2) # email blank and not an email (checks with regex)
-    end
-
-    it "is unique" do
-      another_user = User.create(username: "The Other", email: user.email, password: "password")
-      user.valid?
-      expect(user.errors[:email].size).to eq(1)
-    end
-
-    context "with an invalid email" do
-      it "should be invalid" do
-        user.email = "invalid_email"
+  context "validation tests" do
+    describe "#username" do
+      it "is required" do
+        user.username = nil
         user.valid?
-        expect(user.errors[:email].size).to eq(1)
+        expect(user.errors[:username].first).to match(/blank/)
       end
     end
-  end
 
-  describe "#password" do
-    it "is required" do
-      user.password = nil
-      user.valid?
-      expect(user.errors[:password].size).to eq(1)
+    describe "#email" do
+      it "is required" do
+        user.email = nil
+        user.valid?
+        expect(user.errors[:email].first).to match(/blank/)
+        expect(user.errors[:email].last).to match(/not an email/)
+      end
+
+      it "is unique" do
+        another_user = User.create(username: "The Other", email: user.email, password: "password")
+        user.valid?
+        expect(user.errors[:email].first).to match(/already been taken/)
+      end
+
+      context "with an invalid email" do
+        it "should be invalid" do
+          user.email = "invalid_email"
+          user.valid?
+          expect(user.errors[:email].first).to match(/not an email/)
+        end
+      end
+    end
+
+    describe "#password" do
+      it "is required" do
+        user.password = nil
+        user.valid?
+        expect(user.errors[:password].first).to match(/blank/)
+      end
     end
   end
 
@@ -89,21 +92,17 @@ RSpec.describe User, type: :model do
     end
 
     it "should inactivate the user" do
-      expect(user.active).to eq(false)
+      expect(user).not_to be_active
     end
 
     it "should update the username" do
       expect(user.username).to start_with("deleted-user-")
-      expect(user.username).to satisfy("contain a tag ending with a timestamp") do |value|
-        value.match(/^deleted-user-\d+$/)
-      end
+      expect(user.username).to match(/\Adeleted-user-\d+\z/)
     end
 
     it "should update the email" do
       expect(user.email).to end_with("@deleted-user")
-      expect(user.email).to satisfy("contain a tag beginning with a timestamp") do |value|
-        value.match(/^\d+@deleted-user$/)
-      end
+      expect(user.email).to match(/\A\d+@deleted-user\z/)
     end
 
     it "should set the deactivated_at timestamp" do

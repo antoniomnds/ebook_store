@@ -15,7 +15,7 @@ RSpec.describe Tag, type: :model do
     it "is required" do
       tag.name = nil
       tag.valid?
-      expect(tag.errors[:name].size).to eq(1)
+      expect(tag.errors[:name].first).to match(/blank/)
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe Tag, type: :model do
     it "is not required" do
       tag.description = nil
       tag.valid?
-      expect(tag.errors[:description].size).to eq(0)
+      expect(tag.errors[:description]).to be_empty
     end
   end
 end
