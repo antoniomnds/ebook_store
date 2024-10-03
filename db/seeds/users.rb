@@ -8,10 +8,9 @@
 end
 
 # a known admin user
-User.create! do |user|
+User.find_or_create_by!(email: "admin@example.com") do |user|
   user.username = "admin"
   user.password = "password"
-  user.email = "admin@example.com"
   user.enabled = true
   user.is_admin = true
 end
