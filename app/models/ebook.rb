@@ -46,7 +46,11 @@ class Ebook < ApplicationRecord
       presence: true
 
   validates :isbn,
-    presence: true
+    presence: true,
+    format: {
+      with: /\A978-\d{10}\z/,
+      message: "has not a valid format"
+    }
 
   validate :publication_date_cannot_be_in_the_future
 
