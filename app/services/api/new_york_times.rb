@@ -2,8 +2,8 @@ class Api::NewYorkTimes
   BASE_URL = "https://api.nytimes.com/svc/books/v3/reviews.json".freeze
 
   class << self
-    def fetch_summary(query_params)
-      new.fetch_summary(query_params)
+    def fetch_review(query_params)
+      new.fetch_review(query_params)
     end
   end
 
@@ -13,7 +13,7 @@ class Api::NewYorkTimes
     @api_key = ENV["NYT_API_KEY"]
   end
 
-  def fetch_summary(params)
+  def fetch_review(params)
     base_url = "https://api.nytimes.com/svc/books/v3/reviews.json"
     query_params = params.merge("api-key": api_key)
     query = URI.encode_www_form(query_params)

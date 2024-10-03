@@ -24,7 +24,6 @@ Rails.application.routes.draw do
     member do
       post "purchase"
       patch "increment_views"
-      get "fetch_summary"
     end
   end
 

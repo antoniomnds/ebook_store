@@ -7,75 +7,75 @@
         <div class="card-body">
           <h5 class="card-title"><%= ebook.title %></h5>
           <div class="card-text">
-          <p>
-            <strong>Status:</strong>
-            <%= ebook.status %>
-          </p>
-
-          <p>
-            <strong>Price:</strong>
-            <%= ebook.price %>
-          </p>
-
-          <p>
-            <strong>Authors:</strong>
-            <%= ebook.authors %>
-          </p>
-
-          <p>
-            <strong>Genre:</strong>
-            <%= ebook.genre %>
-          </p>
-
-          <p>
-            <strong>Publisher:</strong>
-            <%= ebook.publisher %>
-          </p>
-
-          <p>
-            <strong>Publication Date:</strong>
-            <%= ebook.publication_date&.strftime("%m/%d/%Y") %>
-          </p>
-
-          <p>
-            <strong>Pages:</strong>
-            <%= ebook.pages %>
-          </p>
-
-          <p>
-            <strong>ISBN:</strong>
-            <%= ebook.isbn %>
-          </p>
-
-          <p>
-            <strong>Sales:</strong>
-            <%= ebook.sales %>
-          </p>
-
-          <p>
-            <strong>Views:</strong>
-            <%= ebook.views %>
-          </p>
-
-          <p>
-            <strong>Preview downloads:</strong>
-            <%= ebook.preview_downloads %>
-          </p>
-
-          <% if ebook.tags.any? %>
             <p>
-              <% ebook.tags.each do |tag| %>
-                <span class="badge bg-info">#<%= tag.name %></span>
-              <% end %>
+              <strong>Status:</strong>
+              <%= ebook.status %>
             </p>
-          <% end %>
 
-          <% if ebook.user %>
             <p>
-              <strong>Owner:</strong>
-              <%= link_to ebook.user.username, user_path(ebook.user) %>
+              <strong>Price:</strong>
+              <%= ebook.price %>
             </p>
-          <% end %>
+
+            <p>
+              <strong>Authors:</strong>
+              <%= ebook.authors %>
+            </p>
+
+            <p>
+              <strong>Genre:</strong>
+              <%= ebook.genre %>
+            </p>
+
+            <p>
+              <strong>Publisher:</strong>
+              <%= ebook.publisher %>
+            </p>
+
+            <p>
+              <strong>Publication Date:</strong>
+              <%= ebook.publication_date&.strftime("%m/%d/%Y") %>
+            </p>
+
+            <p>
+              <strong>Pages:</strong>
+              <%= ebook.pages %>
+            </p>
+
+            <p>
+              <strong>ISBN:</strong>
+              <%= ebook.isbn %>
+            </p>
+
+            <p>
+              <strong>Sales:</strong>
+              <%= ebook.sales %>
+            </p>
+
+            <p>
+              <strong>Views:</strong>
+              <%= ebook.views %>
+            </p>
+
+            <p>
+              <strong>Preview downloads:</strong>
+              <%= ebook.preview_downloads %>
+            </p>
+
+            <% if ebook.tags.any? %>
+              <p>
+                <% ebook.tags.each do |tag| %>
+                  <span class="badge bg-info">#<%= tag.name %></span>
+                <% end %>
+              </p>
+            <% end %>
+
+            <% if ebook.user %>
+              <p>
+                <strong>Owner:</strong>
+                <%= link_to ebook.user.username, user_path(ebook.user) %>
+              </p>
+            <% end %>
           </div>
           <% if ebook.preview_file.attached? %>
             <p class="mt-3">
@@ -91,29 +91,7 @@
     <div class="col-md-8 p-4">
       <h3><%= ebook_status_tag(ebook) %></h3>
       <%= purchase_button(ebook) %>
-
-      <div data-controller="ebook"
-           data-increment-views-url="<%= increment_views_ebook_path(@ebook) %>"
-           data-fetch-summary-url="<%= fetch_summary_ebook_path(@ebook) %>"
-      >
-        <p class="d-inline-flex gap-1 pt-5">
-          <a id="reviewsAnchor"
-             class="btn btn-primary"
-             data-bs-toggle="collapse"
-             href="#collapseSummary"
-             role="button"
-             aria-expanded="false"
-             aria-controls="collapseSummary"
-             data-action="ebook#fetchSummary"
-          >
-            Load Summary from New York Times
-          </a>
-        </p>
-        <div class="collapse ml-4" id="collapseSummary">
-          <div id="summaryContainer" class="card card-body"></div>
-        </div>
-      </div>
+      <%= ebook_summary_tag(@review) %>
     </div>
-
   </div>
 </div>

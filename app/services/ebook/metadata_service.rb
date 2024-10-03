@@ -1,8 +1,8 @@
 class Ebook
   class MetadataService
     class << self
-      def get_summary(ebook)
-        new(ebook).send(:get_summary)
+      def get_review(ebook)
+        new(ebook).send(:get_review)
       end
     end
 
@@ -15,8 +15,8 @@ class Ebook
 
     private
 
-    def get_summary
-      ::Api::NewYorkTimes.fetch_summary(title: ebook.title)
+    def get_review
+      ::Api::NewYorkTimes.fetch_review(title: ebook.title)
     end
   end
 end
