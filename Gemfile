@@ -58,6 +58,9 @@ group :development, :test do
 
   # For generating and running tests with RSpec [https://rspec.info/]
   gem "rspec-rails", "~> 7.0"
+
+  # For generating factories in tests [https://github.com/thoughtbot/factory_bot]
+  gem 'factory_bot_rails'
 end
 
 group :development do
