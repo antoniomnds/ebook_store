@@ -3,7 +3,7 @@ require 'support/shared_examples/model'
 require 'support/shared_contexts/logging'
 
 RSpec.describe Tag, type: :model do
-  subject(:tag) { described_class.new(name: "Example Tag", description: "Lorem Ipsum") }
+  subject(:tag) { build(:tag) }
 
   include_context "logging"
 

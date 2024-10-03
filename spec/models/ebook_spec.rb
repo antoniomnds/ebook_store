@@ -3,22 +3,7 @@ require 'support/shared_examples/model'
 require 'support/shared_contexts/logging'
 
 RSpec.describe Ebook, type: :model do
-  subject(:ebook) do
-    user = User.create(username: "test", email: "test@example.com")
-
-    described_class.new(
-      title: "Example Ebook",
-      status: :live,
-      price: 9.99,
-      authors: "John Doe",
-      genre: "Fiction",
-      publisher: "Acme Publishing",
-      publication_date: "2024-09-23",
-      pages: 100,
-      isbn: "978-3589352332",
-      user: user
-    )
-  end
+  subject(:ebook) { build(:ebook) }
 
   include_context "logging"
 

@@ -3,9 +3,7 @@ require 'support/shared_contexts/logging'
 require 'support/shared_examples/model'
 
 RSpec.describe User, type: :model do
-  subject(:user) do
-    described_class.new(username: "test", email: "test@example.com", password: "password")
-  end
+  subject(:user) { build(:user) }
 
   include_context "logging"
 
@@ -17,7 +15,7 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to be_active }
 
-  it { is_expected.to have_attributes(username: "test", email: "test@example.com", password: "password", enabled: true, is_admin: false) }
+  it { is_expected.to have_attributes(username: "John Doe", email: "john.doe@example.com", password: "password", enabled: true, is_admin: false) }
 
   context "validation tests" do
     describe "#username" do
