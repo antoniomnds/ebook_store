@@ -134,16 +134,25 @@ RSpec.describe Ebook, type: :model do
     end
   end
 
-  context "with a valid discount value" do
-    it "should return the correct discount value" do
-      expect(subject.discount_value(10)).to eq(1.0) # 9.99 * (10 / 100.0) => 0.999 => round(2) => 1.0
+  describe "#discount_value" do
+    context "with a valid discount value" do
+      it "should return the correct discount value" do
+        discount = 10
+        net_price = (ebook.price * (discount.fdiv(100))).round(2)
+        expect(ebook.discount_value(discount)).to eq(net_price)
+      end
     end
-  end
 
-  context "with an invalid discount value" do
-    it "should return nil" do
-      expect(subject.discount_value(-1)).to be_nil
-      expect(subject.discount_value(110)).to be_nil
+    context "with a negative discount value" do
+      it "should return zero" do
+        expect(ebook.discount_value(-1)).to be_zero
+      end
+    end
+
+    context "with a discount above 100" do
+      it "should return the price" do
+        expect(ebook.discount_value(110)).to eq(ebook.price)
+      end
     end
   end
 end

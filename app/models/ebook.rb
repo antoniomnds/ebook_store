@@ -60,11 +60,7 @@ class Ebook < ApplicationRecord
   scope :filter_by_users, ->(user_ids) { where(user_id: user_ids) }
 
   def discount_value(discount)
-    if discount >= 0 && discount <= 100
-      (price * (discount / 100.0)).round(2)
-    else
-      nil
-    end
+    (price * (discount.to_i.clamp(0, 100) / 100.0)).round(2) # .to_i converts nil to 0
   end
 
   def publication_date_cannot_be_in_the_future
