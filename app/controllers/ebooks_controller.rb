@@ -90,13 +90,9 @@ class EbooksController < ApplicationController
   end
 
   def increment_views
-    begin
-      ebook = Ebook.find(params[:id])
-      ebook.increment!(:views)
-      render json: { views: ebook.views }, status: :ok
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Ebook could not be found." }, status: :not_found
-    end
+    ebook = Ebook.find(params[:id])
+    ebook.increment!(:views)
+    render json: { views: ebook.views }, status: :ok
   end
 
   private
