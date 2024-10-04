@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'support/shared_examples/model'
-require 'support/shared_contexts/logging'
 
 RSpec.describe Ebook, type: :model do
   subject(:ebook) { build(:ebook) }

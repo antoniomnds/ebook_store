@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'support/shared_contexts/logging'
-require 'support/shared_examples/model'
 
 RSpec.describe User, type: :model do
   subject(:user) { build(:user) }
