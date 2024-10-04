@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   skip_before_action :require_login, only: %i[ edit update ] # to change password
-  skip_before_action :verify_current_user, only: %i[ edit update ]
+  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop in these actions
 
   # GET /users
   def index
@@ -23,6 +23,11 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    unless @user == current_user || current_user.admin?
+      return redirect_to root_url,
+                  alert: "You can only edit your own profile.",
+                  status: :see_other
+    end
     if @user.update(user_params)
       redirect_to @user, notice: "User was successfully updated.", status: :see_other
     else
