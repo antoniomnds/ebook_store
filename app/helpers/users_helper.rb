@@ -10,13 +10,13 @@ module UsersHelper
   end
 
   def admin_tag(user)
-    return nil unless user.is_admin?
+    return nil unless user.admin?
 
     content_tag :span, "Admin", class: "badge bg-danger"
   end
 
   def password_challenge_tag(form)
-    return nil if current_user.is_admin?
+    return nil if current_user.admin?
 
     content_tag :div, class: "row m-3" do
       form.label(:password_challenge,
@@ -30,7 +30,7 @@ module UsersHelper
   end
 
   def user_enabled_tag(form)
-    return nil unless current_user&.is_admin?
+    return nil unless current_user&.admin?
 
     content_tag :div, class: "row m-3" do
       content_tag(:div, class: "col-sm-10 offset-sm-2") do
