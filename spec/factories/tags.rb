@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tag do
-    name { "Example Tag" }
-    description { "Lorem Ipsum" }
+    name { Faker::Book.genre }
+    description { Faker::Lorem.sentence }
   end
 end

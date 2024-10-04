@@ -33,7 +33,7 @@ RSpec.describe User, type: :model do
       end
 
       it "is unique" do
-        another_user = User.create(username: "The Other", email: user.email, password: "password")
+        another_user = create(:user, email: user.email)
         user.valid?
         expect(user.errors[:email].first).to match(/already been taken/)
       end
@@ -57,23 +57,15 @@ RSpec.describe User, type: :model do
   end
 
   describe "#authenticate method" do
-    before(:context) do
-      puts("Initializing User#authenticate test suite")
-    end
-
-    after(:context) do
-      puts("Finalized User#authenticate test suite")
-    end
-
     context "with correct password" do
       it "should return the user" do
-        expect(user.authenticate("password")).to be(user)
+        expect(user.authenticate(user.password)).to be(user)
       end
     end
 
     context "with incorrect password" do
       it "should return false" do
-        expect(user.authenticate("incorrect")).to be(false)
+        expect(user.authenticate(Faker::Internet.password)).to be(false)
       end
     end
   end
@@ -111,7 +103,7 @@ RSpec.describe User, type: :model do
   end
 
   context "scope tests" do
-    let(:users) { create_list(:random_user, 5) }
+    let(:users) { create_list(:user, 5) }
     before do
       users.first(2).each do |user|
         user.update!(active: false)
