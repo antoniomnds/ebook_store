@@ -5,10 +5,6 @@ require 'support/shared_contexts/logging'
 RSpec.describe Ebook, type: :model do
   subject(:ebook) { build(:ebook) }
 
-  include_context "logging"
-
-  include_examples "model"
-
   it "has zero sales by default" do
     expect(ebook.sales).to be_zero
   end

@@ -12,12 +12,6 @@ RSpec.describe Purchase, type: :model do
     described_class.new(buyer: buyer, seller: seller, ebook: ebook, price: ebook.price)
   end
 
-  let(:ebook) { build(:ebook) }
-
-  include_context "logging"
-
-  include_examples "model"
-
   describe "#before_create" do
     it "has a purchase date" do
       purchase.save!

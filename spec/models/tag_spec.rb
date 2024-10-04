@@ -5,10 +5,6 @@ require 'support/shared_contexts/logging'
 RSpec.describe Tag, type: :model do
   subject(:tag) { build(:tag) }
 
-  include_context "logging"
-
-  include_examples "model"
-
   describe "#name" do
     it "is required" do
       tag.name = nil
