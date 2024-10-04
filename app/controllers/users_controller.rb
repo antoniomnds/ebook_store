@@ -51,9 +51,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def my_ebooks
-    @ebooks = current_user.ebooks
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

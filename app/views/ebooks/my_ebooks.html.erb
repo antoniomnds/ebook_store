@@ -6,9 +6,9 @@
   <%= link_to "New ebook", new_ebook_path, class: 'btn btn-primary' %>
 </div>
 
-<% if @ebooks.any? %>
-  <%= render 'ebooks/filters' %>
+<%= render 'ebooks/filters', url: my_ebooks_ebooks_url %>
 
+<% if @ebooks.any? %>
   <%= render 'ebooks/list', ebooks: @ebooks %>
 <% else %>
   <div class="alert alert-info" role="alert">
