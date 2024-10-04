@@ -3,7 +3,6 @@
     user.username = Faker::Internet.username
     user.password = Faker::Internet.password
     user.email = Faker::Internet.email
-    user.enabled = true
   end
 end
 
@@ -11,6 +10,5 @@ end
 User.find_or_create_by!(email: "admin@example.com") do |user|
   user.username = "admin"
   user.password = "password"
-  user.enabled = true
   user.admin = true
 end
