@@ -1,4 +1,4 @@
-20.times do |_|
+20.times do
   num_users = User.count
   num_tags = Tag.count
   Ebook.create! do |ebook|

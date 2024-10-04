@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :verify_current_user
 
-  rescue_from ActiveRecord::RecordNotFound do |_|
+  rescue_from ActiveRecord::RecordNotFound do
     render file: "#{Rails.root}/public/404.html",  layout: false, status: :not_found
   end
 
