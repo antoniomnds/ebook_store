@@ -38,6 +38,11 @@ class EbooksController < ApplicationController
 
   # PATCH/PUT /ebooks/1
   def update
+    unless @ebook.user == current_user
+      redirect_to ebooks_url,
+                  alert: "You can only edit your ebooks.",
+                  status: :see_other
+    end
     if @ebook.update(ebook_params)
       redirect_to @ebook, notice: "Ebook was successfully updated.", status: :see_other
     else
@@ -89,7 +94,7 @@ class EbooksController < ApplicationController
       ebook = Ebook.find(params[:id])
       ebook.increment!(:views)
       render json: { views: ebook.views }, status: :ok
-    rescue RecordNotFound
+    rescue ActiveRecord::RecordNotFound
       render json: { error: "Ebook could not be found." }, status: :not_found
     end
   end
