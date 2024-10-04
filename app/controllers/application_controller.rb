@@ -5,9 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :verify_current_user
 
-  rescue_from ActiveRecord::RecordNotFound do
-    render file: "#{Rails.root}/public/404.html",  layout: false, status: :not_found
-  end
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   # Finds the User with the ID stored in the session with the key :current_user_id.
   def current_user
@@ -55,5 +53,12 @@ class ApplicationController < ActionController::Base
   def logout
     session.delete(:current_user_id)
     @_current_user = nil
+  end
+
+
+  private
+
+  def not_found
+    render file: "#{ Rails.root }/public/404.html",  layout: false, status: :not_found
   end
 end
