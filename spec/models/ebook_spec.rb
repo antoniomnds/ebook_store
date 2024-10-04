@@ -95,7 +95,7 @@ RSpec.describe Ebook, type: :model do
     end
 
     it "should not be in the future" do
-      ebook.publication_date = Date.tomorrow
+      ebook.publication_date = Date.tomorrow.end_of_day
       ebook.valid?
       expect(ebook.errors[:publication_date]).to contain_exactly "can't be in the future"
     end
