@@ -20,37 +20,38 @@ class Ebook < ApplicationRecord
   end
 
   validates :title,
-    presence: true,
-    length: { minimum: 4 }
+            presence: true,
+            length: { minimum: 4 }
 
   validates :status,
-    presence: true
+            presence: true
 
   validates :price,
-    presence: true,
-    numericality: { greater_than_or_equal_to: 0.0 }
+            presence: true,
+            numericality: { greater_than_or_equal_to: 0.0 }
 
   validates :genre,
-    presence: true
+            presence: true
 
   validates :authors,
-    presence: true
+            presence: true
 
   validates :publisher,
-    presence: true
+            presence: true
 
   validates :publication_date,
-    presence: true
+            presence: true
 
   validates :pages,
-      presence: true
+            presence: true
 
   validates :isbn,
-    presence: true,
-    format: {
-      with: /\A978-\d{10}\z/,
-      message: "has not a valid format"
-    }
+            presence: true,
+            format: {
+              with: /\A978-\d{10}\z/,
+              message: "has not a valid format"
+            },
+            uniqueness: true
 
   validate :publication_date_cannot_be_in_the_future
 

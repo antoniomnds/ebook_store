@@ -71,6 +71,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_104519) do
     t.datetime "updated_at", null: false
     t.string "genre"
     t.integer "user_id"
+    t.index ["isbn"], name: "index_ebooks_on_isbn", unique: true
     t.index ["user_id"], name: "index_ebooks_on_user_id"
   end
 
