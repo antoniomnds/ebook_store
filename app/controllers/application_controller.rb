@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
   def require_login
     unless logged_in?
-      redirect_to new_session_path,
+      redirect_to new_session_url,
                   alert: "You must be logged in to access this page.",
                   status: :see_other
     end
@@ -35,14 +35,14 @@ class ApplicationController < ActionController::Base
   def verify_current_user
     return unless logged_in?
 
-    return redirect_to edit_user_path(current_user),
+    return redirect_to edit_user_url(current_user),
                        alert: "Your password has expired. Please update your password.",
                        status: :see_other if current_user.password_expired?
 
     unless current_user.enabled?
       session.delete(:current_user_id)
       @_current_user = nil
-      redirect_to new_session_path,
+      redirect_to new_session_url,
                   alert: "Your account has been disabled.",
                   status: :see_other
     end

@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     unless @user == current_user || current_user.admin?
-      redirect_to root_path,
+      redirect_to root_url,
                   alert: "You can only edit your own profile.",
                   status: :see_other
     end
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     unless @user == current_user || current_user.admin?
-      redirect_to root_path,
+      redirect_to root_url,
                   alert: "You can only delete your own profile.",
                   status: :see_other
     end
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       @user.avatar.purge_later
       logout
 
-      redirect_to root_path, notice: "User was successfully destroyed.", status: :see_other
+      redirect_to root_url, notice: "User was successfully destroyed.", status: :see_other
     rescue ActiveRecord::RecordInvalid => e
       redirect_to request.referer,
                   alert: "User could not be destroyed. #{ e.message }",

@@ -13,7 +13,7 @@ class RegistrationsController < ApplicationController
     if @user.save
       login(@user)
       UserMailer.welcome(@user).deliver_later
-      redirect_to root_path, notice: "User was successfully created."
+      redirect_to root_url, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
