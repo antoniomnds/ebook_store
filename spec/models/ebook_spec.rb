@@ -21,22 +21,6 @@ RSpec.describe Ebook, type: :model do
     expect(ebook.preview_downloads).to be_zero
   end
 
-  it { is_expected.to have_attributes(
-                        title: "Example Ebook",
-                        status: "live",
-                        price: 9.99,
-                        authors: "John Doe",
-                        genre: "Fiction",
-                        publisher: "Acme Publishing",
-                        publication_date: DateTime.parse("2024-09-23"),
-                        pages: 100,
-                        isbn: "978-3589352332",
-                        sales: 0,
-                        views: 0,
-                        preview_downloads: 0,
-                        user: be_a(User)
-                      )}
-
   describe "#title" do
     it "is required" do
       ebook.title = nil

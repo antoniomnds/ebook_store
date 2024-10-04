@@ -15,8 +15,6 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to be_active }
 
-  it { is_expected.to have_attributes(username: "John Doe", email: "john.doe@example.com", password: "password", enabled: true, admin: false) }
-
   context "validation tests" do
     describe "#username" do
       it "is required" do

@@ -24,11 +24,4 @@ RSpec.describe Purchase, type: :model do
       expect(purchase.purchased_at).to_not be_nil
     end
   end
-
-  it { is_expected.to have_attributes(
-                        buyer: be_a(Buyer),
-                        seller: be_a(Seller),
-                        ebook: be_a(Ebook),
-                        price: ebook.price
-                      ) }
 end

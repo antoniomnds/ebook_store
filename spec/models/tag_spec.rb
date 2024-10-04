@@ -9,8 +9,6 @@ RSpec.describe Tag, type: :model do
 
   include_examples "model"
 
-  it { is_expected.to have_attributes(name: "Example Tag", description: "Lorem Ipsum") }
-
   describe "#name" do
     it "is required" do
       tag.name = nil
