@@ -1,6 +1,6 @@
 <%= render @ebook %>
 
-<div class="btn-group" role="group" aria-label="Ebook management buttons">
+<div class="btn-group p-3" role="group" aria-label="Ebook management buttons">
   <%= link_to "Back to ebooks", ebooks_path, class: 'btn btn-outline-dark' %>
   <%= edit_ebook_button(@ebook) %>
   <%= delete_ebook_button(@ebook) %>
