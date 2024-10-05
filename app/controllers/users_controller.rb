@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    unless @user == current_user || current_user.admin?
+    unless @user == current_user
       return redirect_to root_url,
                   alert: "You can only delete your own profile.",
                   status: :see_other
