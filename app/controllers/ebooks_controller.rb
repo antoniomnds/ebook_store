@@ -38,6 +38,11 @@ class EbooksController < ApplicationController
 
   # PATCH/PUT /ebooks/1
   def update
+    unless @ebook.user == current_user
+      return redirect_to ebooks_url,
+                  alert: "You can only edit your ebooks.",
+                  status: :see_other
+    end
     if @ebook.update(ebook_params)
       redirect_to @ebook, notice: "Ebook was successfully updated.", status: :see_other
     else
@@ -48,7 +53,7 @@ class EbooksController < ApplicationController
   # DELETE /ebooks/1
   def destroy
     unless @ebook.user == current_user
-      redirect_to ebooks_url,
+      return redirect_to ebooks_url,
                   alert: "You can only delete your ebooks.",
                   status: :see_other
     end
@@ -85,13 +90,16 @@ class EbooksController < ApplicationController
   end
 
   def increment_views
-    begin
-      ebook = Ebook.find(params[:id])
-      ebook.increment!(:views)
-      render json: { views: ebook.views }, status: :ok
-    rescue RecordNotFound
-      render json: { error: "Ebook could not be found." }, status: :not_found
-    end
+    ebook = Ebook.find(params[:id])
+    ebook.increment!(:views)
+    render json: { views: ebook.views }, status: :ok
+  end
+
+  def my_ebooks
+    @ebooks = Ebook.filter(params
+                             .slice(:tags)
+                             .merge(users: [ current_user.id ]))
+                   .includes(:tags)
   end
 
   private

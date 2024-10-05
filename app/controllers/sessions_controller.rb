@@ -9,13 +9,13 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
       unless user.enabled?
-        return redirect_to new_session_path,
+        return redirect_to new_session_url,
                            alert: "Your account has been disabled.",
                            status: :see_other
       end
 
       login(user)
-      redirect_to params[:back_url] || root_path,
+      redirect_to params[:back_url] || root_url,
                   notice: "You have successfully logged in.",
                   status: :see_other
     else
@@ -26,6 +26,6 @@ class SessionsController < ApplicationController
 
   def destroy
     logout
-    redirect_to root_path, notice: "You have successfully logged out.", status: :see_other
+    redirect_to root_url, notice: "You have successfully logged out.", status: :see_other
   end
 end

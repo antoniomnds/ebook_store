@@ -14,16 +14,15 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :users, except: %i[ new create] do
-    member do
-      get "my_ebooks"
-    end
-  end
+  resources :users, except: %i[ new create]
 
   resources :ebooks do
     member do
       post "purchase"
       patch "increment_views"
+    end
+    collection do
+      get "my_ebooks"
     end
   end
 
