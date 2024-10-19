@@ -8,7 +8,7 @@ class CreateEbooks < ActiveRecord::Migration[7.2]
       t.string :publisher
       t.datetime :publication_date
       t.integer :pages
-      t.string :isbn
+      t.string :isbn, index: { unique: true }
       t.integer :sales, default: 0
       t.integer :views, default: 0
       t.integer :preview_downloads, default: 0

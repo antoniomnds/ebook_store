@@ -1,7 +1,6 @@
 class EbooksController < ApplicationController
-  before_action :set_ebook, only: %i[ show edit update destroy ]
+  before_action :set_ebook, only: %i[ show edit update destroy purchase increment_views]
   skip_before_action :require_login, only: %i[ index show increment_views ]
-  skip_before_action :verify_current_user, only: %i[ index show increment_views ]
 
   # GET /ebooks
   def index
@@ -10,6 +9,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
+    @review = Ebook::MetadataService.get_review(@ebook)
   end
 
   # GET /ebooks/new
@@ -39,6 +39,11 @@ class EbooksController < ApplicationController
 
   # PATCH/PUT /ebooks/1
   def update
+    unless @ebook.user == current_user
+      return redirect_to ebooks_url,
+                  alert: "You can only edit your ebooks.",
+                  status: :see_other
+    end
     if @ebook.update(ebook_params)
       redirect_to @ebook, notice: "Ebook was successfully updated.", status: :see_other
     else
@@ -49,7 +54,7 @@ class EbooksController < ApplicationController
   # DELETE /ebooks/1
   def destroy
     unless @ebook.user == current_user
-      redirect_to ebooks_url,
+      return redirect_to ebooks_url,
                   alert: "You can only delete your ebooks.",
                   status: :see_other
     end
@@ -73,11 +78,10 @@ class EbooksController < ApplicationController
 
   def purchase
     begin
-      ebook = Ebook.find(params[:id])
       user = current_user
-      Ebook::PurchaseService.purchase(user, ebook)
+      Ebook::PurchaseService.purchase(user, @ebook)
 
-      redirect_to ebook, notice: "Ebook was successfully purchased."
+      redirect_to @ebook, notice: "Ebook was successfully purchased."
     rescue ActiveRecord::RecordNotFound
       redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
@@ -86,13 +90,15 @@ class EbooksController < ApplicationController
   end
 
   def increment_views
-    begin
-      ebook = Ebook.find(params[:id])
-      ebook.increment!(:views)
-      render json: { views: ebook.views }, status: :ok
-    rescue RecordNotFound
-      render json: { error: "Ebook could not be found." }, status: :not_found
-    end
+    @ebook.increment!(:views)
+    render json: { views: @ebook.views }, status: :ok
+  end
+
+  def my_ebooks
+    @ebooks = Ebook.filter(params
+                             .slice(:tags)
+                             .merge(users: [ current_user.id ]))
+                   .includes(:tags)
   end
 
   private

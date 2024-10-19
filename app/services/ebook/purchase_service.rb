@@ -24,8 +24,8 @@ class Ebook
         user.ebooks << ebook # change ebook ownership
         ebook.update_attribute(:sales, ebook.sales + 1)
 
-        UserMailer.notify_purchase(user, ebook).deliver_later
-        UserMailer.notify_ebook_statistics(user, ebook).deliver_later
+        UserMailer.with(user: user, ebook: ebook).notify_purchase.deliver_later
+        UserMailer.with(user: user, ebook: ebook).notify_ebook_statistics.deliver_later
       end
     end
   end

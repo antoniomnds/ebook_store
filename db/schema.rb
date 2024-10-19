@@ -71,6 +71,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_104519) do
     t.datetime "updated_at", null: false
     t.string "genre"
     t.integer "user_id"
+    t.index ["isbn"], name: "index_ebooks_on_isbn", unique: true
     t.index ["user_id"], name: "index_ebooks_on_user_id"
   end
 
@@ -110,9 +111,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_104519) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.datetime "password_expires_at"
-    t.boolean "is_admin", default: false
+    t.boolean "admin", default: false
     t.boolean "active", default: true
-    t.datetime "inactivated_at"
+    t.datetime "deactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

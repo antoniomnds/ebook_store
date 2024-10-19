@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   skip_before_action :require_login, only: %i[ edit update ] # to change password
-  skip_before_action :verify_current_user, only: %i[ edit update ]
+  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop in these actions
 
   # GET /users
   def index
@@ -14,8 +14,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    unless @user == current_user || current_user.is_admin?
-      redirect_to root_path,
+    unless @user == current_user || current_user.admin?
+      redirect_to root_url,
                   alert: "You can only edit your own profile.",
                   status: :see_other
     end
@@ -23,6 +23,11 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    unless @user == current_user || current_user.admin?
+      return redirect_to root_url,
+                  alert: "You can only edit your own profile.",
+                  status: :see_other
+    end
     if @user.update(user_params)
       redirect_to @user, notice: "User was successfully updated.", status: :see_other
     else
@@ -32,8 +37,8 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    unless @user == current_user || current_user.is_admin?
-      redirect_to root_path,
+    unless @user == current_user
+      return redirect_to root_url,
                   alert: "You can only delete your own profile.",
                   status: :see_other
     end
@@ -43,7 +48,7 @@ class UsersController < ApplicationController
       @user.avatar.purge_later
       logout
 
-      redirect_to root_path, notice: "User was successfully destroyed.", status: :see_other
+      redirect_to root_url, notice: "User was successfully destroyed.", status: :see_other
     rescue ActiveRecord::RecordInvalid => e
       redirect_to request.referer,
                   alert: "User could not be destroyed. #{ e.message }",
@@ -51,9 +56,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def my_ebooks
-    @ebooks = current_user.ebooks
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
