@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'support/shared_contexts/logging'
-require 'support/shared_examples/model'
 
 RSpec.describe Purchase, type: :model do
   subject(:purchase) do
