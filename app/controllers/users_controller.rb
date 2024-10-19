@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    unless @user == current_user || current_user.is_admin?
+    unless @user == current_user || current_user.admin?
       redirect_to root_path,
                   alert: "You can only edit your own profile.",
                   status: :see_other
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    unless @user == current_user || current_user.is_admin?
+    unless @user == current_user || current_user.admin?
       redirect_to root_path,
                   alert: "You can only delete your own profile.",
                   status: :see_other

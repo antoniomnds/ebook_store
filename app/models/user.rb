@@ -36,7 +36,7 @@ class User < ApplicationRecord
         active: false,
         username: "deleted-user-#{ DateTime.now.to_i }",
         email: "#{ DateTime.now.to_i }@deleted-user",
-        inactivated_at: DateTime.now
+        deactivated_at: DateTime.now
       )
       # noinspection RailsParamDefResolve
       ebooks.update_all(status: :archived, updated_at: DateTime.now)

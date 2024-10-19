@@ -20,36 +20,52 @@ class Ebook < ApplicationRecord
   end
 
   validates :title,
-    presence: true,
-    length: { minimum: 4 }
+            presence: true,
+            length: { minimum: 4 }
 
   validates :status,
-    presence: true
+            presence: true
 
   validates :price,
-    presence: true,
-    numericality: { greater_than_or_equal_to: 0.0 }
+            presence: true,
+            numericality: { greater_than_or_equal_to: 0.0 }
+
+  validates :genre,
+            presence: true
 
   validates :authors,
-    presence: true
+            presence: true
 
   validates :publisher,
-    presence: true
+            presence: true
 
   validates :publication_date,
-    presence: true
+            presence: true
 
   validates :pages,
-      presence: true
+            presence: true
 
   validates :isbn,
-    presence: true
+            presence: true,
+            format: {
+              with: /\A978-\d{10}\z/,
+              message: "has not a valid format"
+            },
+            uniqueness: true
+
+  validate :publication_date_cannot_be_in_the_future
 
   scope :live, -> { where(status: :live) }
   scope :filter_by_tags, ->(tag_ids) { joins(:ebook_tags).where(ebook_tags: { tag_id: tag_ids }) }
   scope :filter_by_users, ->(user_ids) { where(user_id: user_ids) }
 
   def discount_value(discount)
-    (price * (discount / 100.0)).round(2)
+    (price * (discount.to_i.clamp(0, 100) / 100.0)).round(2) # .to_i converts nil to 0
+  end
+
+  def publication_date_cannot_be_in_the_future
+    if publication_date.present? && publication_date > Date.today
+      errors.add(:publication_date, "can't be in the future")
+    end
   end
 end
