@@ -1,5 +1,5 @@
 class EbooksController < ApplicationController
-  before_action :set_ebook, only: %i[ show edit update destroy ]
+  before_action :set_ebook, only: %i[ show edit update destroy purchase increment_views]
   skip_before_action :require_login, only: %i[ index show increment_views ]
 
   # GET /ebooks
@@ -77,11 +77,10 @@ class EbooksController < ApplicationController
 
   def purchase
     begin
-      ebook = Ebook.find(params[:id])
       user = current_user
-      Ebook::PurchaseService.purchase(user, ebook)
+      Ebook::PurchaseService.purchase(user, @ebook)
 
-      redirect_to ebook, notice: "Ebook was successfully purchased."
+      redirect_to @ebook, notice: "Ebook was successfully purchased."
     rescue ActiveRecord::RecordNotFound
       redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
@@ -90,9 +89,8 @@ class EbooksController < ApplicationController
   end
 
   def increment_views
-    ebook = Ebook.find(params[:id])
-    ebook.increment!(:views)
-    render json: { views: ebook.views }, status: :ok
+    @ebook.increment!(:views)
+    render json: { views: @ebook.views }, status: :ok
   end
 
   def my_ebooks
