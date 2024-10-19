@@ -9,6 +9,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
+    @review = Ebook::MetadataService.get_review(@ebook)
   end
 
   # GET /ebooks/new
@@ -89,7 +90,7 @@ class EbooksController < ApplicationController
       ebook = Ebook.find(params[:id])
       ebook.increment!(:views)
       render json: { views: ebook.views }, status: :ok
-    rescue RecordNotFound
+    rescue ActiveRecord::RecordNotFound
       render json: { error: "Ebook could not be found." }, status: :not_found
     end
   end

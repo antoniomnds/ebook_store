@@ -2,10 +2,13 @@ module EbooksHelper
   def cover_image_tag(ebook)
     return nil unless ebook.cover_image.attached?
 
-    if Rails.configuration.active_storage.service == :cloudinary
-      cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale"
-    elsif Rails.configuration.active_storage.service == :local
-      image_tag ebook.cover_image.variant(:thumb)
+    content_tag :div, class: "text-center mt-4", style: "height: 20rem" do
+      if Rails.configuration.active_storage.service == :cloudinary
+        cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale"
+      elsif Rails.configuration.active_storage.service == :local
+        image_tag ebook.cover_image.variant(:thumb)
+      end +
+      content_tag(:hr)
     end
   end
 
@@ -50,5 +53,16 @@ module EbooksHelper
               method: :delete,
               class: klass,
               data: { turbo_confirm: "Are you sure you want to delete this ebook?" }
+  end
+
+  def ebook_summary_tag(review)
+    return unless review&.any? && review.first["summary"]&.present?
+
+    content_tag :div, class: "mt-5 card", style: "width: 16rem;" do
+      content_tag :div, class: "card-body" do
+        content_tag(:h6, "New York Times Summary", class: "card-title") +
+        content_tag(:div, review.first["summary"], class: "card-text")
+      end
+    end
   end
 end
