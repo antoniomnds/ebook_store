@@ -9,7 +9,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
-    @review = Ebook::MetadataService.get_review(@ebook)
+    @review = Ebook::ReviewFetcher.call(@ebook)
   end
 
   # GET /ebooks/new
@@ -79,7 +79,7 @@ class EbooksController < ApplicationController
   def purchase
     begin
       user = current_user
-      Ebook::PurchaseService.purchase(user, @ebook)
+      Ebook::PurchaseCreator.call(user, @ebook)
 
       redirect_to @ebook, notice: "Ebook was successfully purchased."
     rescue ActiveRecord::RecordNotFound

@@ -1,11 +1,7 @@
-class Ebook
-  class PurchaseService
-    class << self
-      def purchase(user, ebook)
-        new(user, ebook).purchase
-      end
-    end
+# frozen_string_literal: true
 
+class Ebook
+  class PurchaseCreator < ApplicationService
     attr_reader :user, :ebook
 
     def initialize(user, ebook)
@@ -13,7 +9,7 @@ class Ebook
       @ebook = ebook
     end
 
-    def purchase
+    def call
       raise "Ebook is archived." if ebook.status_archived?
 
       ActiveRecord::Base.transaction do
