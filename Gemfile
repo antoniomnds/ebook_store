@@ -61,6 +61,9 @@ group :development, :test do
 
   # For generating factories in tests [https://github.com/thoughtbot/factory_bot]
   gem "factory_bot_rails"
+
+  # For mocking HTTP requests in tests [https://github.com/bblimke/webmock]
+  gem "webmock"
 end
 
 group :development do
