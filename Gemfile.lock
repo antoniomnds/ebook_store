@@ -343,7 +343,7 @@ GEM
     sassc-embedded (1.78.0)
       sass-embedded (~> 1.78)
     securerandom (0.3.1)
-    sidekiq (7.3.4)
+    sidekiq (7.3.6)
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
