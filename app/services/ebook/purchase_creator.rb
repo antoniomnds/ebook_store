@@ -16,12 +16,12 @@ class Ebook
         buyer = user.buyer || user.create_buyer
         seller = ebook.user.seller || ebook.user.create_seller
 
-        Purchase.create!(buyer: buyer, seller: seller, ebook: ebook, price: ebook.price)
+        Purchase.create!(buyer:, seller:, ebook:, price: ebook.price)
         user.ebooks << ebook # change ebook ownership
         ebook.update_attribute(:sales, ebook.sales + 1)
 
-        UserMailer.with(user: user, ebook: ebook).notify_purchase.deliver_later
-        UserMailer.with(user: user, ebook: ebook).notify_ebook_statistics.deliver_later
+        UserMailer.with(user:, ebook:).notify_purchase.deliver_later
+        UserMailer.with(user:, ebook:).notify_ebook_statistics.deliver_later
       end
     end
   end
