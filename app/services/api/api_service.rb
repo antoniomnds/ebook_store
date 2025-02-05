@@ -4,7 +4,7 @@ module Api
   class ApiService < ApplicationService
     NUM_RETRIES = 3
 
-    def make_request(uri, method, fail_message, headers = {}, body = {})
+    def make_request(uri, method, fail_message, headers = {}, body = {}, &block)
       req = create_request(uri, method, headers, body)
       retries = 0
 
