@@ -32,7 +32,7 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
 
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
@@ -45,15 +45,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    address:         "smtp.gmail.com",
-    port:            587,
-    domain:          "gmail.com",
-    user_name:       ENV["GMAIL_USERNAME"],
-    password:        ENV["GMAIL_PASSWORD"],
-    authentication:  "plain",
-    enable_starttls: true,
-    open_timeout:    5,
-    read_timeout:    5
+    address:         '127.0.0.1',
+    port:            1025,
   }
 
   # Print deprecation notices to the Rails logger.
