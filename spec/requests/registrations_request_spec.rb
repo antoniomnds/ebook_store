@@ -1,6 +1,9 @@
 require 'rails_helper'
+require "support/action_mailer_helper"
 
 RSpec.describe "Registrations Request", type: :request do
+  include ActiveJob::TestHelper
+
   it "allows access to registrations#new" do
     get new_registration_path
     expect(response).to have_http_status(200)
@@ -17,6 +20,8 @@ RSpec.describe "Registrations Request", type: :request do
   end
 
   context "with a valid user" do
+    let(:user) { build(:user) }
+
     it "creates a user and redirects to the homepage" do
       expect do
         post registrations_path(user: attributes_for(:user))
@@ -24,6 +29,17 @@ RSpec.describe "Registrations Request", type: :request do
 
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(root_url)
+    end
+
+    it "sends a welcome email to the user" do
+      attr = attributes_for(:user)
+
+      perform_enqueued_jobs do  # Forces `deliver_later` to run synchronously
+        expect {
+          post registrations_path(user: attr)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)  # Verify email is sent
+      end
+
     end
   end
 end
