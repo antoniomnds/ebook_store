@@ -5,7 +5,7 @@ RSpec.describe Purchase, type: :model do
     user = build(:user)
     buyer = build(:buyer, user:)
     seller = build(:seller, user:)
-    ebook = build(:ebook, user:)
+    ebook = build(:ebook, owner: user)
 
     described_class.new(buyer: buyer, seller: seller, ebook: ebook, price: ebook.price)
   end

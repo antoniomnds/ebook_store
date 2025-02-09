@@ -1,7 +1,7 @@
 class Ebook < ApplicationRecord
   include Filterable
 
-  belongs_to :user
+  belongs_to :owner, class_name: "User", foreign_key: "user_id"
   has_many :purchases
   has_many :ebook_tags, dependent: :destroy
   has_many :tags, through: :ebook_tags

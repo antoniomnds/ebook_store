@@ -14,7 +14,7 @@ class Ebook
 
       ActiveRecord::Base.transaction do
         buyer = user.buyer || user.create_buyer
-        seller = ebook.user.seller || ebook.user.create_seller
+        seller = ebook.owner.seller || ebook.owner.create_seller
 
         Purchase.create!(buyer:, seller:, ebook:, price: ebook.price)
         user.ebooks << ebook # change ebook ownership

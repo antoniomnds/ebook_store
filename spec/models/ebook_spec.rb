@@ -120,11 +120,11 @@ RSpec.describe Ebook, type: :model do
     end
   end
 
-  describe "#user" do
+  describe "#owner" do
     it "is required" do
-      ebook.user = nil
+      ebook.owner = nil
       ebook.valid?
-      expect(ebook.errors[:user].first).to match(/must exist/)
+      expect(ebook.errors[:owner].first).to match(/must exist/)
     end
   end
 

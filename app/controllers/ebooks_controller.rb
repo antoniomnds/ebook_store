@@ -19,7 +19,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1/edit
   def edit
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       redirect_to ebooks_url,
                   alert: "You can only edit your ebooks.",
                   status: :see_other
@@ -39,7 +39,7 @@ class EbooksController < ApplicationController
 
   # PATCH/PUT /ebooks/1
   def update
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       return redirect_to ebooks_url,
                   alert: "You can only edit your ebooks.",
                   status: :see_other
@@ -53,7 +53,7 @@ class EbooksController < ApplicationController
 
   # DELETE /ebooks/1
   def destroy
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       return redirect_to ebooks_url,
                   alert: "You can only delete your ebooks.",
                   status: :see_other
