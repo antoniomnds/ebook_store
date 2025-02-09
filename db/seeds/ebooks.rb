@@ -14,7 +14,7 @@
     ebook.sales = Faker::Number.number(digits: 3)
     ebook.views = Faker::Number.number(digits: 5)
     ebook.preview_downloads = Faker::Number.number(digits: 4)
-    ebook.user = User.find(rand(1..num_users))
+    ebook.owner = User.find(rand(1..num_users))
     ebook.tags << Tag.find(rand(1..num_tags))
   end
 end

@@ -24,7 +24,7 @@ RSpec.describe UserMailer, type: :mailer do
 
   describe "notify_purchase" do
     let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, user:)}
+    let(:ebook) { build(:ebook, owner: user)}
     let(:mail) { UserMailer.with(user:, ebook:).notify_purchase }
 
     it "sends a purchase notification email to the user's email address" do
@@ -51,7 +51,7 @@ RSpec.describe UserMailer, type: :mailer do
 
   describe "notify_ebook_statistics" do
     let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, user:)}
+    let(:ebook) { build(:ebook, owner: user)}
     let(:mail) { UserMailer.with(user:, ebook:).notify_ebook_statistics }
 
     it "sends a purchase notification email to the user's email address" do

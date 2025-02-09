@@ -70,10 +70,10 @@
               </p>
             <% end %>
 
-            <% if ebook.user %>
+            <% if ebook.owner %>
               <p>
                 <strong>Owner:</strong>
-                <%= link_to ebook.user.username, user_path(ebook.user) %>
+                <%= link_to ebook.owner.username, user_path(ebook.owner) %>
               </p>
             <% end %>
           </div>

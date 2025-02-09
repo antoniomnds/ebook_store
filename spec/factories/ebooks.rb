@@ -9,6 +9,6 @@ FactoryBot.define do
     publication_date { Faker::Date.between(from: 40.years.ago, to: Date.today) }
     pages { Faker::Number.number(digits: 3) }
     isbn { "978-#{Faker::Number.number(digits: 10)}" }
-    user
+    association :owner, factory: :user
   end
 end

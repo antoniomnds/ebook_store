@@ -21,8 +21,8 @@ RSpec.describe Ebook::PurchaseCreator do
       end
 
       it "changes the owner of the ebook" do
-        expect { described_class.call(user, ebook) }.to change(ebook, :user)
-                                                          .from(ebook.user).to(user)
+        expect { described_class.call(user, ebook) }.to change(ebook, :owner)
+                                                          .from(ebook.owner).to(user)
       end
 
       it "increases the number of sales of the ebook" do

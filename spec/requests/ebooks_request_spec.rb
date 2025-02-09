@@ -148,7 +148,7 @@ RSpec.describe "Ebooks Request", type: :request do
     end
 
     context "when the ebook owner" do
-      let(:ebook) { create(:ebook, user: user) }
+      let(:ebook) { create(:ebook, owner: user) }
 
       it "allows access to ebooks#edit" do
         get edit_ebook_path(ebook)

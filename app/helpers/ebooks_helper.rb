@@ -38,7 +38,7 @@ module EbooksHelper
   end
 
   def edit_ebook_button(ebook, klass: "btn btn-outline-primary")
-    return nil unless current_user == ebook.user
+    return nil unless current_user == ebook.owner
 
     link_to "Edit this ebook",
             edit_ebook_path(ebook),
@@ -46,7 +46,7 @@ module EbooksHelper
   end
 
   def delete_ebook_button(ebook, klass: "btn btn-outline-danger")
-    return nil unless current_user == ebook.user
+    return nil unless current_user == ebook.owner
 
     button_to "Delete this ebook",
               ebook,
