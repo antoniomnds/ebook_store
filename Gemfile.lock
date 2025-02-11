@@ -167,8 +167,8 @@ GEM
     hashdiff (1.1.1)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    image_processing (1.13.0)
-      mini_magick (>= 4.9.5, < 5)
+    image_processing (1.14.0)
+      mini_magick (>= 4.9.5, < 6)
       ruby-vips (>= 2.0.17, < 3)
     importmap-rails (2.1.0)
       actionpack (>= 6.0.0)
@@ -191,7 +191,9 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
-    mini_magick (4.13.2)
+    mini_magick (5.1.2)
+      benchmark
+      logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
     minitest (5.25.4)
@@ -338,7 +340,7 @@ GEM
       rubocop-performance
       rubocop-rails
     ruby-progressbar (1.13.0)
-    ruby-vips (2.2.2)
+    ruby-vips (2.2.3)
       ffi (~> 1.12)
       logger
     sass-embedded (1.83.4)
@@ -440,7 +442,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  image_processing (~> 1.2)
+  image_processing (~> 1.14)
   importmap-rails
   puma (>= 5.0)
   rails (~> 7.2.2)
