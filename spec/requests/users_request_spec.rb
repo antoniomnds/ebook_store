@@ -76,7 +76,7 @@ RSpec.describe "Users Request", type: :request do
           expect(response).to have_http_status(:success)
         end
 
-        context "with an invalid user" do
+        context "with invalid information" do
           it "does not update the user" do
             original_email = user.email
             patch user_path(user: attributes_for(:user, email: ""), id: user.id)
@@ -87,7 +87,7 @@ RSpec.describe "Users Request", type: :request do
           end
         end
 
-        context "with an valid user" do
+        context "with valid information" do
           it "updates the user and redirects to the user's page" do
             original_email = user.email
             patch user_path(user: attributes_for(:user), id: user.id)
@@ -99,12 +99,16 @@ RSpec.describe "Users Request", type: :request do
           end
         end
 
-        it "soft deletes the user and redirects to the homepage" do
-          user # eagerly create the user to not affect the next expectation
-          expect { delete user_path(user) }.to change(User, :count).by(0) # soft delete
-
-          expect(response).to have_http_status(:redirect)
-          expect(response).to redirect_to(root_url)
+        context "when deleting the user" do
+          it "soft deletes the user and redirects to the homepage" do
+            user # eagerly create the user to not affect the next expectation
+            expect { delete user_path(user) }.to change(User, :count).by(0) # soft delete
+            user.reload
+            expect(user).not_to be_enabled
+            expect(user.disabled_at).not_to be_nil
+            expect(response).to have_http_status(:redirect)
+            expect(response).to redirect_to(root_url)
+          end
         end
       end
     end
@@ -112,7 +116,7 @@ RSpec.describe "Users Request", type: :request do
     context "when an admin user" do
       let(:another_user) { create(:user) }
       before do
-        user.update(admin: true)
+        user.update!(admin: true)
       end
 
       it "can access users#edit of another user" do
@@ -130,12 +134,16 @@ RSpec.describe "Users Request", type: :request do
         expect(response).to redirect_to(user_path(another_user))
       end
 
-      it "cannot destroy other users" do
-        user # eagerly create the user to not affect the next expectation
-        expect { delete user_path(user) }.to change(User, :count).by(0) # soft delete
-
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(root_url)
+      context "when deleting another user" do
+        it "soft deletes the other user and redirects to the homepage" do
+          another_user # eagerly create the user to not affect the next expectation
+          expect { delete user_path(another_user) }.to change(User, :count).by(0) # soft delete
+          another_user.reload
+          expect(another_user).not_to be_enabled
+          expect(another_user.disabled_at).not_to be_nil
+          expect(response).to have_http_status(:redirect)
+          expect(response).to redirect_to(root_url)
+        end
       end
     end
   end
