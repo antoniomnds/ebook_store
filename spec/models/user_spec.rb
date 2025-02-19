@@ -7,8 +7,6 @@ RSpec.describe User, type: :model do
 
   it { is_expected.not_to be_admin }
 
-  it { is_expected.to be_active }
-
   context "validation tests" do
     describe "#username" do
       it "is required" do
@@ -27,7 +25,7 @@ RSpec.describe User, type: :model do
       end
 
       it "is unique" do
-        another_user = create(:user, email: user.email)
+        create(:user, email: user.email) # another user
         user.valid?
         expect(user.errors[:email].first).to match(/already been taken/)
       end
@@ -37,6 +35,21 @@ RSpec.describe User, type: :model do
           user.email = "invalid_email"
           user.valid?
           expect(user.errors[:email].first).to match(/not an email/)
+        end
+      end
+    end
+
+    describe "#disabled?" do
+      context "when the user is not enabled" do
+        it "returns true" do
+          user.enabled = false
+          expect(user.disabled?).to eq(true)
+        end
+      end
+
+      context "when the user is enabled" do
+        it "returns false" do
+          expect(user.disabled?).to eq(false)
         end
       end
     end
@@ -64,17 +77,17 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it "can respond to the deactivate! method with no arguments" do
-    expect(user).to respond_to(:deactivate!).and respond_to(:deactivate!).with(0).arguments
+  it "can respond to the disable! method with no arguments" do
+    expect(user).to respond_to(:disable!).and respond_to(:disable!).with(0).arguments
   end
 
-  describe "#deactivate! method" do
+  describe "#disable! method" do
     before do
-      user.deactivate!
+      user.disable!
     end
 
-    it "should inactivate the user" do
-      expect(user).not_to be_active
+    it "should disable the user" do
+      expect(user).not_to be_enabled
     end
 
     it "should update the username" do
@@ -87,25 +100,27 @@ RSpec.describe User, type: :model do
       expect(user.email).to match(/\A\d+@deleted-user\z/)
     end
 
-    it "should set the deactivated_at timestamp" do
-      expect(user.deactivated_at).to_not be_nil
+    it "should set the disabled_at timestamp" do
+      expect(user.disabled_at).to_not be_nil
     end
 
     it "does not raise an error" do
-      expect { user.deactivate! }.not_to raise_error
+      expect { user.disable! }.not_to raise_error
     end
   end
 
   context "scope tests" do
     let(:users) { create_list(:user, 5) }
+    let(:ebooks) { create_list(:ebook, 2) }
+
     before do
-      users.first(2).each do |user|
-        user.update!(active: false)
+      users.first(2).each_with_index do |user, idx|
+        user.ebooks << ebooks[idx]
       end
     end
 
-    it "should return active users" do
-      expect(described_class.active.size).to eq(3)
+    it "should return the users that have ebooks" do
+      expect(described_class.with_ebooks.size).to eq(2)
     end
   end
 end

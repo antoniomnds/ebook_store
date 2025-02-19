@@ -2,7 +2,21 @@
 
 <br>
 
-<div class="btn-group" role="group" aria-label="User management buttons">
-  <%= link_to "Back to users", users_path, class: 'btn btn-outline-dark' %>
-  <%= link_to "Edit profile", edit_user_path(@user), class: 'btn btn-outline-primary' %>
+<div class="d-flex justify-content-between">
+  <div class="btn-group" role="group" aria-label="User management buttons">
+    <%= link_to "Back to users", users_path, class: 'btn btn-outline-dark' %>
+    <%= link_to "Edit profile", edit_user_path(@user), class: 'btn btn-outline-primary' %>
+  </div>
+  <%= button_to "Delete account",
+                @user,
+                method: :delete,
+                form: {
+                  data: {
+                    turbo_confirm: 'Are you sure? This action cannot be undone.'
+                  }
+                },
+                class: 'btn btn-outline-danger',
+      disabled: @user.disabled?
+  %>
 </div>
+

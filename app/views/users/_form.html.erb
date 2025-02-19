@@ -50,7 +50,8 @@
 
   <%= user_enabled_tag(form) %>
 
-  <div>
+  <div class="d-flex justify-content-between" role="group" aria-label="User management buttons">
+    <%= link_to "Cancel", user_path(@user), class: 'btn btn-outline-dark' %>
     <%= form.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

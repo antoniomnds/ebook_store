@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if user&.authenticate(params[:password])
       unless user.enabled?
         return redirect_to new_session_url,
-                           alert: "Your account has been disabled.",
+                           alert: "Your account has been removed.",
                            status: :see_other
       end
 

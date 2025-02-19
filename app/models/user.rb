@@ -21,25 +21,29 @@ class User < ApplicationRecord
   after_save_commit :resize_avatar,
                     if: -> { avatar.attached? }
 
-  scope :active, -> { where(active: true) }
-
   scope :with_ebooks, -> { joins(:ebooks).distinct.order(:id) }
 
   def password_expired?
     DateTime.now > password_expires_at
   end
 
+  def disabled?
+    !enabled?
+  end
+
   # Performs a soft delete on the user.
-  def deactivate!
+  def disable!
     ActiveRecord::Base.transaction do
+      time = DateTime.now
+      timestamp = time.to_i
       update!(
-        active: false,
-        username: "deleted-user-#{ DateTime.now.to_i }",
-        email: "#{ DateTime.now.to_i }@deleted-user",
-        deactivated_at: DateTime.now
+        enabled: false,
+        username: "deleted-user-#{ timestamp }",
+        email: "#{ timestamp }@deleted-user",
+        disabled_at: time
       )
       # noinspection RailsParamDefResolve
-      ebooks.update_all(status: :archived, updated_at: DateTime.now)
+      ebooks.update_all(status: :archived, updated_at: time)
     end
   end
 

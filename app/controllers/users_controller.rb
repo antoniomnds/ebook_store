@@ -44,8 +44,14 @@ class UsersController < ApplicationController
                          status: :see_other
     end
 
+    if @user.disabled?
+      return redirect_to request.referer,
+                         alert: "User already deleted.",
+                         status: :see_other
+    end
+
     begin
-      @user.deactivate!
+      @user.disable!
       @user.avatar.purge_later
       if own_user
         logout
