@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  skip_before_action :require_login, only: %i[ edit update ] # to change password
-  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop in these actions
+  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop when password expired
 
   # GET /users
   def index
