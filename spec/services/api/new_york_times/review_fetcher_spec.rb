@@ -5,7 +5,7 @@ require 'support/request_helper'
 
 RSpec.describe ::Api::NewYorkTimes::ReviewFetcher do
   let(:ebook) { build(:ebook) }
-  let(:mocked_review) { { results: [{ summary: Faker::Lorem.sentence }] }.to_json }
+  let(:mocked_review) { { results: [ { summary: Faker::Lorem.sentence } ] }.to_json }
 
   describe ".call" do
     it "fetches a review from the API" do

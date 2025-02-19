@@ -10,7 +10,7 @@ RSpec.describe "Ebooks Request", type: :request do
     end
 
     it "allows access to ebooks#show" do
-      mocked_review = { results: [{ summary: Faker::Lorem.sentence }] }.to_json
+      mocked_review = { results: [ { summary: Faker::Lorem.sentence } ] }.to_json
       allow(Ebook::ReviewFetcher).to receive(:call).with(ebook).and_return(mocked_review)
       get ebook_path(ebook)
       expect(response).to have_http_status(:success)

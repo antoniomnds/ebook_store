@@ -6,11 +6,11 @@ RSpec.describe UserMailer, type: :mailer do
     let(:mail) { UserMailer.with(user:).welcome }
 
     it "sends a welcome email to the user's email address" do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq(["antoniomndsantos@gmail.com"])
+      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
     end
 
     it "sends with the correct subject" do
@@ -24,15 +24,15 @@ RSpec.describe UserMailer, type: :mailer do
 
   describe "notify_purchase" do
     let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, owner: user)}
+    let(:ebook) { build(:ebook, owner: user) }
     let(:mail) { UserMailer.with(user:, ebook:).notify_purchase }
 
     it "sends a purchase notification email to the user's email address" do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq(["antoniomndsantos@gmail.com"])
+      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
     end
 
     it "sends with the correct subject" do
@@ -46,20 +46,19 @@ RSpec.describe UserMailer, type: :mailer do
     it "thanks for buying the ebook" do
       expect(mail.body).to match(/Thank you for purchasing #{ebook.title}!/)
     end
-
   end
 
   describe "notify_ebook_statistics" do
     let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, owner: user)}
+    let(:ebook) { build(:ebook, owner: user) }
     let(:mail) { UserMailer.with(user:, ebook:).notify_ebook_statistics }
 
     it "sends a purchase notification email to the user's email address" do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq(["antoniomndsantos@gmail.com"])
+      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
     end
 
     it "sends with the correct subject" do
@@ -75,6 +74,5 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.body).to match(/The book has been viewed #{ebook.views} times in the store./)
       expect(mail.body).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
     end
-
   end
 end
