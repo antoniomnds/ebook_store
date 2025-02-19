@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.describe "Sessions", type: :request do
   let(:user) { create(:user) }
 
+  def login_user
+    post sessions_path(email: user.email, password: user.password)
+    follow_redirect!
+  end
+
   it "allows access to sessions#new" do
     get new_session_path
     expect(response).to have_http_status(200)
@@ -33,6 +38,19 @@ RSpec.describe "Sessions", type: :request do
 
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(back_url)
+    end
+  end
+
+  context "when logging out" do
+    it "destroys the session and redirects to the homepage" do
+      login_user
+      delete session_path(user)
+      expect(response).to have_http_status(:redirect)
+      expect(response).to redirect_to(root_path)
+      # no longer can access a route that requires authentication
+      get users_path
+      expect(response).to have_http_status(:redirect)
+      expect(response).to redirect_to(new_session_path)
     end
   end
 end
