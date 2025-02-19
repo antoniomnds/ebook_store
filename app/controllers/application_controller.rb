@@ -29,13 +29,15 @@ class ApplicationController < ActionController::Base
 
   # Performs some checks before allowing access to the application, namely:
   # - User's password must not be expired
-  # - User must not be banned
+  # - User must not be disabled
   def verify_current_user
     return unless logged_in?
 
-    return redirect_to edit_user_url(current_user),
-                       alert: "Your password has expired. Please update your password.",
-                       status: :see_other if current_user.password_expired?
+    if current_user.password_expired?
+      return redirect_to edit_user_url(current_user),
+                         alert: "Your password has expired. Please update your password.",
+                         status: :see_other
+    end
 
     unless current_user.enabled?
       session.delete(:current_user_id)
