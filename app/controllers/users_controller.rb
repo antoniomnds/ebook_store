@@ -37,18 +37,21 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    unless @user == current_user
+    own_user = @user == current_user
+    unless own_user or current_user.admin?
       return redirect_to root_url,
-                  alert: "You can only delete your own profile.",
-                  status: :see_other
+                         alert: "You can only delete your own profile.",
+                         status: :see_other
     end
 
     begin
       @user.deactivate!
       @user.avatar.purge_later
-      logout
+      if own_user
+        logout
+      end
 
-      redirect_to root_url, notice: "User was successfully destroyed.", status: :see_other
+      redirect_to root_url, notice: "User was successfully removed.", status: :see_other
     rescue ActiveRecord::RecordInvalid => e
       redirect_to request.referer,
                   alert: "User could not be destroyed. #{ e.message }",
