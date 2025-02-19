@@ -10,10 +10,19 @@ RSpec.describe "Sessions", type: :request do
 
   context "with invalid credentials" do
     it "does not create a session" do
-      back_url = ebooks_url
-      post sessions_path(email: user.email, password: "", back_url: back_url)
+      post sessions_path(email: user.email, password: "", back_url: ebooks_url)
 
       expect(response).to have_http_status(422)
+    end
+  end
+
+  context "with a disabled user" do
+    it "does not create a session" do
+      user.disable!
+      post sessions_path(email: user.email, password: user.password)
+
+      expect(response).to have_http_status(:redirect)
+      expect(response).to redirect_to(new_session_path)
     end
   end
 
