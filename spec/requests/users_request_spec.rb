@@ -102,7 +102,7 @@ RSpec.describe "Users Request", type: :request do
         context "when deleting the user" do
           it "soft deletes the user and redirects to the homepage" do
             user # eagerly create the user to not affect the next expectation
-            expect { delete user_path(user) }.to change(User, :count).by(0) # soft delete
+            expect { delete user_path(user) }.not_to change(User, :count) # soft delete
             user.reload
             expect(user).not_to be_enabled
             expect(user.disabled_at).not_to be_nil
@@ -137,7 +137,7 @@ RSpec.describe "Users Request", type: :request do
       context "when deleting another user" do
         it "soft deletes the other user and redirects to the homepage" do
           another_user # eagerly create the user to not affect the next expectation
-          expect { delete user_path(another_user) }.to change(User, :count).by(0) # soft delete
+          expect { delete user_path(another_user) }.not_to change(User, :count) # soft delete
           another_user.reload
           expect(another_user).not_to be_enabled
           expect(another_user.disabled_at).not_to be_nil
