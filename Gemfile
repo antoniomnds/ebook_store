@@ -73,6 +73,14 @@ group :development, :test do
   gem "mailcatcher", "~> 0.10"
 end
 
+group :test do
+  # For simulating user interactions in tests [https://github.com/teamcapybara/capybara]
+  gem "capybara"
+
+  # For running tests in a browser [https://github.com/SeleniumHQ/selenium/tree/trunk/rb]
+  gem "selenium-webdriver"
+end
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
