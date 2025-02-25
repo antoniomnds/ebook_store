@@ -7,7 +7,7 @@ RSpec.describe Ebook::PurchaseCreator do
   let(:ebook) { create(:ebook) }
   let(:user) { create(:user) }
 
-  describe ".call" do
+  describe "#call" do
     context "when the ebook is archived" do
       it "raises an exception" do
         ebook.status = :archived

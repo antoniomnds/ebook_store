@@ -15,116 +15,118 @@ RSpec.describe Ebook, type: :model do
     expect(ebook.preview_downloads).to be_zero
   end
 
-  describe "#title" do
-    it "is required" do
-      ebook.title = nil
-      ebook.valid?
-      expect(ebook.errors[:title].first).to match(/blank/)
-      expect(ebook.errors[:title].last).to match(/too short \(minimum is 4 characters\)/)
-    end
-
-    context "with a title less than four characters" do
-      it "should be invalid" do
-        ebook.title = "A" * 3
+  context "validation tests" do
+    describe "#title" do
+      it "is required" do
+        ebook.title = nil
         ebook.valid?
-        expect(ebook.errors[:title].first).to match(/too short \(minimum is 4 characters\)/)
+        expect(ebook.errors[:title].first).to match(/blank/)
+        expect(ebook.errors[:title].last).to match(/too short \(minimum is 4 characters\)/)
+      end
+
+      context "with a title less than four characters" do
+        it "should be invalid" do
+          ebook.title = "A" * 3
+          ebook.valid?
+          expect(ebook.errors[:title].first).to match(/too short \(minimum is 4 characters\)/)
+        end
       end
     end
-  end
 
-  describe "#status" do
-    it "is required" do
-      ebook.status = nil
-      ebook.valid?
-      expect(ebook.errors[:status].first).to match(/blank/)
-    end
+    describe "#status" do
+      it "is required" do
+        ebook.status = nil
+        ebook.valid?
+        expect(ebook.errors[:status].first).to match(/blank/)
+      end
 
-    it "belongs to a predefined set of values" do
-      expect(ebook.status).to satisfy("be one of #{ Ebook.statuses.keys }") do |status|
-        Ebook.statuses.keys.include?(status)
+      it "belongs to a predefined set of values" do
+        expect(ebook.status).to satisfy("be one of #{ Ebook.statuses.keys }") do |status|
+          Ebook.statuses.keys.include?(status)
+        end
       end
     end
-  end
 
-  describe "#price" do
-    it "is required" do
-      ebook.price = nil
-      ebook.valid?
-      expect(ebook.errors[:price].first).to match(/blank/)
-      expect(ebook.errors[:price].last).to match(/not a number/)
+    describe "#price" do
+      it "is required" do
+        ebook.price = nil
+        ebook.valid?
+        expect(ebook.errors[:price].first).to match(/blank/)
+        expect(ebook.errors[:price].last).to match(/not a number/)
+      end
+
+      it "should not be negative" do
+        ebook.price = -1
+        ebook.valid?
+        expect(ebook.errors[:price].first).to match(/greater than or equal to 0.0/)
+      end
     end
 
-    it "should not be negative" do
-      ebook.price = -1
-      ebook.valid?
-      expect(ebook.errors[:price].first).to match(/greater than or equal to 0.0/)
-    end
-  end
-
-  describe "#authors" do
-    it "is required" do
-      ebook.authors = nil
-      ebook.valid?
-      expect(ebook.errors[:authors].first).to match(/blank/)
-    end
-  end
-
-  describe "#genre" do
-    it "is required" do
-      ebook.genre = nil
-      ebook.valid?
-      expect(ebook.errors[:genre].first).to match(/blank/)
-    end
-  end
-
-  describe "#publisher" do
-    it "is required" do
-      ebook.publisher = nil
-      ebook.valid?
-      expect(ebook.errors[:publisher].first).to match(/blank/)
-    end
-  end
-
-  describe "#publication date" do
-    it "is required" do
-      ebook.publication_date = nil
-      ebook.valid?
-      expect(ebook.errors[:publication_date].first).to match(/blank/)
+    describe "#authors" do
+      it "is required" do
+        ebook.authors = nil
+        ebook.valid?
+        expect(ebook.errors[:authors].first).to match(/blank/)
+      end
     end
 
-    it "should not be in the future" do
-      ebook.publication_date = Date.tomorrow.end_of_day
-      ebook.valid?
-      expect(ebook.errors[:publication_date]).to contain_exactly "can't be in the future"
-    end
-  end
-
-  describe "#pages" do
-    it "is required" do
-      ebook.pages = nil
-      ebook.valid?
-      expect(ebook.errors[:pages].first).to match(/blank/)
-    end
-  end
-
-  describe "#ISBN" do
-    it "is required" do
-      ebook.isbn = nil
-      ebook.valid?
-      expect(ebook.errors[:isbn].first).to match(/blank/)
-      expect(ebook.errors[:isbn].last).to match(/not a valid format/)
+    describe "#genre" do
+      it "is required" do
+        ebook.genre = nil
+        ebook.valid?
+        expect(ebook.errors[:genre].first).to match(/blank/)
+      end
     end
 
-    it "has a defined format" do
-      expect(ebook.isbn).to match(/\A978-\d{10}\z/)
+    describe "#publisher" do
+      it "is required" do
+        ebook.publisher = nil
+        ebook.valid?
+        expect(ebook.errors[:publisher].first).to match(/blank/)
+      end
     end
-  end
 
-  describe "#owner" do
-    it "is required" do
-      ebook.owner = nil
-      ebook.valid?
-      expect(ebook.errors[:owner].first).to match(/must exist/)
+    describe "#publication date" do
+      it "is required" do
+        ebook.publication_date = nil
+        ebook.valid?
+        expect(ebook.errors[:publication_date].first).to match(/blank/)
+      end
+
+      it "should not be in the future" do
+        ebook.publication_date = Date.tomorrow.end_of_day
+        ebook.valid?
+        expect(ebook.errors[:publication_date]).to contain_exactly "can't be in the future"
+      end
+    end
+
+    describe "#pages" do
+      it "is required" do
+        ebook.pages = nil
+        ebook.valid?
+        expect(ebook.errors[:pages].first).to match(/blank/)
+      end
+    end
+
+    describe "#ISBN" do
+      it "is required" do
+        ebook.isbn = nil
+        ebook.valid?
+        expect(ebook.errors[:isbn].first).to match(/blank/)
+        expect(ebook.errors[:isbn].last).to match(/not a valid format/)
+      end
+
+      it "has a defined format" do
+        expect(ebook.isbn).to match(/\A978-\d{10}\z/)
+      end
+    end
+
+    describe "#owner" do
+      it "is required" do
+        ebook.owner = nil
+        ebook.valid?
+        expect(ebook.errors[:owner].first).to match(/must exist/)
+      end
     end
   end
 
