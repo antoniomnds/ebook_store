@@ -130,6 +130,39 @@ RSpec.describe Ebook, type: :model do
     end
   end
 
+  context "scope tests" do
+    let!(:ebooks) { create_list(:ebook, 3, status: :live) }
+
+    describe ".live" do
+      before do
+        ebooks.last.update!(status: :archived)
+      end
+
+      it "returns the ebooks with status live" do
+        expect(described_class.live).to match(ebooks.first(2))
+      end
+    end
+
+    describe ".filter_by_tags" do
+      let(:tag) { build(:tag) }
+
+      before do
+        ebooks.first.tags << tag
+      end
+
+      it "returns the ebooks with the given tag" do
+        expect(described_class.filter_by_tags(tag)).to include(ebooks.first)
+        expect(described_class.filter_by_tags(tag)).not_to include(ebooks.last)
+      end
+    end
+
+    describe ".filter_by_users" do
+      it "returns the ebooks owned by the given user" do
+        expect(described_class.filter_by_users(User.first)).to match([ ebooks.first ])
+      end
+    end
+  end
+
   describe "#discount_value" do
     context "with a valid discount value" do
       it "should return the correct discount value" do
