@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject(:user) { build(:user) }
 
+  # factory should produce valid objects
+  it { is_expected.to be_valid }
+
   it { is_expected.to be_enabled }
 
   it { is_expected.not_to be_admin }
@@ -31,25 +34,10 @@ RSpec.describe User, type: :model do
       end
 
       context "with an invalid email" do
-        it "should be invalid" do
+        it "is not valid" do
           user.email = "invalid_email"
           user.valid?
           expect(user.errors[:email].first).to match(/not an email/)
-        end
-      end
-    end
-
-    describe "#disabled?" do
-      context "when the user is not enabled" do
-        it "returns true" do
-          user.enabled = false
-          expect(user.disabled?).to eq(true)
-        end
-      end
-
-      context "when the user is enabled" do
-        it "returns false" do
-          expect(user.disabled?).to eq(false)
         end
       end
     end
@@ -63,15 +51,30 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "#authenticate method" do
+  describe "#disabled?" do
+    context "when the user is not enabled" do
+      it "returns true" do
+        user.enabled = false
+        expect(user.disabled?).to eq(true)
+      end
+    end
+
+    context "when the user is enabled" do
+      it "returns false" do
+       expect(user.disabled?).to eq(false)
+      end
+    end
+  end
+
+  describe "#authenticate" do
     context "with correct password" do
-      it "should return the user" do
+      it "returns the user" do
         expect(user.authenticate(user.password)).to be(user)
       end
     end
 
     context "with incorrect password" do
-      it "should return false" do
+      it "returns false" do
         expect(user.authenticate(Faker::Internet.password)).to be(false)
       end
     end
@@ -81,27 +84,44 @@ RSpec.describe User, type: :model do
     expect(user).to respond_to(:disable!).and respond_to(:disable!).with(0).arguments
   end
 
-  describe "#disable! method" do
+  context "scope tests" do
+    describe(".with_ebooks") do
+      let(:users) { create_list(:user, 3) }
+      let(:ebooks) { create_list(:ebook, 2) }
+
+      before do
+        users.first(2).each_with_index do |user, idx|
+          user.ebooks << ebooks[idx]
+        end
+      end
+
+      it "returns the users that have ebooks" do
+        expect(described_class.with_ebooks).to match(users.first(2))
+      end
+    end
+  end
+
+  describe "#disable!" do
     before do
       user.disable!
     end
 
-    it "should disable the user" do
+    it "disables the user" do
       expect(user).not_to be_enabled
     end
 
-    it "should update the username" do
+    it "updates the username" do
       expect(user.username).to start_with("deleted-user-")
       expect(user.username).to match(/\Adeleted-user-\d+\z/)
     end
 
-    it "should update the email" do
+    it "updates the email" do
       expect(user.email).to end_with("@deleted-user")
       expect(user.email).to match(/\A\d+@deleted-user\z/)
     end
 
-    it "should set the disabled_at timestamp" do
-      expect(user.disabled_at).to_not be_nil
+    it "sets the disabled_at timestamp" do
+      expect(user.disabled_at).not_to be_nil
     end
 
     it "does not raise an error" do
@@ -109,18 +129,28 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "scope tests" do
-    let(:users) { create_list(:user, 5) }
-    let(:ebooks) { create_list(:ebook, 2) }
+  describe "#resize_avatar" do
+    it "pushes a job onto the job queue to resize the avatar" do
+      expect(ResizeImageJob).to receive(:perform_later).with(described_class.name, nil, :avatar, 250, 250)
 
-    before do
-      users.first(2).each_with_index do |user, idx|
-        user.ebooks << ebooks[idx]
-      end
+      user.send(:resize_avatar)
     end
 
-    it "should return the users that have ebooks" do
-      expect(described_class.with_ebooks.size).to eq(2)
+    it "runs after database transaction" do
+      allow(user.avatar).to receive(:attached?).and_return(true)
+
+      expect(user).to receive(:resize_avatar).with(no_args)
+
+      user.save!
+    end
+  end
+
+  describe "#set_password_expiration" do
+    it "postpones the password expiration date", :aggregate_failures do
+      expect(user.password_expires_at).to be_nil
+      # user is a new record so password_digest_changed? will return true
+      user.run_callbacks(:validation)
+      expect(user.password_expires_at).to be_within(1.seconds).of(Time.now + 6.months)
     end
   end
 end
