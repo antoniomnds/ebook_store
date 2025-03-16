@@ -2,7 +2,7 @@ retries = 1
 begin
   10.times do
     Tag.create! do |tag|
-      tag.name = Faker::Book.genre # name is unique
+      tag.name = Faker::Lorem.word # name is unique
       tag.description = Faker::Lorem.sentence
     end
   end

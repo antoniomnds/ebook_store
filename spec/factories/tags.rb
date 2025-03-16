@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tag do
-    name { Faker::Book.genre }
+    sequence(:name) { |n| "#{Faker::Lorem.word}_#{n}" }
     description { Faker::Lorem.sentence }
   end
 end
