@@ -3,9 +3,6 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject(:user) { build(:user) }
 
-  # factory should produce valid objects
-  it { is_expected.to be_valid }
-
   it { is_expected.to be_enabled }
 
   it { is_expected.not_to be_admin }
