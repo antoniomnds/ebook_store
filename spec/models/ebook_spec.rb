@@ -119,6 +119,12 @@ RSpec.describe Ebook, type: :model do
       it "has a defined format" do
         expect(ebook.isbn).to match(/\A978-\d{10}\z/)
       end
+
+      it "is unique" do
+        create(:ebook, isbn: ebook.isbn)
+        ebook.valid?
+        expect(ebook.errors[:isbn].first).to match(/already been taken/)
+      end
     end
 
     describe "#owner" do
