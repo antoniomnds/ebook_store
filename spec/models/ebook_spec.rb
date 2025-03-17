@@ -25,7 +25,7 @@ RSpec.describe Ebook, type: :model do
       end
 
       context "with a title less than four characters" do
-        it "should be invalid" do
+        it "is be invalid" do
           ebook.title = "A" * 3
           ebook.valid?
           expect(ebook.errors[:title].first).to match(/too short \(minimum is 4 characters\)/)
@@ -55,8 +55,8 @@ RSpec.describe Ebook, type: :model do
         expect(ebook.errors[:price].last).to match(/not a number/)
       end
 
-      it "should not be negative" do
-        ebook.price = -1
+      it "is not negative" do
+        ebook.price = -1.to_d # field of type BigDecimal
         ebook.valid?
         expect(ebook.errors[:price].first).to match(/greater than or equal to 0.0/)
       end
@@ -93,7 +93,7 @@ RSpec.describe Ebook, type: :model do
         expect(ebook.errors[:publication_date].first).to match(/blank/)
       end
 
-      it "should not be in the future" do
+      it "is not in the future" do
         ebook.publication_date = Date.tomorrow.end_of_day
         ebook.valid?
         expect(ebook.errors[:publication_date]).to contain_exactly "can't be in the future"
@@ -162,7 +162,7 @@ RSpec.describe Ebook, type: :model do
 
   describe "#discount_value" do
     context "with a valid discount value" do
-      it "should return the correct discount value" do
+      it "returns the correct discount value" do
         discount = 10
         net_price = (ebook.price * (discount.fdiv(100))).round(2)
         expect(ebook.discount_value(discount)).to eq(net_price)
@@ -170,13 +170,13 @@ RSpec.describe Ebook, type: :model do
     end
 
     context "with a negative discount value" do
-      it "should return zero" do
+      it "returns zero" do
         expect(ebook.discount_value(-1)).to be_zero
       end
     end
 
     context "with a discount above 100" do
-      it "should return the price" do
+      it "returns the price" do
         expect(ebook.discount_value(110)).to eq(ebook.price)
       end
     end
