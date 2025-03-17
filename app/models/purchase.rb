@@ -3,12 +3,12 @@ class Purchase < ApplicationRecord
   belongs_to :seller
   belongs_to :ebook
 
-  before_create :set_purchase_at
+  before_create :set_purchased_at
 
 
   private
 
-  def set_purchase_at
+  def set_purchased_at
     self.purchased_at = Time.now
   end
 end
