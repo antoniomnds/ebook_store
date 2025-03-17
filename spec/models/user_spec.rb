@@ -83,17 +83,11 @@ RSpec.describe User, type: :model do
 
   context "scope tests" do
     describe(".with_ebooks") do
-      let(:users) { create_list(:user, 3) }
-      let(:ebooks) { create_list(:ebook, 2) }
-
-      before do
-        users.first(2).each_with_index do |user, idx|
-          user.ebooks << ebooks[idx]
-        end
-      end
+      let(:users) { create_pair(:user, :with_ebooks) }
 
       it "returns the users that have ebooks" do
-        expect(described_class.with_ebooks).to match(users.first(2))
+        create(:user) # doesn't own ebooks by default
+        expect(described_class.with_ebooks).to match(users)
       end
     end
   end

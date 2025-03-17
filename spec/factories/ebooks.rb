@@ -10,5 +10,19 @@ FactoryBot.define do
     pages { Faker::Number.number(digits: 3) }
     isbn { "978-#{Faker::Number.number(digits: 10)}" }
     owner
+
+    trait :live do
+      status { :live }
+    end
+
+    trait :archived do
+      status { :archived }
+    end
+
+    trait :with_tags do
+      after(:create) do |ebook|
+        create_pair(:tag, ebooks: [ ebook ])
+      end
+    end
   end
 end

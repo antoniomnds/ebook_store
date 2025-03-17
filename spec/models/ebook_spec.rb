@@ -131,34 +131,25 @@ RSpec.describe Ebook, type: :model do
   end
 
   context "scope tests" do
-    let!(:ebooks) { create_list(:ebook, 3, status: :live) }
+    let!(:live_ebooks) { create_list(:ebook, 3, :live) }
 
     describe ".live" do
-      before do
-        ebooks.last.update!(status: :archived)
-      end
-
       it "returns the ebooks with status live" do
-        expect(described_class.live).to match(ebooks.first(2))
+        create(:ebook, :archived)
+        expect(described_class.live).to match(live_ebooks)
       end
     end
 
-    describe ".filter_by_tags" do
-      let(:tag) { build(:tag) }
+    describe ".filter" do
+      let(:tagged_ebook) { create(:ebook, :with_tags) }
 
-      before do
-        ebooks.first.tags << tag
+      it "returns the ebooks with the given tag(s)" do
+        expect(described_class.filter(tags: [ tagged_ebook.tags ])).to include(tagged_ebook)
+        expect(described_class.filter(tags: [ tagged_ebook.tags ])).not_to include(live_ebooks)
       end
 
-      it "returns the ebooks with the given tag" do
-        expect(described_class.filter_by_tags(tag)).to include(ebooks.first)
-        expect(described_class.filter_by_tags(tag)).not_to include(ebooks.last)
-      end
-    end
-
-    describe ".filter_by_users" do
-      it "returns the ebooks owned by the given user" do
-        expect(described_class.filter_by_users(User.first)).to match([ ebooks.first ])
+      it "returns the ebooks owned by the given users" do
+        expect(described_class.filter(users: [ User.first ])).to match([ live_ebooks.first ])
       end
     end
   end
