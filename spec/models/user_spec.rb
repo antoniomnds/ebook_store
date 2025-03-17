@@ -82,12 +82,14 @@ RSpec.describe User, type: :model do
   end
 
   context "scope tests" do
-    describe(".with_ebooks") do
-      let(:users) { create_pair(:user, :with_ebooks) }
+    describe(".with_live_ebooks") do
+      let(:users_with_live_ebooks) { create_pair(:user, :with_live_ebooks) }
 
       it "returns the users that have ebooks" do
+        create(:ebook, :archived) # creates user that owns archived ebook
         create(:user) # doesn't own ebooks by default
-        expect(described_class.with_ebooks).to match(users)
+
+        expect(described_class.with_live_ebooks).to match(users_with_live_ebooks)
       end
     end
   end

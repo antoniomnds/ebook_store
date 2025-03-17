@@ -4,9 +4,9 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
 
-    trait :with_ebooks do
+    trait :with_live_ebooks do
       after(:create) do |user|
-        create_pair(:ebook, owner: user)
+        create_pair(:ebook, :live, owner: user)
       end
     end
   end

@@ -21,7 +21,7 @@ class User < ApplicationRecord
   after_save_commit :resize_avatar,
                     if: -> { avatar.attached? }
 
-  scope :with_ebooks, -> { joins(:ebooks).distinct.order(:id) }
+  scope :with_live_ebooks, -> { joins(:ebooks).merge(Ebook.live).distinct.order(:id) }
 
   def password_expired?
     DateTime.now > password_expires_at

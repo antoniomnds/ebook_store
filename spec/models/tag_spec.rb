@@ -26,4 +26,27 @@ RSpec.describe Tag, type: :model do
       end
     end
   end
+
+  describe "scope tests" do
+    describe ".with_live_ebooks" do
+      it "returns tags assigned to ebooks that have status live" do
+        live_tagged_ebook = create(:ebook, :live, :with_tags)
+        create(:ebook, :archived, :with_tags) # archived tagged ebook
+        create(:tag)
+
+        expect(described_class.with_live_ebooks).to match(live_tagged_ebook.tags)
+      end
+    end
+
+    describe ".with_ebooks_for_user" do
+      it "returns tags assigned to ebooks owned by the given user" do
+        user = create(:user)
+        user_tagged_ebook = create(:ebook, :with_tags, owner: user)
+        create(:ebook, :with_tags) # another user's tagged ebook
+        create(:tag)
+
+        expect(described_class.with_ebooks_for_user(user)).to match(user_tagged_ebook.tags)
+      end
+    end
+  end
 end
