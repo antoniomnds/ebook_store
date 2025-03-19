@@ -37,21 +37,21 @@ module EbooksHelper
     end
   end
 
-  def edit_ebook_button(ebook, klass: "btn btn-outline-primary")
+  def edit_ebook_button(ebook)
     return nil unless current_user == ebook.owner
 
     link_to "Edit this ebook",
             edit_ebook_path(ebook),
-            class: klass
+            class: "btn btn-outline-primary"
   end
 
-  def delete_ebook_button(ebook, klass: "btn btn-outline-danger")
+  def delete_ebook_button(ebook)
     return nil unless current_user == ebook.owner
 
     button_to "Delete this ebook",
               ebook,
               method: :delete,
-              class: klass,
+              class: "btn btn-outline-danger",
               data: { turbo_confirm: "Are you sure you want to delete this ebook?" }
   end
 
