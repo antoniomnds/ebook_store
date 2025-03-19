@@ -1,13 +1,52 @@
 require 'rails_helper'
 
 RSpec.describe Purchase, type: :model do
-  subject(:purchase) do
-    user = build(:user)
-    buyer = build(:buyer, user:)
-    seller = build(:seller, user:)
-    ebook = build(:ebook, owner: user)
+  subject(:purchase) { build(:purchase) }
 
-    described_class.new(buyer: buyer, seller: seller, ebook: ebook, price: ebook.price)
+  describe "Validation tests" do
+    describe "#buyer" do
+      it "is required" do
+        purchase.buyer = nil
+        purchase.valid?
+        expect(purchase.errors[:buyer].first).to match(/must exist/)
+      end
+    end
+
+    describe "#seller" do
+      it "is required" do
+        purchase.seller = nil
+        purchase.valid?
+        expect(purchase.errors[:seller].first).to match(/must exist/)
+      end
+
+      it "is the ebook owner" do
+        purchase.seller.user = build(:user) # other than the ebook owner
+        purchase.valid?
+        expect(purchase.errors[:seller].first).to match(/must be the owner of the ebook/)
+      end
+    end
+
+    describe "#ebook" do
+      it "is required" do
+        purchase.ebook = nil
+        purchase.valid?
+        expect(purchase.errors[:ebook].first).to match(/must exist/)
+      end
+    end
+
+    describe "#price" do
+      it "is required" do
+        purchase.price = nil
+        purchase.valid?
+        expect(purchase.errors[:price].first).to match(/blank/)
+      end
+
+      it "is greater than or equal to zero" do
+        purchase.price = -1.to_d
+        purchase.valid?
+        expect(purchase.errors[:price].first).to match(/greater than or equal to 0.0/)
+      end
+    end
   end
 
   describe "#set_purchased_at" do
