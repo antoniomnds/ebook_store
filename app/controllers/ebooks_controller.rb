@@ -71,7 +71,7 @@ class EbooksController < ApplicationController
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
     rescue ActiveRecord::InvalidForeignKey
       redirect_to request.referer,
-                  alert: "Ebook already bought and cannot not be destroyed.",
+                  alert: "Ebook already bought and cannot be destroyed.",
                   status: :see_other
     rescue ActiveRecord::RecordNotDestroyed => e
       redirect_to request.referer,
