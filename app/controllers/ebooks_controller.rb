@@ -82,12 +82,9 @@ class EbooksController < ApplicationController
 
   def purchase
     begin
-      user = current_user
-      Ebook::PurchaseCreator.call(user, @ebook)
+      Ebook::PurchaseCreator.call(current_user, @ebook)
 
       redirect_to @ebook, notice: "Ebook was successfully purchased."
-    rescue ActiveRecord::RecordNotFound
-      redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
       redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
     end
