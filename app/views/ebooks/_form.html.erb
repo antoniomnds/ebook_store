@@ -87,7 +87,7 @@
   </div>
 
   <div class="row mb-3">
-    <%= form.label :tag_ids, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <%= form.label :tag_ids, "Tags", style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%= form.select :tag_ids,
                       Tag.pluck(:name, :id),

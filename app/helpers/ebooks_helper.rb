@@ -58,7 +58,7 @@ module EbooksHelper
   def ebook_summary_tag(review)
     return unless review
 
-    content_tag :div, class: "mt-5 card", style: "width: 16rem;" do
+    content_tag :div, id: "ebook_summary", class: "mt-5 card", style: "width: 16rem;" do
       content_tag :div, class: "card-body" do
         content_tag(:h6, "New York Times Summary", class: "card-title") +
         content_tag(:div, review, class: "card-text")

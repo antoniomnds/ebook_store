@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
                   status: :see_other
     else
       flash[:alert] = "The email or password you entered is incorrect."
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity # keeps the same URL (/sessions)
     end
   end
 
