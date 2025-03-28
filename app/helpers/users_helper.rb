@@ -41,4 +41,19 @@ module UsersHelper
       end
     end
   end
+
+  def delete_user_button(user)
+    disabled = user.disabled? || (user != current_user && !current_user.admin?)
+
+    button_to "Delete account",
+               @user,
+               method: :delete,
+               form: {
+                 data: {
+                   turbo_confirm: "Are you sure? This action cannot be undone."
+                 }
+               },
+               class: "btn btn-outline-danger",
+               disabled:
+  end
 end
