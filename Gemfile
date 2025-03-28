@@ -79,6 +79,12 @@ group :test do
 
   # For running tests in a browser [https://github.com/SeleniumHQ/selenium/tree/trunk/rb]
   gem "selenium-webdriver"
+
+  # For opening the browser in tests [https://github.com/copiousfreetime/launchy]
+  gem "launchy"
+
+  # For running tests automatically when files change [
+  gem "guard-rspec", require: false
 end
 
 group :development do
