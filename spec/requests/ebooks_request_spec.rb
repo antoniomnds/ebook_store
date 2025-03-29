@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/login_support'
 
 RSpec.describe "Ebooks Request", type: :request do
   describe "Public access to ebooks" do
@@ -81,8 +82,7 @@ RSpec.describe "Ebooks Request", type: :request do
     let(:ebook) { create(:ebook) }
 
     before do
-      post sessions_path(email: user.email, password: user.password) # authenticate the user
-      follow_redirect!
+      sign_in_request_as user
     end
 
     it "grants access to ebooks#new" do

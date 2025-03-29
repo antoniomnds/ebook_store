@@ -1,4 +1,9 @@
 module LoginSupport
+  def sign_in_request_as(user)
+    post sessions_path, params: { email: user.email, password: user.password } # authenticate the user
+    follow_redirect!
+  end
+
   def sign_in_as(user)
     visit root_path
 

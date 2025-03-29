@@ -1,12 +1,8 @@
 require 'rails_helper'
+require 'support/login_support'
 
 RSpec.describe "Sessions Request", type: :request do
   let(:user) { create(:user) }
-
-  def login_user
-    post sessions_path(email: user.email, password: user.password)
-    follow_redirect!
-  end
 
   it "allows access to sessions#new" do
     get new_session_path
@@ -46,7 +42,8 @@ RSpec.describe "Sessions Request", type: :request do
 
   context "when logging out" do
     it "destroys the session and redirects to the homepage" do
-      login_user
+      sign_in_request_as user
+
       delete session_path(user)
 
       expect(response).to have_http_status(:redirect)

@@ -1,28 +1,24 @@
 require 'rails_helper'
+require 'support/login_support'
 
 RSpec.describe "Application Request", type: :request do
   let(:user) { create(:user) }
-
-  def login_user
-    post sessions_path(email: user.email, password: user.password)
-    follow_redirect!
-  end
 
   describe "handling NotFound exceptions" do
     context "when accessing a non-existent ebook" do
       it "responds not found" do
         get ebook_path(id: 0)
+
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context "when accessing a non-existent user" do
-      before do
-        login_user # authenticate the user since user_path is a protected route
-      end
-
       it "responds not found" do
+        sign_in_request_as user # authenticate the user since user_path is a protected route
+
         get user_path(id: 0)
+
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -32,6 +28,7 @@ RSpec.describe "Application Request", type: :request do
     context "when navigating to a protected route" do
       it "redirects to the login page" do
         get users_path
+
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(new_session_path)
       end
@@ -41,12 +38,13 @@ RSpec.describe "Application Request", type: :request do
   describe "handling an user with an expired password" do
     before do
       user.update!(password_expires_at: Date.yesterday)
-      login_user # authenticate the user since users_path is a protected route
+      sign_in_request_as user # authenticate the user since users_path is a protected route
     end
 
     context "when navigating to a protected route" do
       it "redirects to the page to edit the password" do
         get users_path
+
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(edit_user_path(user))
       end
@@ -55,7 +53,7 @@ RSpec.describe "Application Request", type: :request do
 
   describe "handling a disabled user" do
     before do
-      login_user
+      sign_in_request_as user
       user.disable!
     end
 

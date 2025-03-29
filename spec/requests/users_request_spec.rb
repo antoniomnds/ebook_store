@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/login_support'
 
 RSpec.describe "Users Request", type: :request do
   let(:user) { create(:user) }
@@ -30,8 +31,7 @@ RSpec.describe "Users Request", type: :request do
 
   describe "Authenticated access to users" do
     before do
-      post sessions_path(email: user.email, password: user.password) # authenticate the user
-      follow_redirect!
+      sign_in_request_as user # authenticate the user
     end
 
     it "grants access to users#index" do
