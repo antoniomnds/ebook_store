@@ -1,18 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe "Ebooks Request", type: :request do
-  let(:ebook) { create(:ebook) }
-
   describe "Public access to ebooks" do
+    let(:ebook) { create(:ebook) }
+
     it "allows access to ebooks#index" do
       get ebooks_path
+
       expect(response).to have_http_status(:success)
     end
 
     it "allows access to ebooks#show" do
       mocked_review = { results: [ { summary: Faker::Lorem.sentence } ] }.to_json
       allow(Ebook::ReviewFetcher).to receive(:call).with(ebook).and_return(mocked_review)
+
       get ebook_path(ebook)
+
       expect(response).to have_http_status(:success)
     end
 
@@ -28,13 +31,14 @@ RSpec.describe "Ebooks Request", type: :request do
 
     it "denies access to ebooks#new" do
       get new_ebook_path
+
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(new_session_url)
     end
 
     it "denies access to ebooks#create" do
       expect do
-        post ebooks_path(ebook: attributes_for(:ebook))
+        post ebooks_path, params: { ebook: attributes_for(:ebook) }
       end.not_to change(Ebook, :count)
 
       expect(response).to have_http_status(:redirect)
@@ -50,6 +54,7 @@ RSpec.describe "Ebooks Request", type: :request do
 
     it "denies access to ebooks#destroy" do
       ebook # eagerly create the ebook to not affect the next expectation
+
       expect { delete ebook_path(ebook) }.not_to change(Ebook, :count)
 
       expect(response).to have_http_status(:redirect)
@@ -73,6 +78,8 @@ RSpec.describe "Ebooks Request", type: :request do
 
   describe "Authenticated access to ebooks" do
     let(:user) { create(:user) }
+    let(:ebook) { create(:ebook) }
+
     before do
       post sessions_path(email: user.email, password: user.password) # authenticate the user
       follow_redirect!
@@ -88,7 +95,7 @@ RSpec.describe "Ebooks Request", type: :request do
       context "with an invalid ebook" do
         it "does not create an ebook" do
           expect do
-            post ebooks_path(ebook: attributes_for(:ebook)) # no associated user
+            post ebooks_path, params: { ebook: attributes_for(:ebook) } # no associated user
           end.not_to change(Ebook, :count)
 
           expect(response).to have_http_status(422)
@@ -98,7 +105,7 @@ RSpec.describe "Ebooks Request", type: :request do
       context "with a valid ebook" do
         it "creates an ebook and redirects to the ebook's page" do
           expect do
-            post ebooks_path(ebook: attributes_for(:ebook).merge(user_id: user.id))
+            post ebooks_path, params: { ebook: attributes_for(:ebook).merge(user_id: user.id) }
           end.to change(Ebook, :count).by(1)
 
           expect(response).to have_http_status(:redirect)
@@ -130,9 +137,11 @@ RSpec.describe "Ebooks Request", type: :request do
 
       it "denies access to ebooks#update" do
         original_title = ebook.title
-        patch ebook_path(ebook: attributes_for(:ebook), id: ebook.id)
+
+        patch ebook_path(ebook), params: { ebook: attributes_for(:ebook) }
 
         ebook.reload
+
         expect(ebook.title).to eq(original_title)
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(ebooks_url)
@@ -140,6 +149,7 @@ RSpec.describe "Ebooks Request", type: :request do
 
       it "denies access to ebooks#destroy" do
         ebook # eagerly create the ebook to not affect the next expectation
+
         expect { delete ebook_path(ebook) }.not_to change(Ebook, :count)
 
         expect(response).to have_http_status(:redirect)
@@ -148,40 +158,43 @@ RSpec.describe "Ebooks Request", type: :request do
     end
 
     context "when the ebook owner" do
-      let(:ebook) { create(:ebook, owner: user) }
+      let!(:owned_ebook) { create(:ebook, owner: user) }
 
       it "allows access to ebooks#edit" do
-        get edit_ebook_path(ebook)
+        get edit_ebook_path(owned_ebook)
 
         expect(response).to have_http_status(:success)
       end
 
       context "with an invalid ebook" do
         it "does not update the ebook" do
-          original_title = ebook.title
-          patch ebook_path(ebook: attributes_for(:ebook, title: ""), id: ebook.id)
+          original_title = owned_ebook.title
 
-          ebook.reload
-          expect(ebook.title).to eq(original_title)
+          patch ebook_path(owned_ebook), params: { ebook: attributes_for(:ebook, title: "") }
+
+          owned_ebook.reload
+
+          expect(owned_ebook.title).to eq(original_title)
           expect(response).to have_http_status(422)
         end
       end
 
       context "with a valid ebook" do
         it "updates the ebook and redirects to the ebook's page" do
-          original_title = ebook.title
-          patch ebook_path(ebook: attributes_for(:ebook), id: ebook.id)
+          original_title = owned_ebook.title
 
-          ebook.reload
-          expect(ebook.title).not_to eq(original_title)
+          patch ebook_path(owned_ebook), params: { ebook: attributes_for(:ebook) }
+
+          owned_ebook.reload
+
+          expect(owned_ebook.title).not_to eq(original_title)
           expect(response).to have_http_status(:redirect)
-          expect(response).to redirect_to(ebook_url(ebook))
+          expect(response).to redirect_to(ebook_url(owned_ebook))
         end
       end
 
       it "deletes the ebook and redirects to the ebook listing" do
-        ebook # eagerly create the ebook to not affect the next expectation
-        expect { delete ebook_path(ebook) }.to change(Ebook, :count).by(-1)
+        expect { delete ebook_path(owned_ebook) }.to change(Ebook, :count).by(-1)
 
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(ebooks_url)

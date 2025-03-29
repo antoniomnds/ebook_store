@@ -6,18 +6,21 @@ RSpec.describe "Users Request", type: :request do
   describe "Public access to users" do
     it "denies access to users#index" do
       get users_path
+
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(new_session_url)
     end
 
     it "denies access to users#show" do
       get user_path(user)
+
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(new_session_url)
     end
 
     it "denies access to users#destroy" do
       user # eagerly create the user to not affect the next expectation
+
       expect { delete user_path(user) }.not_to change(User, :count)
 
       expect(response).to have_http_status(:redirect)
@@ -33,11 +36,13 @@ RSpec.describe "Users Request", type: :request do
 
     it "grants access to users#index" do
       get users_path
+
       expect(response).to have_http_status(:success)
     end
 
     it "grants access to users#show" do
       get user_path(user)
+
       expect(response).to have_http_status(:success)
     end
 
@@ -47,15 +52,18 @@ RSpec.describe "Users Request", type: :request do
 
         it "denies access to users#edit" do
           get edit_user_path(another_user)
+
           expect(response).to have_http_status(:redirect)
           expect(response).to redirect_to(root_url)
         end
 
         it "cannot update another user" do
           original_email = another_user.email
-          patch user_path(user: attributes_for(:user), id: another_user.id)
+
+          patch user_path(another_user), params: { user: attributes_for(:user) }
 
           another_user.reload
+
           expect(another_user.email).to eq(original_email)
           expect(response).to have_http_status(:redirect)
           expect(response).to redirect_to(root_url)
@@ -63,6 +71,7 @@ RSpec.describe "Users Request", type: :request do
 
         it "cannot destroy another user" do
           another_user # eagerly create another user to not affect the next expectation
+
           expect { delete user_path(another_user) }.not_to change(User, :count)
 
           expect(response).to have_http_status(:redirect)
@@ -73,15 +82,17 @@ RSpec.describe "Users Request", type: :request do
       context "when managing himself" do
         it "allows access to users#edit" do
           get edit_user_path(user)
+
           expect(response).to have_http_status(:success)
         end
 
         context "with invalid information" do
           it "does not update the user" do
             original_email = user.email
-            patch user_path(user: attributes_for(:user, email: ""), id: user.id)
+            patch user_path(user), params: { user: attributes_for(:user, email: "") }
 
             user.reload
+
             expect(user.email).to eq(original_email)
             expect(response).to have_http_status(422)
           end
@@ -90,9 +101,10 @@ RSpec.describe "Users Request", type: :request do
         context "with valid information" do
           it "updates the user and redirects to the user's page" do
             original_email = user.email
-            patch user_path(user: attributes_for(:user), id: user.id)
+            patch user_path(user), params: { user: attributes_for(:user) }
 
             user.reload
+
             expect(user.email).not_to eq(original_email)
             expect(response).to have_http_status(:redirect)
             expect(response).to redirect_to(user_path(user))
@@ -102,8 +114,11 @@ RSpec.describe "Users Request", type: :request do
         context "when deleting the user" do
           it "soft deletes the user and redirects to the homepage" do
             user # eagerly create the user to not affect the next expectation
+
             expect { delete user_path(user) }.not_to change(User, :count) # soft delete
+
             user.reload
+
             expect(user).not_to be_enabled
             expect(user.disabled_at).not_to be_nil
             expect(response).to have_http_status(:redirect)
@@ -121,14 +136,17 @@ RSpec.describe "Users Request", type: :request do
 
       it "can access users#edit of another user" do
         get edit_user_path(another_user)
+
         expect(response).to have_http_status(:success)
       end
 
       it "updates other users" do
         original_email = another_user.email
-        patch user_path(user: attributes_for(:user), id: another_user.id)
+
+        patch user_path(another_user), params: { user: attributes_for(:user) }
 
         another_user.reload
+
         expect(another_user.email).not_to eq(original_email)
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(user_path(another_user))
@@ -137,8 +155,11 @@ RSpec.describe "Users Request", type: :request do
       context "when deleting another user" do
         it "soft deletes the other user and redirects to the homepage" do
           another_user # eagerly create the user to not affect the next expectation
+
           expect { delete user_path(another_user) }.not_to change(User, :count) # soft delete
+
           another_user.reload
+
           expect(another_user).not_to be_enabled
           expect(another_user.disabled_at).not_to be_nil
           expect(response).to have_http_status(:redirect)

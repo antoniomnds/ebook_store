@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Sessions", type: :request do
+RSpec.describe "Sessions Request", type: :request do
   let(:user) { create(:user) }
 
   def login_user
@@ -10,21 +10,23 @@ RSpec.describe "Sessions", type: :request do
 
   it "allows access to sessions#new" do
     get new_session_path
+
     expect(response).to have_http_status(200)
   end
 
   context "with invalid credentials" do
     it "does not create a session" do
-      post sessions_path(email: user.email, password: "", back_url: ebooks_url)
+      post sessions_path, params: { email: user.email, password: "" }
 
-      expect(response).to have_http_status(422)
+      expect(response).to have_http_status(422) # Unprocessable Entity
     end
   end
 
   context "with a disabled user" do
     it "does not create a session" do
       user.disable!
-      post sessions_path(email: user.email, password: user.password)
+
+      post sessions_path, params: { email: user.email, password: user.password }
 
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(new_session_path)
@@ -34,7 +36,8 @@ RSpec.describe "Sessions", type: :request do
   context "with valid credentials" do
     it "creates a session and redirects back" do
       back_url = ebooks_url
-      post sessions_path(email: user.email, password: user.password, back_url: back_url)
+
+      post sessions_path, params: { email: user.email, password: user.password, back_url: back_url }
 
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(back_url)
@@ -45,10 +48,13 @@ RSpec.describe "Sessions", type: :request do
     it "destroys the session and redirects to the homepage" do
       login_user
       delete session_path(user)
+
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(root_path)
+
       # no longer can access a route that requires authentication
       get users_path
+
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(new_session_path)
     end
