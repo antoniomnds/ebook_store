@@ -142,7 +142,7 @@ RSpec.describe Ebook, type: :model do
     describe ".live" do
       it "returns the ebooks with status live" do
         create(:ebook, :archived)
-        expect(described_class.live).to match(live_ebooks)
+        expect(described_class.live).to match_array(live_ebooks)
       end
     end
 
@@ -155,7 +155,7 @@ RSpec.describe Ebook, type: :model do
       end
 
       it "returns the ebooks owned by the given users" do
-        expect(described_class.filter(users: [ User.first ])).to match([ live_ebooks.first ])
+        expect(described_class.filter(users: [ User.first ])).to match_array([ live_ebooks.first ])
       end
     end
   end

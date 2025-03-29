@@ -89,7 +89,7 @@ RSpec.describe User, type: :model do
         create(:ebook, :archived) # creates user that owns archived ebook
         create(:user) # doesn't own ebooks by default
 
-        expect(described_class.with_live_ebooks).to match(users_with_live_ebooks)
+        expect(described_class.with_live_ebooks).to match_array(users_with_live_ebooks)
       end
     end
   end

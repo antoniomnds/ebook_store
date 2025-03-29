@@ -34,7 +34,7 @@ RSpec.describe Tag, type: :model do
         create(:ebook, :archived, :with_tags) # archived tagged ebook
         create(:tag)
 
-        expect(described_class.with_live_ebooks).to match(live_tagged_ebook.tags)
+        expect(described_class.with_live_ebooks).to match_array(live_tagged_ebook.tags)
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe Tag, type: :model do
         create(:ebook, :with_tags) # another user's tagged ebook
         create(:tag)
 
-        expect(described_class.with_ebooks_for_user(user)).to match(user_tagged_ebook.tags)
+        expect(described_class.with_ebooks_for_user(user)).to match_array(user_tagged_ebook.tags)
       end
     end
   end
