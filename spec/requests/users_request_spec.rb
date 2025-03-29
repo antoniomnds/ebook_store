@@ -1,8 +1,12 @@
 require 'rails_helper'
 require 'support/login_support'
+require 'support/file_support'
 
 RSpec.describe "Users Request", type: :request do
+  include ActionDispatch::TestProcess::FixtureFile
+
   let(:user) { create(:user) }
+  let(:avatar) { file_fixture_upload("avatar.jpg", "image/jpg") } #
 
   describe "Public access to users" do
     it "denies access to users#index" do
@@ -58,13 +62,11 @@ RSpec.describe "Users Request", type: :request do
         end
 
         it "cannot update another user" do
-          original_email = another_user.email
+          expect do
+            patch user_path(another_user), params: { user: attributes_for(:user) }
+            another_user.reload
+          end.not_to change(another_user, :email)
 
-          patch user_path(another_user), params: { user: attributes_for(:user) }
-
-          another_user.reload
-
-          expect(another_user.email).to eq(original_email)
           expect(response).to have_http_status(:redirect)
           expect(response).to redirect_to(root_url)
         end
@@ -88,12 +90,11 @@ RSpec.describe "Users Request", type: :request do
 
         context "with invalid information" do
           it "does not update the user" do
-            original_email = user.email
-            patch user_path(user), params: { user: attributes_for(:user, email: "") }
+            expect do
+              patch user_path(user), params: { user: attributes_for(:user, email: "") }
+              user.reload
+            end.not_to change(user, :email)
 
-            user.reload
-
-            expect(user.email).to eq(original_email)
             expect(response).to have_http_status(422)
           end
         end
@@ -101,13 +102,18 @@ RSpec.describe "Users Request", type: :request do
         context "with valid information" do
           it "updates the user and redirects to the user's page" do
             original_email = user.email
-            patch user_path(user), params: { user: attributes_for(:user) }
+            user_attr = attributes_for(:user).merge(avatar:)
 
-            user.reload
+            expect do
+              patch user_path(user), params: { user: user_attr }
+              user.reload
+            end.to change(user, :email).from(original_email).to(user_attr[:email])
 
-            expect(user.email).not_to eq(original_email)
-            expect(response).to have_http_status(:redirect)
-            expect(response).to redirect_to(user_path(user))
+            expect_uploaded_file(user, :avatar)
+            aggregate_failures do
+              expect(response).to have_http_status(:redirect)
+              expect(response).to redirect_to(user_path(user))
+            end
           end
         end
 
@@ -142,14 +148,18 @@ RSpec.describe "Users Request", type: :request do
 
       it "updates other users" do
         original_email = another_user.email
+        user_attr = attributes_for(:user).merge(avatar:)
 
-        patch user_path(another_user), params: { user: attributes_for(:user) }
+        expect do
+          patch user_path(another_user), params: { user: user_attr }
+          another_user.reload
+        end.to change(another_user, :email).from(original_email).to(user_attr[:email])
 
-        another_user.reload
-
-        expect(another_user.email).not_to eq(original_email)
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(user_path(another_user))
+        expect_uploaded_file(another_user, :avatar)
+        aggregate_failures do
+          expect(response).to have_http_status(:redirect)
+          expect(response).to redirect_to(user_path(another_user))
+        end
       end
 
       context "when deleting another user" do

@@ -1,7 +1,10 @@
 require 'rails_helper'
 require 'support/login_support'
+require 'support/file_support'
 
 RSpec.describe "Ebooks Request", type: :request do
+  include ActionDispatch::TestProcess::FixtureFile
+
   describe "Public access to ebooks" do
     let(:ebook) { create(:ebook) }
 
@@ -80,6 +83,8 @@ RSpec.describe "Ebooks Request", type: :request do
   describe "Authenticated access to ebooks" do
     let(:user) { create(:user) }
     let(:ebook) { create(:ebook) }
+    let(:cover_image) { file_fixture_upload("cover.jpg", "image/jpg") }
+    let(:preview_file) { file_fixture_upload("sample.pdf", "application/pdf") }
 
     before do
       sign_in_request_as user
@@ -136,13 +141,11 @@ RSpec.describe "Ebooks Request", type: :request do
       end
 
       it "denies access to ebooks#update" do
-        original_title = ebook.title
+        expect do
+          patch ebook_path(ebook), params: { ebook: attributes_for(:ebook) }
+          ebook.reload
+        end.not_to change(ebook, :title)
 
-        patch ebook_path(ebook), params: { ebook: attributes_for(:ebook) }
-
-        ebook.reload
-
-        expect(ebook.title).to eq(original_title)
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(ebooks_url)
       end
@@ -168,13 +171,11 @@ RSpec.describe "Ebooks Request", type: :request do
 
       context "with an invalid ebook" do
         it "does not update the ebook" do
-          original_title = owned_ebook.title
+          expect do
+            patch ebook_path(owned_ebook), params: { ebook: attributes_for(:ebook, title: "") }
+            owned_ebook.reload
+          end.not_to change(owned_ebook, :title)
 
-          patch ebook_path(owned_ebook), params: { ebook: attributes_for(:ebook, title: "") }
-
-          owned_ebook.reload
-
-          expect(owned_ebook.title).to eq(original_title)
           expect(response).to have_http_status(422)
         end
       end
@@ -182,14 +183,21 @@ RSpec.describe "Ebooks Request", type: :request do
       context "with a valid ebook" do
         it "updates the ebook and redirects to the ebook's page" do
           original_title = owned_ebook.title
+          ebook_attr = attributes_for(:ebook).merge(cover_image:, preview_file:)
 
-          patch ebook_path(owned_ebook), params: { ebook: attributes_for(:ebook) }
+          expect do
+            patch ebook_path(owned_ebook), params: { ebook: ebook_attr }
+            owned_ebook.reload
+          end.to change(owned_ebook, :title).from(original_title).to(ebook_attr[:title])
 
-          owned_ebook.reload
-
-          expect(owned_ebook.title).not_to eq(original_title)
-          expect(response).to have_http_status(:redirect)
-          expect(response).to redirect_to(ebook_url(owned_ebook))
+          aggregate_failures do
+            expect_uploaded_file(owned_ebook, :cover_image)
+            expect_uploaded_file(owned_ebook, :preview_file)
+          end
+          aggregate_failures do
+            expect(response).to have_http_status(:redirect)
+            expect(response).to redirect_to(ebook_url(owned_ebook))
+          end
         end
       end
 
