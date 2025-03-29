@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'support/request_helper'
+require 'support/request_support'
 
 RSpec.describe ::Api::NewYorkTimes::ReviewFetcher do
   let(:ebook) { build(:ebook) }

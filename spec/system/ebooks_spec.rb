@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'support/request_helper'
+require 'support/request_support'
 require 'support/login_support'
 
 RSpec.describe "Ebooks management", type: :system do

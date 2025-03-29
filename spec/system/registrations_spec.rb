@@ -30,7 +30,6 @@ RSpec.describe "Registrations", type: :system do
     perform_enqueued_jobs do # Forces `deliver_later` to run synchronously
       expect {
         yield # block is not optional
-
       }.to change(User, :count).by(1)
 
       expect(page).to have_content "User was successfully created."
