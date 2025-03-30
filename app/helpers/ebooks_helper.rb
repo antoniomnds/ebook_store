@@ -5,7 +5,7 @@ module EbooksHelper
     content_tag :div, class: "text-center mt-4", style: "height: 20rem" do
       if Rails.configuration.active_storage.service == :cloudinary
         cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale"
-      elsif Rails.configuration.active_storage.service == :local
+      else
         image_tag ebook.cover_image.variant(:thumb)
       end +
       content_tag(:hr)
