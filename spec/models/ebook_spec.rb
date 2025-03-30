@@ -136,6 +136,22 @@ RSpec.describe Ebook, type: :model do
     end
   end
 
+  describe "#cover_image" do
+    it "stores an uploaded cover image" do
+      ebook.cover_image.attach(file_fixture("cover.jpg"))
+
+      expect(ebook.cover_image).to be_attached
+    end
+  end
+
+  describe "#preview_file" do
+    it "stores an uploaded preview file" do
+      ebook.preview_file.attach(file_fixture("sample.pdf"))
+
+      expect(ebook.preview_file).to be_attached
+    end
+  end
+
   context "scope tests" do
     let!(:live_ebooks) { create_list(:ebook, 3, :live) }
 

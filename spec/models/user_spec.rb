@@ -48,6 +48,14 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#avatar" do
+    it "stores an uploaded avatar image" do
+      user.avatar.attach(file_fixture("avatar.jpg"))
+
+      expect(user.avatar).to be_attached
+    end
+  end
+
   describe "#disabled?" do
     context "when the user is not enabled" do
       it "returns true" do
