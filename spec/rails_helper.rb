@@ -80,4 +80,8 @@ RSpec.configure do |config|
   config.before(:each, type: :system, js: true) do
     driven_by :selenium_chrome_headless # selenium when we need javascript
   end
+
+  config.after(:suite) do
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
+  end
 end
