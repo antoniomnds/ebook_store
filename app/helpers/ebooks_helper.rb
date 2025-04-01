@@ -55,13 +55,13 @@ module EbooksHelper
               data: { turbo_confirm: "Are you sure you want to delete this ebook?" }
   end
 
-  def ebook_summary_tag(review)
-    return unless review
+  def ebook_summary_tag(summary)
+    return unless summary
 
     content_tag :div, id: "ebook_summary", class: "mt-5 card", style: "width: 16rem;" do
       content_tag :div, class: "card-body" do
         content_tag(:h6, "New York Times Summary", class: "card-title") +
-        content_tag(:div, review, class: "card-text")
+        content_tag(:div, summary, class: "card-text")
       end
     end
   end

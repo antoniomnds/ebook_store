@@ -13,7 +13,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1
   def show
-    @review = Ebook::ReviewFetcher.call(@ebook)
+    @summary = Ebook::ReviewFetcher.call(@ebook)
   end
 
   # GET /ebooks/new

@@ -3,10 +3,8 @@ require 'support/api_support'
 require 'support/login_support'
 
 RSpec.describe "Ebooks management", type: :system do
-  let(:ebook_summary) { { results: [ { summary: Faker::Lorem.sentence } ] } }
-
-  def stub_ebook_summary_request(ebook)
-    stub_summary_request(:get, { title: ebook.title }, {}, ebook_summary)
+  def stub_ebook_review_request(ebook)
+    stub_review_request(title: ebook.title )
   end
 
   def visit_ebooks_page
@@ -15,7 +13,7 @@ RSpec.describe "Ebooks management", type: :system do
   end
 
   def visit_ebook_page(ebook)
-    stub_ebook_summary_request(ebook)
+    stub_ebook_review_request(ebook)
 
     visit_ebooks_page
 
@@ -98,7 +96,7 @@ RSpec.describe "Ebooks management", type: :system do
         end
 
         it "enables the ebook's summary to be fetched from NYT" do
-          summary_content = ebook_summary.dig(:results, 0, :summary)
+          summary_content = mocked_review.dig(:results, 0, :summary)
 
           expect_ebook_summary(ebook, summary_content)
         end
@@ -172,7 +170,7 @@ RSpec.describe "Ebooks management", type: :system do
       tag = create(:tag)
       ebook_attr = attributes_for(:ebook)
       # user gets redirected to the ebook page after submitting the form
-      stub_ebook_summary_request(instance_double("Ebook", title: ebook_attr[:title]))
+      stub_ebook_review_request(instance_double("Ebook", title: ebook_attr[:title]))
 
       visit_new_ebook_page
 
@@ -217,7 +215,7 @@ RSpec.describe "Ebooks management", type: :system do
       ebook_attr = attributes_for(:ebook)
 
       # user gets redirected to the ebook page after submitting the form
-      stub_ebook_summary_request(instance_double("Ebook", title: ebook_attr[:title]))
+      stub_ebook_review_request(instance_double("Ebook", title: ebook_attr[:title]))
 
       visit edit_ebook_path(ebook)
 
@@ -277,7 +275,7 @@ RSpec.describe "Ebooks management", type: :system do
 
     it "buys an ebook", js: true do
       ebook = create(:ebook, :live)
-      stub_ebook_summary_request(ebook)
+      stub_ebook_review_request(ebook)
 
       visit_ebooks_page
 

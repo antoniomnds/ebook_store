@@ -16,8 +16,7 @@ RSpec.describe "Ebooks Request", type: :request do
     end
 
     it "allows access to ebooks#show" do
-      mocked_review = { results: [ { summary: Faker::Lorem.sentence } ] }
-      stub_summary_request(:get, { title: ebook.title }, {}, mocked_review)
+      stub_review_request(title: ebook.title)
 
       get ebook_path(ebook)
 

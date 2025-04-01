@@ -8,11 +8,9 @@ RSpec.describe ::Api::NewYorkTimes::ReviewFetcher do
 
   describe "#call" do
     it "fetches a review from the API" do
-      mocked_review = { "results" => [ { "summary" => Faker::Lorem.sentence } ] }
-      stub = stub_summary_request(:get, { title: ebook.title }, {}, mocked_review)
+      stub = stub_review_request(title: ebook.title)
 
       expect(::Api::NewYorkTimes::ReviewFetcher.call(title: ebook.title)).to eq(mocked_review["results"])
-
       expect(stub).to have_been_requested
     end
   end
