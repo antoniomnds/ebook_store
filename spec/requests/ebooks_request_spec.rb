@@ -1,6 +1,7 @@
 require 'rails_helper'
 require 'support/login_support'
 require 'support/file_support'
+require 'support/api_support'
 
 RSpec.describe "Ebooks Request", type: :request do
   include ActionDispatch::TestProcess::FixtureFile
@@ -15,8 +16,8 @@ RSpec.describe "Ebooks Request", type: :request do
     end
 
     it "allows access to ebooks#show" do
-      mocked_review = { results: [ { summary: Faker::Lorem.sentence } ] }.to_json
-      allow(Ebook::ReviewFetcher).to receive(:call).with(ebook).and_return(mocked_review)
+      mocked_review = { results: [ { summary: Faker::Lorem.sentence } ] }
+      stub_summary_request(:get, { title: ebook.title }, {}, mocked_review)
 
       get ebook_path(ebook)
 
