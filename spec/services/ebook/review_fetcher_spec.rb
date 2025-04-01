@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require 'support/api_support'
 
 RSpec.describe Ebook::ReviewFetcher do
-  let(:ebook) { create(:ebook) }
-  let(:mocked_response) { Faker::Lorem.sentence }
-
   describe "#call" do
     it "returns the review data from the API" do
-      allow(Api::NewYorkTimes::ReviewFetcher).to receive(:call).with(ebook).and_return(mocked_response)
+      ebook = build(:ebook)
+      stub_review_request(title: ebook.title)
 
-      expect(Api::NewYorkTimes::ReviewFetcher.call(ebook)).to be(mocked_response)
+      expect(described_class.call(ebook)).to eq(mocked_review.dig("results", 0, "summary"))
     end
   end
 end
