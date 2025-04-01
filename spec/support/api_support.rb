@@ -1,5 +1,5 @@
-module RequestSupport
-  def stubbed_request(method, params, headers = {}, body = {})
+module ApiSupport
+  def stub_summary_request(method, params, headers = {}, body = {})
     query_params = params.merge("api-key": ENV["NYT_API_KEY"])
     url = URI("#{ Api::NewYorkTimes::ReviewFetcher::BASE_URL }?#{ URI.encode_www_form(query_params) }")
     headers.merge!(
@@ -14,5 +14,5 @@ module RequestSupport
 end
 
 RSpec.configure do |config|
-  config.include RequestSupport
+  config.include ApiSupport
 end
