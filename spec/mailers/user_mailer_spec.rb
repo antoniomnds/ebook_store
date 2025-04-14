@@ -70,9 +70,11 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "sends some statistics on the ebook" do
-      expect(mail.body).to match(/The book has been purchased #{ebook.sales} times./)
-      expect(mail.body).to match(/The book has been viewed #{ebook.views} times in the store./)
-      expect(mail.body).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
+      aggregate_failures do
+        expect(mail.body).to match(/The book has been purchased #{ebook.sales} times./)
+        expect(mail.body).to match(/The book has been viewed #{ebook.views} times in the store./)
+        expect(mail.body).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
+      end
     end
   end
 end
