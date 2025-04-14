@@ -9,5 +9,9 @@ FactoryBot.define do
         create_pair(:ebook, :live, owner: user)
       end
     end
+
+    trait :admin do
+      admin { true }
+    end
   end
 end

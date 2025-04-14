@@ -15,6 +15,7 @@ module UsersHelper
     content_tag :span, "Admin", class: "badge bg-danger"
   end
 
+  # only admin users are not required to fill the current password (password challenge)
   def password_challenge_tag(form)
     return nil if current_user.admin?
 
@@ -46,7 +47,7 @@ module UsersHelper
     disabled = user.disabled? || (user != current_user && !current_user.admin?)
 
     button_to "Delete account",
-               @user,
+               user,
                method: :delete,
                form: {
                  data: {
