@@ -50,14 +50,15 @@ module Api
 
     def log_response(message, response, type = :info)
       return unless response.is_a? Net::HTTPResponse
+      return unless Logger::Severity.constants.include?(type.to_s.upcase.to_sym)
 
       log_message = %Q(
         Error: #{ message }
-        HTTP code: #{ response.status }
+        HTTP code: #{ response.code }
         HTTP response message: #{ response.message }
         HTTP response body: #{ response.body }
       )
-      Rails.logger.send(type) { log_message }
+      Rails.logger.public_send(type) { log_message }
     end
   end
 end
