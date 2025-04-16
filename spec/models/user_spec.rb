@@ -60,13 +60,13 @@ RSpec.describe User, type: :model do
     context "when the user is not enabled" do
       it "returns true" do
         user.enabled = false
-        expect(user.disabled?).to eq(true)
+        expect(user.disabled?).to be(true)
       end
     end
 
     context "when the user is enabled" do
       it "returns false" do
-       expect(user.disabled?).to eq(false)
+       expect(user.disabled?).to be(false)
       end
     end
   end
