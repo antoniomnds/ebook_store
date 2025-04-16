@@ -2,15 +2,15 @@ require "rails_helper"
 
 RSpec.describe UserMailer, type: :mailer do
   describe "welcome" do
-    let(:user) { build(:user) }
-    let(:mail) { UserMailer.with(user:).welcome }
+    let(:user) { instance_double(User, email: "jonh_doe@example.com", username: "john_doe") }
+    let(:mail) { described_class.with(user:).welcome }
 
     it "sends a welcome email to the user's email address" do
-      expect(mail.to).to eq([ user.email ])
+      expect(mail.to).to match_array([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
+      expect(mail.from).to eq([ described_class.default_params[:from] ])
     end
 
     it "sends with the correct subject" do
@@ -23,16 +23,16 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe "notify_purchase" do
-    let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, owner: user) }
-    let(:mail) { UserMailer.with(user:, ebook:).notify_purchase }
+    let(:user) { instance_double(User, email: "jonh_doe@example.com", username: "john_doe") }
+    let(:ebook) { build_stubbed(:ebook) }
+    let(:mail) { described_class.with(user:, ebook:).notify_purchase }
 
     it "sends a purchase notification email to the user's email address" do
       expect(mail.to).to eq([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
+      expect(mail.from).to match_array([ described_class.default_params[:from] ])
     end
 
     it "sends with the correct subject" do
@@ -40,25 +40,25 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "greets the user by its username" do
-      expect(mail.body).to match(/Hi #{user.username}!/)
+      expect(mail.body.encoded).to match(/Hi #{user.username}!/)
     end
 
     it "thanks for buying the ebook" do
-      expect(mail.body).to match(/Thank you for purchasing #{ebook.title}!/)
+      expect(mail.body.encoded).to match(/Thank you for purchasing #{ebook.title}!/)
     end
   end
 
   describe "notify_ebook_statistics" do
-    let(:user) { build(:user) }
-    let(:ebook) { build(:ebook, owner: user) }
-    let(:mail) { UserMailer.with(user:, ebook:).notify_ebook_statistics }
+    let(:user) { instance_double(User, email: "jonh_doe@example.com", username: "john_doe") }
+    let(:ebook) { build_stubbed(:ebook) }
+    let(:mail) { described_class.with(user:, ebook:).notify_ebook_statistics }
 
     it "sends a purchase notification email to the user's email address" do
       expect(mail.to).to eq([ user.email ])
     end
 
     it "sends from the configured email account" do
-      expect(mail.from).to eq([ "antoniomndsantos@gmail.com" ])
+      expect(mail.from).to eq([ described_class.default_params[:from] ])
     end
 
     it "sends with the correct subject" do
@@ -66,14 +66,16 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "greets the user by its username" do
-      expect(mail.body).to match(/Hi #{user.username}!/)
+      expect(mail.body.encoded).to match(/Hi #{user.username}!/)
     end
 
     it "sends some statistics on the ebook" do
+      content = mail.body.encoded
+
       aggregate_failures do
-        expect(mail.body).to match(/The book has been purchased #{ebook.sales} times./)
-        expect(mail.body).to match(/The book has been viewed #{ebook.views} times in the store./)
-        expect(mail.body).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
+        expect(content).to match(/The book has been purchased #{ebook.sales} times./)
+        expect(content).to match(/The book has been viewed #{ebook.views} times in the store./)
+        expect(content).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
       end
     end
   end
