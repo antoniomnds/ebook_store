@@ -127,7 +127,10 @@
     </div>
   </div>
 
-  <%= form.hidden_field :user_id, value: current_user.id %>
+  <% if action_name == 'new' %>
+    <%# ebook owner will be the currently logged in user %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+  <% end %>
 
   <p>
     <%= form.submit class: 'btn btn-primary' %>
