@@ -131,21 +131,11 @@ RSpec.describe EbooksHelper, type: :helper do
   end
 
   describe "#purchase_button" do
-    before do
-      def helper.logged_in?
-        @current_user.present?
-      end
-
-      def helper.current_user
-        @current_user
-      end
-    end
-
     context "when logged in, not the ebook owner and ebook status is live" do
       it "returns a button to purchase the ebook" do
         live_ebook = build_stubbed(:ebook, :live, owner: build_stubbed(:user))
         user = instance_double(User, id: 2)
-        helper.instance_variable_set(:@current_user, user) # log in user
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         result = helper.purchase_button(live_ebook)
 
@@ -169,7 +159,7 @@ RSpec.describe EbooksHelper, type: :helper do
       it "returns nil" do
         ebook_owner = build_stubbed(:user)
         live_ebook = build_stubbed(:ebook, :live, owner: ebook_owner)
-        helper.instance_variable_set(:@current_user, ebook_owner) # log in user
+        allow(helper).to receive(:current_user).and_return(ebook_owner) # log in user
 
         expect(helper.purchase_button(live_ebook)).to be nil
       end
@@ -180,7 +170,7 @@ RSpec.describe EbooksHelper, type: :helper do
         status = Ebook.statuses.keys.reject { |s| s == "live" }.sample
         ebook = build_stubbed(:ebook, status:, owner: build_stubbed(:user))
         user = instance_double(User, id: 2)
-        helper.instance_variable_set(:@current_user, user) # log in user
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         expect(helper.purchase_button(ebook)).to be nil
       end
@@ -188,16 +178,12 @@ RSpec.describe EbooksHelper, type: :helper do
   end
 
   describe "#edit_ebook_button" do
-    before do
-      def helper.current_user
-        @current_user
-      end
-    end
-
     context "when the user is not the owner of the ebook" do
       it "returns nil" do
-        ebook = instance_double(Ebook, owner: instance_double(User))
-        helper.instance_variable_set(:@current_user, instance_double(User))
+        user = instance_double(User)
+        another_user = instance_double(User)
+        ebook = instance_double(Ebook, owner: user)
+        allow(helper).to receive(:current_user).and_return(another_user) # log in user
 
         expect(helper.edit_ebook_button(ebook)).to be_nil
       end
@@ -207,7 +193,7 @@ RSpec.describe EbooksHelper, type: :helper do
       it "returns a link to edit the ebook" do
         user = build_stubbed(:user)
         ebook = build_stubbed(:ebook, owner: user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         result = helper.edit_ebook_button(ebook)
 
@@ -221,16 +207,12 @@ RSpec.describe EbooksHelper, type: :helper do
   end
 
   describe "#delete_ebook_button" do
-    before do
-      def helper.current_user
-        @current_user
-      end
-    end
-
     context "when the user is not the owner of the ebook" do
       it "returns nil" do
-        ebook = instance_double(Ebook, owner: instance_double(User))
-        helper.instance_variable_set(:@current_user, instance_double(User))
+        user = instance_double(User)
+        another_user = instance_double(User)
+        ebook = instance_double(Ebook, owner: user)
+        allow(helper).to receive(:current_user).and_return(another_user) # log in user
 
         expect(helper.delete_ebook_button(ebook)).to be_nil
       end
@@ -240,7 +222,7 @@ RSpec.describe EbooksHelper, type: :helper do
       it "returns a button to delete the ebook" do
         user = build_stubbed(:user)
         ebook = build_stubbed(:ebook, owner: user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         result = helper.delete_ebook_button(ebook)
 

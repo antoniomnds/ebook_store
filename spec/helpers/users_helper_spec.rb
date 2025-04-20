@@ -90,18 +90,11 @@ RSpec.describe UsersHelper, type: :helper do
       end
     end
 
-    before do
-      # simulate how a controller method is made available in views
-      def helper.current_user
-        @current_user
-      end
-    end
-
     # admin user is not required to fill the current password when editing a user
     context "when an admin user" do
       it "returns nil" do
         admin_user = build_stubbed(:user, :admin)
-        helper.instance_variable_set(:@current_user, admin_user)
+        allow(helper).to receive(:current_user).and_return(admin_user)
 
         expect(helper.password_challenge_tag(form_mock)).to be nil
       end
@@ -110,7 +103,7 @@ RSpec.describe UsersHelper, type: :helper do
     context "when a non-admin user" do
       it "returns a div with the password challenge label and input" do
         user = build_stubbed(:user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user)
 
         result = helper.password_challenge_tag(form_mock)
 
@@ -137,17 +130,10 @@ RSpec.describe UsersHelper, type: :helper do
       end
     end
 
-    before do
-      # simulate how a controller method is made available in views
-      def helper.current_user
-        @current_user
-      end
-    end
-
     context "when an admin_user" do
       it "returns a checkbox and label for the enabled field" do
         admin_user = build_stubbed(:user, :admin)
-        helper.instance_variable_set(:@current_user, admin_user)
+        allow(helper).to receive(:current_user).and_return(admin_user) # log in user
 
         result = helper.user_enabled_tag(form_mock)
 
@@ -164,7 +150,7 @@ RSpec.describe UsersHelper, type: :helper do
     context "when not an admin user" do
       it "returns nil" do
         user = build_stubbed(:user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         expect(helper.user_enabled_tag(form_mock)).to be_nil
       end
@@ -172,13 +158,6 @@ RSpec.describe UsersHelper, type: :helper do
   end
 
   describe "#delete_user_button" do
-    before do
-      # simulate how a controller method is made available in views
-      def helper.current_user
-        @current_user
-      end
-    end
-
     context "when the user is disabled" do
       it "is disabled" do
         user = build_stubbed(:user, enabled: false)
@@ -191,7 +170,7 @@ RSpec.describe UsersHelper, type: :helper do
       it "is disabled" do
         user = build_stubbed(:user)
         another_user = build_stubbed(:user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         expect(helper.delete_user_button(another_user)).to include("disabled=\"disabled\"")
       end
@@ -201,7 +180,7 @@ RSpec.describe UsersHelper, type: :helper do
       it "is not disabled" do
         user = build_stubbed(:user, :admin)
         another_user = build_stubbed(:user)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         expect(helper.delete_user_button(another_user)).not_to include("disabled=\"disabled\"")
       end
@@ -210,7 +189,7 @@ RSpec.describe UsersHelper, type: :helper do
     context "when user is current user" do
       it "is not disabled" do
         user = build_stubbed(:user, :admin)
-        helper.instance_variable_set(:@current_user, user)
+        allow(helper).to receive(:current_user).and_return(user) # log in user
 
         expect(helper.delete_user_button(user)).not_to include("disabled=\"disabled\"")
       end

@@ -85,4 +85,7 @@ RSpec.configure do |config|
   config.after(:suite) do
     FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
   end
+
+  # Make helper methods available to specs
+  config.include AuthenticationHelper, type: :view
 end
