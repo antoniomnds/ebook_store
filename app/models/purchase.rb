@@ -15,7 +15,7 @@ class Purchase < ApplicationRecord
   private
 
   def set_purchased_at
-    self.purchased_at = Time.zone.now
+    self.purchased_at = Time.current
   end
 
   def seller_is_ebook_owner
