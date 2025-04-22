@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'support/login_support'
-require 'support/file_support'
 
 RSpec.describe "Users Request", type: :request do
   include ActionDispatch::TestProcess::FixtureFile

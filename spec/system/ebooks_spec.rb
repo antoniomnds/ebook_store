@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'support/api_support'
-require 'support/login_support'
 
 RSpec.describe "Ebooks management", type: :system do
   def stub_ebook_review_request(ebook)

@@ -31,7 +31,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -85,6 +85,21 @@ RSpec.configure do |config|
   config.after(:suite) do
     FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
   end
+
+  config.define_derived_metadata(file_path: %r{spec/services}) do |metadata|
+    metadata[:type] = :service
+  end
+
+  config.include ActionMailerSupport, type: :service
+
+  config.include LoginSupport, type: :request
+  config.include LoginSupport, type: :system
+
+  config.include FileSupport, type: :request
+
+  config.include ApiSupport, type: :service
+  config.include ApiSupport, type: :request
+  config.include ApiSupport, type: :system
 
   # Make helper methods available to specs
   config.include AuthenticationHelper, type: :view

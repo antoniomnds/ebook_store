@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/login_support'
 
 RSpec.describe "Sessions Request", type: :request do
   let(:user) { create(:user) }

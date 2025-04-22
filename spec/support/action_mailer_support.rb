@@ -9,7 +9,3 @@ module ActionMailerSupport
     expect(message_delivery_double).to receive(delivery_method).once
   end
 end
-
-RSpec.configure do |config|
-  config.include ActionMailerSupport
-end

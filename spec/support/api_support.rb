@@ -15,7 +15,3 @@ module ApiSupport
     stub_request(:get, url).to_return_json(body: mocked_review.to_json, headers:)
   end
 end
-
-RSpec.configure do |config|
-  config.include ApiSupport
-end

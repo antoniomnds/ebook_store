@@ -1,7 +1,4 @@
 require 'rails_helper'
-require 'support/login_support'
-require 'support/file_support'
-require 'support/api_support'
 
 RSpec.describe "Ebooks Request", type: :request do
   include ActionDispatch::TestProcess::FixtureFile

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/login_support'
 
 RSpec.describe "Users management", type: :system do
   describe "authenticated access to users" do
