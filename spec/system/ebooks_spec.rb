@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Ebooks management", type: :system do
   def stub_ebook_review_request(ebook)
-    stub_review_request(title: ebook.title )
+    stub_review_request(title: ebook.title)
   end
 
   def visit_ebooks_page
@@ -116,7 +116,7 @@ RSpec.describe "Ebooks management", type: :system do
 
       def expect_no_ebooks_available
         expect(page).to have_css("div", class: "alert alert-info", text: "There are no ebooks available.")
-        expect(page).to have_link("Add one")
+        expect(page).to have_link("Add one", href: new_ebook_path)
       end
     end
   end
