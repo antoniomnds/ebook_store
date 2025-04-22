@@ -90,6 +90,8 @@ RSpec.configure do |config|
     metadata[:type] = :service
   end
 
+  config.include RedirectWithFlashMatcher, type: :request
+
   config.include ActionMailerSupport, type: :service
 
   config.include LoginSupport, type: :request

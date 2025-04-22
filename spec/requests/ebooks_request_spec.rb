@@ -33,8 +33,7 @@ RSpec.describe "Ebooks Request", type: :request do
     it "denies access to ebooks#new" do
       get new_ebook_path
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
 
     it "denies access to ebooks#create" do
@@ -42,15 +41,13 @@ RSpec.describe "Ebooks Request", type: :request do
         post ebooks_path, params: { ebook: attributes_for(:ebook) }
       end.not_to change(Ebook, :count)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
 
     it "denies access to ebooks#edit" do
       get edit_ebook_path(ebook)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
 
     it "denies access to ebooks#destroy" do
@@ -58,22 +55,19 @@ RSpec.describe "Ebooks Request", type: :request do
 
       expect { delete ebook_path(ebook) }.not_to change(Ebook, :count)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
 
     it "denies access to ebooks#purchase" do
       expect { post purchase_ebook_path(ebook) }.not_to change(Purchase, :count)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
 
     it "denies access to ebooks#my_ebooks" do
       get my_ebooks_ebooks_path
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_url)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
   end
 
@@ -110,8 +104,7 @@ RSpec.describe "Ebooks Request", type: :request do
             post ebooks_path, params: { ebook: attributes_for(:ebook).merge(user_id: user.id) }
           end.to change(Ebook, :count).by(1)
 
-          expect(response).to have_http_status(:redirect)
-          expect(response).to redirect_to(ebook_url(Ebook.last))
+          expect(response).to redirect_with_flash_to(ebook_url(Ebook.last), :notice)
         end
       end
     end
@@ -119,8 +112,17 @@ RSpec.describe "Ebooks Request", type: :request do
     it "creates a purchase and redirects to the ebook page" do
       expect { post purchase_ebook_path(ebook) }.to change(Purchase, :count).by(1)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(ebook_url(ebook))
+      expect(response).to redirect_with_flash_to(ebook_url(ebook), :notice)
+    end
+
+    context "when purchasing an archived ebook" do
+      it "redirects to the ebook listing" do
+        ebook.update!(status: "archived")
+
+        post purchase_ebook_path(ebook)
+
+        expect(response).to redirect_with_flash_to(ebooks_url, :alert)
+      end
     end
 
     it "grants access to ebooks#my_ebooks" do
@@ -133,8 +135,7 @@ RSpec.describe "Ebooks Request", type: :request do
       it "denies access to ebooks#edit" do
         get edit_ebook_path(ebook)
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(ebooks_url)
+        expect(response).to redirect_with_flash_to(ebooks_url, :alert)
       end
 
       it "denies access to ebooks#update" do
@@ -143,8 +144,7 @@ RSpec.describe "Ebooks Request", type: :request do
           ebook.reload
         end.not_to change(ebook, :title)
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(ebooks_url)
+        expect(response).to redirect_with_flash_to(ebooks_url, :alert)
       end
 
       it "denies access to ebooks#destroy" do
@@ -152,8 +152,7 @@ RSpec.describe "Ebooks Request", type: :request do
 
         expect { delete ebook_path(ebook) }.not_to change(Ebook, :count)
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(ebooks_url)
+        expect(response).to redirect_with_flash_to(ebooks_url, :alert)
       end
     end
 
@@ -190,19 +189,38 @@ RSpec.describe "Ebooks Request", type: :request do
           aggregate_failures do
             expect_uploaded_file(owned_ebook, :cover_image)
             expect_uploaded_file(owned_ebook, :preview_file)
+            expect(response).to redirect_with_flash_to(ebook_url(owned_ebook), :notice)
           end
-          aggregate_failures do
-            expect(response).to have_http_status(:redirect)
-            expect(response).to redirect_to(ebook_url(owned_ebook))
-          end
+        end
+      end
+
+      context "when deleting an ebook already bought" do
+        it "redirects back" do
+          create(:purchase, ebook: owned_ebook)
+          back_url = ebook_url(owned_ebook) # should be different from the happy path
+
+          delete ebook_path(owned_ebook), headers: { "HTTP_REFERER" => back_url }
+
+          expect(response).to redirect_with_flash_to(back_url, :alert)
+        end
+      end
+
+      context "when deleting an inconsistent ebook" do
+        it "redirects back" do
+          allow(Ebook).to receive(:find).and_return(owned_ebook)
+          allow(owned_ebook).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed)
+          back_url = ebook_url(owned_ebook) # should be different from the happy path
+
+          delete ebook_path(owned_ebook), headers: { "HTTP_REFERER" => back_url }
+
+          expect(response).to redirect_with_flash_to(back_url, :alert)
         end
       end
 
       it "deletes the ebook and redirects to the ebook listing" do
         expect { delete ebook_path(owned_ebook) }.to change(Ebook, :count).by(-1)
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(ebooks_url)
+        expect(response).to redirect_with_flash_to(ebooks_url, :notice)
       end
     end
   end

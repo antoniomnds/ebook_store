@@ -23,8 +23,7 @@ RSpec.describe "Sessions Request", type: :request do
 
       post sessions_path, params: { email: user.email, password: user.password }
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_path)
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
   end
 
@@ -34,25 +33,25 @@ RSpec.describe "Sessions Request", type: :request do
 
       post sessions_path, params: { email: user.email, password: user.password, back_url: back_url }
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(back_url)
+      expect(response).to redirect_with_flash_to(back_url, :notice)
     end
   end
 
   context "when logging out" do
-    it "destroys the session and redirects to the homepage" do
+    it "destroys the session" do
       sign_in_request_as user
 
       delete session_path(user)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(root_path)
+      expect(session.has_key?(:current_user_id)).to be(false)
+    end
 
-      # no longer can access a route that requires authentication
-      get users_path
+    it "redirects to the homepage" do
+      sign_in_request_as user
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(new_session_path)
+      delete session_path(user)
+
+      expect(response).to redirect_with_flash_to(root_url, :notice)
     end
   end
 end

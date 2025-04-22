@@ -27,29 +27,14 @@ RSpec.describe "Application Request", type: :request do
       user.disable!
     end
 
-    it "denies access to protected routes and logs out the user" do
-      aggregate_failures do
-        get users_path
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
+    it "logs out the user" do
+      expect { get users_path }.to change { session.has_key?("current_user_id") }.from(true).to(false)
+    end
 
-        # the following requests will fail as the user is not logged in
-        get user_path(user)
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
+    it "redirects to the login page" do
+      get users_path
 
-        get edit_user_path(user)
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
-
-        get new_ebook_path
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
-
-        get my_ebooks_ebooks_path
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
-      end
+      expect(response).to redirect_with_flash_to(new_session_url, :alert)
     end
   end
 
@@ -58,8 +43,7 @@ RSpec.describe "Application Request", type: :request do
       it "redirects to the login page" do
         get users_path
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(new_session_path)
+        expect(response).to redirect_with_flash_to(new_session_url, :alert)
       end
     end
   end
@@ -74,8 +58,7 @@ RSpec.describe "Application Request", type: :request do
       it "redirects to the page to edit the password" do
         get users_path
 
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(edit_user_path(user))
+        expect(response).to redirect_with_flash_to(edit_user_url(user), :alert)
       end
     end
   end

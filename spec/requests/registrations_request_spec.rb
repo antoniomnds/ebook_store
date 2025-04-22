@@ -25,8 +25,7 @@ RSpec.describe "Registrations Request", type: :request do
         post registrations_path, params: { user: attributes_for(:user) }
       end.to change(User, :count).by(1)
 
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(root_url)
+      expect(response).to redirect_with_flash_to(root_url, :notice)
     end
 
     it "sends a welcome email to the user" do
