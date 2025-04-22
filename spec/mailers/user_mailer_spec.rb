@@ -40,11 +40,15 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "greets the user by its username" do
-      expect(mail.body.encoded).to match(/Hi #{user.username}!/)
+      content = Nokogiri::HTML(mail.body.encoded).content
+
+      expect(content).to include("Hi #{user.username}!")
     end
 
     it "thanks for buying the ebook" do
-      expect(mail.body.encoded).to match(/Thank you for purchasing #{ebook.title}!/)
+      content = Nokogiri::HTML(mail.body.encoded).content
+
+      expect(content).to include("Thank you for purchasing #{ebook.title}!")
     end
   end
 
@@ -66,16 +70,18 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "greets the user by its username" do
-      expect(mail.body.encoded).to match(/Hi #{user.username}!/)
+      content = Nokogiri::HTML(mail.body.encoded).content
+
+      expect(content).to include("Hi #{user.username}!")
     end
 
     it "sends some statistics on the ebook" do
-      content = mail.body.encoded
+      content = Nokogiri::HTML(mail.body.encoded).content
 
       aggregate_failures do
-        expect(content).to match(/The book has been purchased #{ebook.sales} times./)
-        expect(content).to match(/The book has been viewed #{ebook.views} times in the store./)
-        expect(content).to match(/The preview of the book has been downloaded #{ebook.preview_downloads} times./)
+        expect(content).to include("The book has been purchased #{ebook.sales} times.")
+        expect(content).to include("The book has been viewed #{ebook.views} times in the store.")
+        expect(content).to include("The preview of the book has been downloaded #{ebook.preview_downloads} times.")
       end
     end
   end
