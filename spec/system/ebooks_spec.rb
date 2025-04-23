@@ -33,7 +33,7 @@ RSpec.describe "Ebooks management", type: :system do
 
       def expect_ebooks_page
         expect(page).to have_current_path(ebooks_path)
-        expect(page).to have_css("table#ebooks")
+        expect(page).to have_table(id: "ebooks")
       end
 
       it "enables accessing an ebook from the ebook listing" do
@@ -65,7 +65,7 @@ RSpec.describe "Ebooks management", type: :system do
 
       def expect_filtered_ebooks(included_ebook:, excluded_ebook:)
         expect(page).to have_content(included_ebook.title)
-        expect(page).not_to have_content(excluded_ebook.title)
+        expect(page).to have_no_content(excluded_ebook.title)
       end
 
       context "when visiting an ebook" do
@@ -101,7 +101,7 @@ RSpec.describe "Ebooks management", type: :system do
 
         def expect_ebook_summary(ebook, summary)
           within "#ebook_#{ebook.id}" do
-            expect(page).to have_css("div#ebook_summary", text: summary)
+            expect(page).to have_css("div", id: "ebook_summary", text: summary)
           end
         end
       end
@@ -254,7 +254,7 @@ RSpec.describe "Ebooks management", type: :system do
         expect(page).to have_current_path(ebooks_path) # ensure the page updates before checking the database
       }.to change(Ebook, :count).by(-1)
       expect(page).to have_content("Ebook was successfully destroyed.")
-      expect(page).not_to have_css("tr#ebook_#{ebook.id}")
+      expect(page).not_to have_css("tr", id: "ebook_#{ebook.id}")
     end
 
     it "cannot remove an ebook already bought", js: true do

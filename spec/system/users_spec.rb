@@ -22,7 +22,7 @@ RSpec.describe "Users management", type: :system do
 
     def expect_users_page
       expect(page).to have_current_path(users_path)
-      expect(page).to have_css("table#users")
+      expect(page).to have_table(id: "users")
     end
 
     it "enables accessing an user from the users page" do
