@@ -19,11 +19,12 @@ RSpec.describe EbooksHelper, type: :helper do
         allow(ebook).to receive(:cover_image).and_return(cover_image_mock)
 
         result = helper.cover_image_tag(ebook)
+        doc = Nokogiri::HTML.fragment(result || "")
+        img = doc.at_css("img")
 
         aggregate_failures do
-          expect(result).to include("<img")
-          expect(result).to include("src=\"https://res.cloudinary.com")
-          expect(result).to include(cover_image_key)
+          expect(img).not_to be_nil
+          expect(img["src"]).to match(%r{https://res\.cloudinary\.com/\w+/image/upload/.*/#{cover_image_key}(\?.*)?})
         end
       end
     end
@@ -44,10 +45,12 @@ RSpec.describe EbooksHelper, type: :helper do
         allow(ebook).to receive(:cover_image).and_return(cover_image_mock)
 
         result = helper.cover_image_tag(ebook)
+        doc = Nokogiri::HTML.fragment(result || "")
+        img = doc.at_css("img")
 
         aggregate_failures do
-          expect(result).to include("<img")
-          expect(result).to include(cover_image_url)
+          expect(img).not_to be_nil
+          expect(img["src"]).to include(cover_image_url)
         end
       end
     end
@@ -69,8 +72,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to include(">Archived<")
+        expect(result).to have_css("span", text: ebook.status.titleize)
       end
     end
 
@@ -80,8 +82,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to include(">Draft<")
+        expect(result).to have_css("span", text: ebook.status.titleize)
       end
     end
 
@@ -91,8 +92,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to include(">Pending<")
+        expect(result).to have_css("span", text: ebook.status.titleize)
       end
     end
 
@@ -102,8 +102,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to include(">Available<")
+        expect(result).to have_css("span", text: "Available")
       end
     end
 
@@ -113,8 +112,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to include(">Other Status<")
+        expect(result).to have_css("span", text: ebook.status.titleize)
       end
     end
 
@@ -124,32 +122,15 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.ebook_status_tag(ebook)
 
-        expect(result).to include("<span")
-        expect(result).to match(/span[^>]*><\/span>/) # empty span
+        expect(result).to have_css("span", text: "")
       end
     end
   end
 
   describe "#purchase_button" do
-    context "when logged in, not the ebook owner and ebook status is live" do
-      it "returns a button to purchase the ebook" do
-        live_ebook = build_stubbed(:ebook, :live, owner: build_stubbed(:user))
-        user = instance_double(User, id: 2)
-        allow(helper).to receive(:current_user).and_return(user) # log in user
-
-        result = helper.purchase_button(live_ebook)
-
-        aggregate_failures do
-          expect(result).to include("action=\"/ebooks/#{live_ebook.id}/purchase\"")
-          expect(result).to include("<button")
-          expect(result).to match(/Purchase/)
-        end
-      end
-    end
-
     context "when the user is not logged in" do
       it "returns nil" do
-        live_ebook = build_stubbed(:ebook, :live, owner: build_stubbed(:user))
+        live_ebook = build_stubbed(:ebook, :live)
 
         expect(helper.purchase_button(live_ebook)).to be nil
       end
@@ -175,6 +156,20 @@ RSpec.describe EbooksHelper, type: :helper do
         expect(helper.purchase_button(ebook)).to be nil
       end
     end
+
+    context "when logged in, not the ebook owner and ebook status is live" do
+      it "returns a button to purchase the ebook" do
+        live_ebook = build_stubbed(:ebook, :live)
+        allow(helper).to receive(:current_user).and_return(instance_double(User, id: 1)) # log in user
+
+        result = helper.purchase_button(live_ebook)
+
+        aggregate_failures do
+          expect(result).to include("action=\"/ebooks/#{live_ebook.id}/purchase\"")
+          expect(result).to have_button("Purchase", type: "submit")
+        end
+      end
+    end
   end
 
   describe "#edit_ebook_button" do
@@ -197,11 +192,7 @@ RSpec.describe EbooksHelper, type: :helper do
 
         result = helper.edit_ebook_button(ebook)
 
-        aggregate_failures do
-          expect(result).to include("<a")
-          expect(result).to include("href=\"/ebooks/#{ebook.id}/edit\"")
-          expect(result).to match(/Edit/)
-        end
+        expect(result).to have_link("Edit this ebook", href: edit_ebook_path(ebook))
       end
     end
   end
@@ -227,9 +218,8 @@ RSpec.describe EbooksHelper, type: :helper do
         result = helper.delete_ebook_button(ebook)
 
         aggregate_failures do
-          expect(result).to include("action=\"/ebooks/#{ebook.id}\"")
-          expect(result).to include("<button")
-          expect(result).to match(/Delete/)
+          expect(result).to have_field(type: "hidden", name: "_method", with: "delete")
+          expect(result).to have_button("Delete this ebook", type: "submit")
         end
       end
     end
@@ -244,14 +234,11 @@ RSpec.describe EbooksHelper, type: :helper do
 
     context "when there's a summary to present" do
       it "returns a div with the summary" do
-        summary = "some random text"
+        summary = "Lorem ipsum"
 
         result = helper.ebook_summary_tag(summary)
 
-        aggregate_failures do
-          expect(result).to include("<div")
-          expect(result).to include(summary)
-        end
+        expect(result).to have_css("div", id: "ebook_summary", text: summary)
       end
     end
   end

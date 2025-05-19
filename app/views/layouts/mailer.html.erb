@@ -9,9 +9,11 @@
 
   <body>
     <%= yield %>
-    <p>Kind regards,</p>
-    <em>Ebook Store</em>
+    <footer>
+      <p>Kind regards,</p>
+      <em>Ebook Store</em>
 
-    <p>Visit the <%= link_to 'Ebook Store', ebooks_url %> to see more ebooks.</p>
-  </body>
+      <p>Visit the <%= link_to 'Ebook Store', ebooks_url %> to see more ebooks.</p>
+    </footer>
+    </body>
 </html>

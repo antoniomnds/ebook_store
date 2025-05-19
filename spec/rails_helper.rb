@@ -105,4 +105,6 @@ RSpec.configure do |config|
 
   # Make helper methods available to specs
   config.include AuthenticationHelper, type: :view
+
+  config.include ViewSpecHelpers, type: :view
 end

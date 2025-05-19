@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
   def notify_purchase
     @user = params[:user]
     @ebook = params[:ebook]
+    @discount = 10
 
     mail(subject: "Thank you for buying '#{@ebook.title}'", to: @user.email)
   end

@@ -1,11 +1,11 @@
 <%= render @ebook %>
 
-<div class="btn-group p-3" role="group" aria-label="Ebook management buttons">
-  <%= link_to "Back to ebooks", ebooks_path, class: 'btn btn-outline-dark' %>
-  <%= edit_ebook_button(@ebook) %>
+<div class="d-flex justify-content-between">
+  <div class="btn-group p-3" role="group" aria-label="Ebook management buttons">
+    <%= link_to "Back to ebooks", ebooks_path, class: 'btn btn-outline-dark' %>
+    <%= edit_ebook_button(@ebook) %>
+  </div>
   <%= delete_ebook_button(@ebook) %>
 </div>
 
-<div data-controller="ebook"
-     data-increment-views-url="<%= increment_views_ebook_path(@ebook) %>">
-</div>
+<div data-controller="ebook" data-increment-views-url="<%= increment_views_ebook_path(@ebook) %>"></div>

@@ -1,5 +1,5 @@
-<%= form_with(model: user) do |form| %>
-  <%= error_messages_for user %>
+<%= form_with(model: @user) do |form| %>
+  <%= error_messages_for @user %>
 
   <div class="row m-3">
     <%= form.label :avatar, style: 'display: block', class: 'col-sm-2 col-form-label' %>
@@ -51,7 +51,7 @@
   <%= user_enabled_tag(form) %>
 
   <div class="d-flex justify-content-between" role="group" aria-label="User management buttons">
-    <%= link_to "Cancel", user_path(@user), class: 'btn btn-outline-dark' %>
+    <%= link_to "Cancel", request.referer, class: 'btn btn-outline-dark' %>
     <%= form.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

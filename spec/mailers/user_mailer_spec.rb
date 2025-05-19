@@ -48,7 +48,19 @@ RSpec.describe UserMailer, type: :mailer do
     it "thanks for buying the ebook" do
       content = Nokogiri::HTML(mail.body.encoded).content
 
-      expect(content).to include("Thank you for purchasing #{ebook.title}!")
+      expect(content).to include("Thank you for purchasing \"#{ebook.title}\"!")
+    end
+
+    it "includes information on the discount applied" do
+      discount = 10
+      content = Nokogiri::HTML(mail.body.encoded).content.squish # squish removes extra whitespaces
+
+      expected_text = %(
+        You have gotten #{discount}% off the original price of #{ebook.price}€,
+        which corresponds to a discount of #{ebook.discount_value(discount)}€!
+      ).squish
+
+      expect(content).to include(expected_text)
     end
   end
 

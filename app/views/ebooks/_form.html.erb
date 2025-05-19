@@ -1,5 +1,5 @@
-<%= form_with(model: ebook) do |form| %>
-  <%= error_messages_for ebook %>
+<%= form_with(model: @ebook) do |form| %>
+  <%= error_messages_for @ebook %>
 
   <div class="row mb-3">
     <%= form.label :title, style: 'display: block', class: 'col-sm-2 col-form-label' %>
@@ -132,7 +132,8 @@
     <%= form.hidden_field :user_id, value: current_user.id %>
   <% end %>
 
-  <p>
+  <div class="d-flex justify-content-between" role="group" aria-label="Ebook management buttons">
+    <%= link_to "Cancel", request.referer, class: 'btn btn-outline-dark' %>
     <%= form.submit class: 'btn btn-primary' %>
-  </p>
+  </div>
 <% end %>
