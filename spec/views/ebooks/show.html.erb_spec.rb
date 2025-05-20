@@ -19,8 +19,6 @@ RSpec.describe "ebooks/show", type: :view do
 
     render
 
-    byebug
-
     expect(rendered).to have_link("Back to ebooks", href: ebooks_path)
   end
 end
