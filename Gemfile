@@ -28,7 +28,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "image_processing", "~> 1.14"
 
 # Use Bootstrap styles for the frontend
-gem "bootstrap", "~> 5.3.3"
+gem "bootstrap", "~> 5.3.5"
 gem "dartsass-sprockets"
 
 # For image hosting and processing [https://cloudinary.com]
