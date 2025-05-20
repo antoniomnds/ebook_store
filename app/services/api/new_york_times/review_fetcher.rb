@@ -11,10 +11,9 @@ module Api
       end
 
       def call
-        base_url = "https://api.nytimes.com/svc/books/v3/reviews.json"
         query_params = params.merge("api-key": api_key)
         query = URI.encode_www_form(query_params)
-        uri = URI("#{ base_url }?#{ query }")
+        uri = URI("#{ BASE_URL }?#{ query }")
         fail_message = "Unable to retrieve reviews from NY Times API."
 
         make_request(uri, :get, fail_message) do |data|

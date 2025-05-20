@@ -1,5 +1,5 @@
-<%= form_with(model: ebook) do |form| %>
-  <%= error_messages_for ebook %>
+<%= form_with(model: @ebook) do |form| %>
+  <%= error_messages_for @ebook %>
 
   <div class="row mb-3">
     <%= form.label :title, style: 'display: block', class: 'col-sm-2 col-form-label' %>
@@ -87,10 +87,10 @@
   </div>
 
   <div class="row mb-3">
-    <%= form.label :tag_ids, style: 'display: block', class: 'col-sm-2 col-form-label' %>
+    <%= form.label :tag_ids, "Tags", style: 'display: block', class: 'col-sm-2 col-form-label' %>
     <div class="col-sm-10">
       <%= form.select :tag_ids,
-                      Tag.all.map { |tag| [ tag.name, tag.id ] },
+                      Tag.pluck(:name, :id),
                       {
                         include_blank: true
                       },
@@ -127,9 +127,13 @@
     </div>
   </div>
 
-  <%= form.hidden_field :user_id, value: current_user.id %>
+  <% if action_name == 'new' %>
+    <%# ebook owner will be the currently logged in user %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+  <% end %>
 
-  <p>
+  <div class="d-flex justify-content-between" role="group" aria-label="Ebook management buttons">
+    <%= link_to "Cancel", request.referer, class: 'btn btn-outline-dark' %>
     <%= form.submit class: 'btn btn-primary' %>
-  </p>
+  </div>
 <% end %>

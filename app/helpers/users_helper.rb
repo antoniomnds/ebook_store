@@ -4,7 +4,7 @@ module UsersHelper
 
     if Rails.configuration.active_storage.service == :cloudinary
       cl_image_tag user.avatar.key, width: 250, height: 250, crop: "scale"
-    elsif Rails.configuration.active_storage.service == :local
+    else
       image_tag user.avatar.variant(resize_to_limit: [ 250, 250 ])
     end
   end
@@ -15,6 +15,7 @@ module UsersHelper
     content_tag :span, "Admin", class: "badge bg-danger"
   end
 
+  # only admin users are not required to fill the current password (password challenge)
   def password_challenge_tag(form)
     return nil if current_user.admin?
 
@@ -40,5 +41,20 @@ module UsersHelper
         end
       end
     end
+  end
+
+  def delete_user_button(user)
+    disabled = user.disabled? || (user != current_user && !current_user.admin?)
+
+    button_to "Delete account",
+               user,
+               method: :delete,
+               form: {
+                 data: {
+                   turbo_confirm: "Are you sure? This action cannot be undone."
+                 }
+               },
+               class: "btn btn-outline-danger",
+               disabled:
   end
 end

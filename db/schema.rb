@@ -112,8 +112,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_104519) do
     t.string "password_digest"
     t.datetime "password_expires_at"
     t.boolean "admin", default: false
-    t.boolean "active", default: true
-    t.datetime "deactivated_at"
+    t.datetime "disabled_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

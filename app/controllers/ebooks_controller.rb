@@ -4,12 +4,16 @@ class EbooksController < ApplicationController
 
   # GET /ebooks
   def index
-    @ebooks = Ebook.filter(params.slice(:tags, :users)).includes(:tags).live
+    @ebooks = Ebook.filter(params.slice(:tags, :users))
+                   .includes(:tags)
+                   .live
+    @tags = Tag.with_live_ebooks
+    @users = User.with_live_ebooks
   end
 
   # GET /ebooks/1
   def show
-    @review = Ebook::ReviewFetcher.call(@ebook)
+    @summary = Ebook::ReviewFetcher.call(@ebook)
   end
 
   # GET /ebooks/new
@@ -19,7 +23,7 @@ class EbooksController < ApplicationController
 
   # GET /ebooks/1/edit
   def edit
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       redirect_to ebooks_url,
                   alert: "You can only edit your ebooks.",
                   status: :see_other
@@ -39,7 +43,7 @@ class EbooksController < ApplicationController
 
   # PATCH/PUT /ebooks/1
   def update
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       return redirect_to ebooks_url,
                   alert: "You can only edit your ebooks.",
                   status: :see_other
@@ -53,7 +57,7 @@ class EbooksController < ApplicationController
 
   # DELETE /ebooks/1
   def destroy
-    unless @ebook.user == current_user
+    unless @ebook.owner == current_user
       return redirect_to ebooks_url,
                   alert: "You can only delete your ebooks.",
                   status: :see_other
@@ -67,7 +71,7 @@ class EbooksController < ApplicationController
       redirect_to ebooks_url, notice: "Ebook was successfully destroyed.", status: :see_other
     rescue ActiveRecord::InvalidForeignKey
       redirect_to request.referer,
-                  alert: "Ebook already bought and cannot not be destroyed.",
+                  alert: "Ebook already bought and cannot be destroyed.",
                   status: :see_other
     rescue ActiveRecord::RecordNotDestroyed => e
       redirect_to request.referer,
@@ -78,12 +82,9 @@ class EbooksController < ApplicationController
 
   def purchase
     begin
-      user = current_user
-      Ebook::PurchaseCreator.call(user, @ebook)
+      Ebook::PurchaseCreator.call(current_user, @ebook)
 
       redirect_to @ebook, notice: "Ebook was successfully purchased."
-    rescue ActiveRecord::RecordNotFound
-      redirect_to ebooks_url, alert: "Ebook could not be found."
     rescue StandardError => e
       redirect_to ebooks_url, alert: "Ebook could not be purchased. #{ e.message }"
     end
@@ -99,6 +100,7 @@ class EbooksController < ApplicationController
                              .slice(:tags)
                              .merge(users: [ current_user.id ]))
                    .includes(:tags)
+    @tags = Tag.with_ebooks_for_user(current_user)
   end
 
   private

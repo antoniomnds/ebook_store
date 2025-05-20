@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if user&.authenticate(params[:password])
       unless user.enabled?
         return redirect_to new_session_url,
-                           alert: "Your account has been disabled.",
+                           alert: "Your account has been removed.",
                            status: :see_other
       end
 
@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
                   status: :see_other
     else
       flash[:alert] = "The email or password you entered is incorrect."
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity # keeps the same URL (/sessions)
     end
   end
 

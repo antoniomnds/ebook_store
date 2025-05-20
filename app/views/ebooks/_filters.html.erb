@@ -5,7 +5,7 @@
         <%= label_tag :tags, "Tags" %>
         <%= select_tag :tags,
                        options_from_collection_for_select(
-                         Tag.all,
+                         @tags,
                          "id",
                          "name",
                          params[:tags]
@@ -20,7 +20,7 @@
           <%= label_tag :users, "Users" %>
           <%= select_tag :users,
                          options_from_collection_for_select(
-                           User.with_ebooks,
+                           @users,
                            "id",
                            "username",
                            params[:users]

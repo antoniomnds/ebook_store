@@ -1,5 +1,5 @@
-<%= form_with model: user, url: registrations_path do |form| %>
-  <%= error_messages_for user %>
+<%= form_with model: @user, url: registrations_path do |form| %>
+  <%= error_messages_for @user %>
 
   <div class="row m-3">
     <%= form.label :username, style: 'display: block', class: 'col-sm-2 col-form-label' %>

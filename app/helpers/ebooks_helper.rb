@@ -5,7 +5,7 @@ module EbooksHelper
     content_tag :div, class: "text-center mt-4", style: "height: 20rem" do
       if Rails.configuration.active_storage.service == :cloudinary
         cl_image_tag ebook.cover_image.key, width: 200, height: 300, crop: "scale"
-      elsif Rails.configuration.active_storage.service == :local
+      else
         image_tag ebook.cover_image.variant(:thumb)
       end +
       content_tag(:hr)
@@ -37,31 +37,31 @@ module EbooksHelper
     end
   end
 
-  def edit_ebook_button(ebook, klass: "btn btn-outline-primary")
-    return nil unless current_user == ebook.user
+  def edit_ebook_button(ebook)
+    return nil unless current_user == ebook.owner
 
     link_to "Edit this ebook",
             edit_ebook_path(ebook),
-            class: klass
+            class: "btn btn-outline-primary"
   end
 
-  def delete_ebook_button(ebook, klass: "btn btn-outline-danger")
-    return nil unless current_user == ebook.user
+  def delete_ebook_button(ebook)
+    return nil unless current_user == ebook.owner
 
     button_to "Delete this ebook",
               ebook,
               method: :delete,
-              class: klass,
+              class: "btn btn-outline-danger",
               data: { turbo_confirm: "Are you sure you want to delete this ebook?" }
   end
 
-  def ebook_summary_tag(review)
-    return unless review
+  def ebook_summary_tag(summary)
+    return unless summary
 
-    content_tag :div, class: "mt-5 card", style: "width: 16rem;" do
+    content_tag :div, id: "ebook_summary", class: "mt-5 card", style: "width: 16rem;" do
       content_tag :div, class: "card-body" do
         content_tag(:h6, "New York Times Summary", class: "card-title") +
-        content_tag(:div, review, class: "card-text")
+        content_tag(:div, summary, class: "card-text")
       end
     end
   end

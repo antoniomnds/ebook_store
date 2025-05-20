@@ -42,7 +42,8 @@ gem "requestjs-rails"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  # gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "pry-byebug"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
@@ -64,6 +65,26 @@ group :development, :test do
 
   # For mocking HTTP requests in tests [https://github.com/bblimke/webmock]
   gem "webmock"
+
+  # For analyzing test coverage [https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
+
+  # For capturing and testing emails in development [https://mailcatcher.me/]
+  gem "mailcatcher", "~> 0.10"
+end
+
+group :test do
+  # For simulating user interactions in tests [https://github.com/teamcapybara/capybara]
+  gem "capybara"
+
+  # For running tests in a browser [https://github.com/SeleniumHQ/selenium/tree/trunk/rb]
+  gem "selenium-webdriver"
+
+  # For opening the browser in tests [https://github.com/copiousfreetime/launchy]
+  gem "launchy"
+
+  # For running tests automatically when files change [
+  gem "guard-rspec", require: false
 end
 
 group :development do

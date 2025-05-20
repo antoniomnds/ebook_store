@@ -1,11 +1,10 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  skip_before_action :require_login, only: %i[ edit update ] # to change password
-  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop in these actions
+  skip_before_action :verify_current_user, only: %i[ edit update ] # to avoid loop when password expired
 
   # GET /users
   def index
-    @users = User.active
+    @users = User.all
   end
 
   # GET /users/1
@@ -37,18 +36,27 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    unless @user == current_user
+    own_user = @user == current_user
+    unless own_user or current_user.admin?
       return redirect_to root_url,
-                  alert: "You can only delete your own profile.",
-                  status: :see_other
+                         alert: "You can only delete your own profile.",
+                         status: :see_other
+    end
+
+    if @user.disabled?
+      return redirect_to request.referer,
+                         alert: "User already deleted.",
+                         status: :see_other
     end
 
     begin
-      @user.deactivate!
+      @user.disable!
       @user.avatar.purge_later
-      logout
+      if own_user
+        logout
+      end
 
-      redirect_to root_url, notice: "User was successfully destroyed.", status: :see_other
+      redirect_to root_url, notice: "User was successfully removed.", status: :see_other
     rescue ActiveRecord::RecordInvalid => e
       redirect_to request.referer,
                   alert: "User could not be destroyed. #{ e.message }",
@@ -60,7 +68,7 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.active.find(params[:id])
+      @user = User.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

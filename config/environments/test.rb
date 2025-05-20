@@ -40,6 +40,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # Run jobs inline, meaning the job gets executed immediately.
+  config.active_job.queue_adapter = :test
+
   # Unlike controllers, the mailer instance doesn't have any context about the
   # incoming request so you'll need to provide the :host parameter yourself.
   config.action_mailer.default_url_options = { host: "www.example.com" }
@@ -62,7 +65,6 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # Using :local will store the files locally.
-  config.active_storage.service = :local
-  # config.active_storage.service = :cloudinary
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
 end
