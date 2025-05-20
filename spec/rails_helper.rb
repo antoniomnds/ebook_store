@@ -79,7 +79,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :selenium_chrome_headless # selenium when we need javascript
+    driven_by :selenium, using: :headless_chrome # selenium when we need javascript
   end
 
   config.after(:suite) do
