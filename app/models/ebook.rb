@@ -56,7 +56,10 @@ class Ebook < ApplicationRecord
   validate :publication_date_cannot_be_in_the_future
 
   scope :live, -> { where(status: :live) }
-  scope :filter_by_tags, ->(tag_ids) { joins(:ebook_tags).where(ebook_tags: { tag_id: tag_ids }) }
+  scope :filter_by_tags, ->(tag_ids) { joins(:ebook_tags)
+                                         .where(ebook_tags: { tag_id: tag_ids })
+                                         .includes(:tags)
+                                         .distinct }
   scope :filter_by_users, ->(user_ids) { where(user_id: user_ids) }
 
   def discount_value(discount)

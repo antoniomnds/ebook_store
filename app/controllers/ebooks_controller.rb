@@ -5,7 +5,6 @@ class EbooksController < ApplicationController
   # GET /ebooks
   def index
     @ebooks = Ebook.filter(params.slice(:tags, :users))
-                   .includes(:tags)
                    .live
     @tags = Tag.with_live_ebooks
     @users = User.with_live_ebooks
@@ -99,7 +98,6 @@ class EbooksController < ApplicationController
     @ebooks = Ebook.filter(params
                              .slice(:tags)
                              .merge(users: [ current_user.id ]))
-                   .includes(:tags)
     @tags = Tag.with_ebooks_for_user(current_user)
   end
 
