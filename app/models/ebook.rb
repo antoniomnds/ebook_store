@@ -1,10 +1,9 @@
 class Ebook < ApplicationRecord
   include Filterable
+  include Taggable
 
   belongs_to :owner, class_name: "User", foreign_key: "user_id"
   has_many :purchases
-  has_many :ebook_tags, dependent: :destroy
-  has_many :tags, through: :ebook_tags
 
   enum :status, %i[archived draft pending live], prefix: true
 
@@ -56,8 +55,8 @@ class Ebook < ApplicationRecord
   validate :publication_date_cannot_be_in_the_future
 
   scope :live, -> { where(status: :live) }
-  scope :filter_by_tags, ->(tag_ids) { joins(:ebook_tags)
-                                         .where(ebook_tags: { tag_id: tag_ids })
+  scope :filter_by_tags, ->(tag_ids) { joins(:taggings)
+                                         .where(taggings: { tag_id: tag_ids })
                                          .includes(:tags)
                                          .distinct }
   scope :filter_by_users, ->(user_ids) { where(user_id: user_ids) }

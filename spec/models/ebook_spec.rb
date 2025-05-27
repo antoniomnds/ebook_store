@@ -152,6 +152,26 @@ RSpec.describe Ebook, type: :model do
     end
   end
 
+  describe "#tags" do
+    it "can be tagged" do
+      tag = build(:tag)
+
+      ebook.tags << tag
+
+      expect(ebook.tags).to include(tag)
+    end
+
+    it "deletes taggings when destroyed" do
+      tag = create(:tag)
+
+      ebook.tags << tag
+      # ebook is only in memory (build(:ebook)), thus the tagging wasn't yet created
+      ebook.save!
+
+      expect { ebook.destroy }.to change(Tagging, :count).by(-1)
+    end
+  end
+
   context "scope tests" do
     describe ".live" do
       it "returns the ebooks with status live" do
