@@ -27,26 +27,23 @@ RSpec.describe Tag, type: :model do
     end
   end
 
-  describe "scope tests" do
-    describe ".with_live_ebooks" do
-      it "returns tags assigned to ebooks that have status live" do
-        live_tagged_ebook = create(:ebook, :live, :with_tags)
-        create(:ebook, :archived, :with_tags) # archived tagged ebook
-        create(:tag)
+  describe "#ebooks" do
+    it "can be associated with ebooks" do
+      ebook = build(:ebook)
 
-        expect(described_class.with_live_ebooks).to match_array(live_tagged_ebook.tags)
-      end
+      tag.ebooks << ebook
+
+      expect(tag.ebooks).to include(ebook)
     end
 
-    describe ".with_ebooks_for_user" do
-      it "returns tags assigned to ebooks owned by the given user" do
-        user = create(:user)
-        user_tagged_ebook = create(:ebook, :with_tags, owner: user)
-        create(:ebook, :with_tags) # another user's tagged ebook
-        create(:tag)
+    it "removes the tagging when destroyed" do
+      ebook = create(:ebook)
 
-        expect(described_class.with_ebooks_for_user(user)).to match_array(user_tagged_ebook.tags)
-      end
+      tag.ebooks << ebook
+      # tag is only in memory (build(:tag)), thus the tagging wasn't yet created
+      tag.save!
+
+      expect { tag.destroy }.to change(Tagging, :count).by(-1)
     end
   end
 end

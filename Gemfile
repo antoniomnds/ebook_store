@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 7.2.2"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
-# Use sqlite3 as the database for Active Record
+# Use sqlite3 as the database for Active Record [https://github.com/sparklemotion/sqlite3-ruby]
 gem "sqlite3", ">= 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -54,7 +54,7 @@ group :development, :test do
   # Fake data generation for testing purposes
   gem "faker"
 
-  # Load environment variables from .env into ENV in development
+  # Load environment variables from .env into ENV in development [https://github.com/bkeepers/dotenv]
   gem "dotenv-rails"
 
   # For generating and running tests with RSpec [https://rspec.info/]
