@@ -1,4 +1,5 @@
-# 📚 Ebook Store
+# 📚 Ebook Store [![CI](https://github.com/antoniomnds/ebook_store/actions/workflows/ci.yml/badge.svg)](https://github.com/antoniomnds/ebook_store/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/antoniomnds/ebook_store/graph/badge.svg?token=4RCR91OHQG)](https://codecov.io/gh/antoniomnds/ebook_store)
+
 
 A simple full-stack Rails application for managing ebooks, which can be bought/sold by users.
 
