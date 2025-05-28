@@ -10,6 +10,9 @@ module LoginSupport
     click_link "Log in"
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password
-    click_button "Login"
+    click_button "Login" # asynchronous when js: true
+
+    # wait until login completes
+    expect(page).to have_current_path(root_path)
   end
 end
