@@ -14,6 +14,8 @@ RSpec.describe UsersHelper, type: :helper do
       context "when Active Storage service is Cloudinary" do
         it "returns an image tag with a cloudinary URL" do
           allow(Rails.configuration.active_storage).to receive(:service).and_return(:cloudinary)
+          # Configure Cloudinary with test values for CI
+          Cloudinary.config_from_url("cloudinary://dummy_key:dummy_secret@dummy_cloud")
           # partially mock the attachment system
           avatar_key = "sample_key"
           # make an "unverified" double for avatar since the method key is only available through delegation at runtime

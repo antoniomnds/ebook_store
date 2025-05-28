@@ -13,6 +13,8 @@ RSpec.describe EbooksHelper, type: :helper do
     context "when Active Storage service is cloudinary" do
       it "returns an image tag with a remote source" do
         allow(Rails.configuration.active_storage).to receive(:service).and_return(:cloudinary)
+        # Configure Cloudinary with test values for CI
+        Cloudinary.config_from_url("cloudinary://dummy_key:dummy_secret@dummy_cloud")
         ebook = build_stubbed(:ebook)
         cover_image_key = "sample_key"
         cover_image_mock = double(:cover_image, attached?: true, key: cover_image_key)
