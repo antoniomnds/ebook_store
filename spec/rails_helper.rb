@@ -1,6 +1,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
-SimpleCov.start 'rails'
+require "simplecov_json_formatter"
+SimpleCov.start 'rails' do
+  formatter(SimpleCov::Formatter::JSONFormatter) # to report to Codecov
+end
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -86,6 +89,7 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
   end
 
+  # Tag all groups and examples in the spec/service directory with type: :service
   config.define_derived_metadata(file_path: %r{spec/services}) do |metadata|
     metadata[:type] = :service
   end
