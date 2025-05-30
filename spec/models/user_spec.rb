@@ -91,9 +91,8 @@ RSpec.describe User, type: :model do
 
   context "scope tests" do
     describe(".with_live_ebooks") do
-      let(:users_with_live_ebooks) { create_pair(:user, :with_live_ebooks) }
-
       it "returns the users that have ebooks" do
+        users_with_live_ebooks = create_pair(:user, :with_live_ebooks)
         create(:ebook, :archived) # creates user that owns archived ebook
         create(:user) # doesn't own ebooks by default
 
