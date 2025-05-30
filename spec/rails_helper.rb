@@ -2,6 +2,7 @@
 require 'simplecov'
 require "simplecov_json_formatter"
 SimpleCov.start 'rails' do
+  add_filter "spec" # don't include the spec directory
   formatter(SimpleCov::Formatter::JSONFormatter) # to report to Codecov
 end
 
