@@ -1,0 +1,23 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        if_not_found: failure
+    patch:
+      default:
+        target: 100%
+        threshold: 1%
+        if_not_found: failure
+  comment:
+    layout: "reach, diff, flags, files, footer"
+    behavior: default
+  flags:
+    - name: "unit"
+      paths:
+        - "spec/factories_spec.rb"
+        - '^spec/(model|helpers|jobs|mailers|routing|services|views)/\w+_spec.rb$'
+    - name: "integration"
+      paths:
+        - '^spec\/(requests|system)/\w+_spec.rb$'
