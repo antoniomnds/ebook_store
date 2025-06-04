@@ -81,6 +81,8 @@ RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true # run everything when there's no focused examples
 
+  config.filter_run_excluding :slow unless ENV['RUN_SLOW_SPECS'] # exclude slow specs by default
+
   config.before(:each, type: :system) do
     driven_by :rack_test # rack_test by default, for performance
   end
