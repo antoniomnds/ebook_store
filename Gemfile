@@ -71,6 +71,9 @@ group :development, :test do
 
   # For capturing and testing emails in development [https://mailcatcher.me/]
   gem "mailcatcher", "~> 0.10"
+
+  # For running tests in parallel [https://github.com/grosser/parallel_tests]
+  gem "parallel_tests"
 end
 
 group :test do
