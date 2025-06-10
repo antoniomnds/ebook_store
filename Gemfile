@@ -77,6 +77,13 @@ group :development, :test do
 
   # For cleaning the database between tests [https://github.com/DatabaseCleaner/database_cleaner-active_record]
   gem "database_cleaner-active_record", "~> 2.1"
+
+  # For code smell detection [https://github.com/troessner/reek]
+  gem "reek", require: false
+
+  # For detecting Rails best practices [https://github.com/flyerhzm/rails_best_practices]
+  # rails_best_practices -f html --with-github antoniomnds/ebook_store
+  gem "rails_best_practices", require: false
 end
 
 group :test do
