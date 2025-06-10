@@ -28,6 +28,7 @@ require "etc"
 #  * 'just' rspec: 'rspec'
 #  * parallel tests: 'parallel_rspec -n 4' (requires the parallel_tests gem)
 
+# Note: When using parallel_rspec, ensure database cleaner is configured with the :truncation strategy
 rspec_options = {
   cmd: "bundle exec rspec",
   run_all: {

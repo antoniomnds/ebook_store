@@ -74,6 +74,9 @@ group :development, :test do
 
   # For running tests in parallel [https://github.com/grosser/parallel_tests]
   gem "parallel_tests"
+
+  # For cleaning the database between tests [https://github.com/DatabaseCleaner/database_cleaner-active_record]
+  gem "database_cleaner-active_record", "~> 2.1"
 end
 
 group :test do
