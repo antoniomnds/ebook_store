@@ -10,16 +10,16 @@ coverage:
         target: 95%
         threshold: 1%
         if_not_found: failure
-  comment:
-    layout: "reach, diff, flags, files, footer"
-    behavior: "new"
-  flags:
-    - name: "unit"
-      carryforward: true
-      paths:
-        - '^spec/factories_spec.rb$'
-        - '^spec/(model|helpers|jobs|mailers|routing|services|views)/.+_spec.rb$'
-    - name: "integration"
-      carryforward: true
-      paths:
-        - '^spec/(requests|system)/.+_spec.rb$'
+comment:
+  layout: "reach, diff, flags, files, footer"
+  behavior: "new"
+flags:
+  unit:
+    carryforward: true
+    paths:
+      - '^spec/factories_spec.rb$'
+      - '^spec/(model|helpers|jobs|mailers|routing|services|views)/.+_spec.rb$'
+  integration:
+    carryforward: true
+    paths:
+      - '^spec/(requests|system)/.+_spec.rb$'
