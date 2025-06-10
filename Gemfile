@@ -3,17 +3,17 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+gem "sprockets-rails", "~> 3.5"
 # Use sqlite3 as the database for Active Record [https://github.com/sparklemotion/sqlite3-ruby]
 gem "sqlite3", ">= 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails"
+gem "importmap-rails", "~> 2.1"
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+gem "turbo-rails", "~> 2.0"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails"
+gem "stimulus-rails", "~> 1.3"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -28,17 +28,17 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "image_processing", "~> 1.14"
 
 # Use Bootstrap styles for the frontend
-gem "bootstrap", "~> 5.3.5"
-gem "dartsass-sprockets"
+gem "bootstrap", "~> 5.3"
+gem "dartsass-sprockets", "~> 3.2"
 
 # For image hosting and processing [https://cloudinary.com]
-gem "cloudinary"
+gem "cloudinary", "~> 2.3"
 
 # For background processing
-gem "sidekiq"
+gem "sidekiq", "~> 7.3"
 
 # For sending by default some headers that are required by rails, like X-CSRF-Token
-gem "requestjs-rails"
+gem "requestjs-rails", "~> 0.0.13"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -46,7 +46,7 @@ group :development, :test do
   gem "pry-byebug"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+  gem "brakeman", "~> 7.0", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -73,7 +73,7 @@ group :development, :test do
   gem "mailcatcher", "~> 0.10"
 
   # For running tests in parallel [https://github.com/grosser/parallel_tests]
-  gem "parallel_tests"
+  gem "parallel_tests", "~> 5.3"
 
   # For cleaning the database between tests [https://github.com/DatabaseCleaner/database_cleaner-active_record]
   gem "database_cleaner-active_record", "~> 2.1"
@@ -81,10 +81,10 @@ end
 
 group :test do
   # For simulating user interactions in tests [https://github.com/teamcapybara/capybara]
-  gem "capybara"
+  gem "capybara", "~> 3.40"
 
   # For running tests in a browser [https://github.com/SeleniumHQ/selenium/tree/trunk/rb]
-  gem "selenium-webdriver"
+  gem "selenium-webdriver", "~> 4.33"
 
   # For opening the browser in tests [https://github.com/copiousfreetime/launchy]
   gem "launchy"
