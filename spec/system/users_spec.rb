@@ -32,7 +32,6 @@ RSpec.describe "Users management", type: :system do
     end
 
     def visit_user_page(user)
-      user # so the user is in the listing at users_url
       visit users_path
 
       within "#user_#{user.id}" do

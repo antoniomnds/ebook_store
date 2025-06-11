@@ -1,5 +1,8 @@
-# A sample Guardfile
+# This file is used to configure Guard, a command line tool to easily
+# handle events on file system changes, such as running tests or
+# reloading code.
 # More info at https://github.com/guard/guard#readme
+require "etc"
 
 ## Uncomment and set this to only include directories you want to watch
 # directories %w(app lib config test spec features) \
@@ -23,8 +26,19 @@
 #                          installed the spring binstubs per the docs)
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
+#  * parallel tests: 'parallel_rspec -n 4' (requires the parallel_tests gem)
 
-guard :rspec, cmd: "bundle exec rspec" do
+# Note: When using parallel_rspec, ensure database cleaner is configured with the :truncation strategy
+rspec_options = {
+  cmd: "bundle exec rspec",
+  run_all: {
+    # keep one processor free for the OS
+    cmd: "bundle exec parallel_rspec -n #{[ ::Etc.nprocessors - 1, 1 ].max} -o '",
+    cmd_additional_args: "'"
+  }
+}
+
+guard :rspec, rspec_options do
   require "guard/rspec/dsl"
   dsl = Guard::RSpec::Dsl.new(self)
 

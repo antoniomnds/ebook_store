@@ -53,7 +53,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
@@ -81,12 +81,41 @@ RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true # run everything when there's no focused examples
 
+  config.filter_run_excluding :slow unless ENV['RUN_SLOW_SPECS'] # exclude slow specs by default
+
+  config.before(:suite) do
+    if config.use_transactional_fixtures?
+      raise(<<-MSG)
+        Delete line `config.use_transactional_fixtures = true` from rails_helper.rb
+        (or set it to false) to prevent uncommitted transactions being used in
+        JavaScript-dependent specs.
+
+        During testing, the app-under-test that the browser driver connects to
+        uses a different database connection to the database connection used by
+        the spec. The app's database connection would not be able to access
+        uncommitted transaction data setup over the spec's database connection.
+      MSG
+    end
+    # Ensure the test database is clean before running the suite
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
   config.before(:each, type: :system) do
     driven_by :rack_test # rack_test by default, for performance
   end
 
-  config.before(:each, type: :system, js: true) do
-    driven_by :selenium, using: :headless_chrome # selenium when we need javascript
+  config.before(:each) do |example|
+    if example.metadata[:type] == :system && example.metadata[:js]
+      driven_by :selenium, using: :headless_chrome
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start # this must be placed after the strategy is set
+  end
+
+  config.append_after(:each) do
+    DatabaseCleaner.clean # clean/rollback the database after each example
   end
 
   config.after(:suite) do
