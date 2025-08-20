@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 
 permissions:
   contents: read
@@ -7,8 +7,15 @@ permissions:
 
 on:
   pull_request:
+    branches:
+      - main
   push:
-    branches: [ main ]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   scan_ruby:
