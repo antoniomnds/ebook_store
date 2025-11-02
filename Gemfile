@@ -69,9 +69,6 @@ group :development, :test do
   # For analyzing test coverage [https://github.com/simplecov-ruby/simplecov]
   gem "simplecov", require: false
 
-  # For capturing and testing emails in development [https://mailcatcher.me/]
-  gem "mailcatcher", "~> 0.10"
-
   # For running tests in parallel [https://github.com/grosser/parallel_tests]
   gem "parallel_tests", "~> 5.3"
 
