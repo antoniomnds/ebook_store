@@ -70,7 +70,7 @@ group :development, :test do
   gem "simplecov", require: false
 
   # For capturing and testing emails in development [https://mailcatcher.me/]
-  gem "mailcatcher", "~> 0.10"
+  gem "mailcatcher", "~> 0.11"
 end
 
 group :test do
