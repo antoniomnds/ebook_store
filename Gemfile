@@ -25,7 +25,7 @@ gem "bcrypt", "~> 3.1.22"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 2.0"
+gem "image_processing", "~> 2.2"
 
 # Use Bootstrap styles for the frontend
 gem "bootstrap", "~> 5.3.8"
@@ -70,7 +70,7 @@ group :development, :test do
   gem "simplecov", require: false
 
   # For capturing and testing emails in development [https://mailcatcher.me/]
-  gem "mailcatcher", "~> 0.10"
+  gem "mailcatcher", "~> 0.11"
 end
 
 group :test do
